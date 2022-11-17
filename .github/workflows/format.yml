@@ -1,4 +1,4 @@
-name: format code
+name: format check
 
 on:
   push:
@@ -29,5 +29,8 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - name: format
-        run: npm run style
+      - name: run lint
+        run: npm run lint
+
+      - name: run prettier
+        run: npm run pretty
