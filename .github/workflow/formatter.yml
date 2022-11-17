@@ -1,4 +1,4 @@
-name: format checker
+name: formatter
 
 on:
   push:
