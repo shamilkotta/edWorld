@@ -29,11 +29,5 @@ jobs:
       - name: install dependencies
         run: npm ci
 
-      - name: run lint
-        run: npm run lint
-
-      - name: run prettier
-        run: npm run pretty
-
-      - name: force format
+      - name: format
         run: npm run style
