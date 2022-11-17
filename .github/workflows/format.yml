@@ -34,3 +34,6 @@ jobs:
 
       - name: run prettier
         run: npm run pretty
+
+      - name: force format
+        run: npm run style
