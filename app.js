@@ -5,6 +5,7 @@ const session = require("express-session");
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
+const officeRouter = require("./routes/office");
 const errorHandler = require("./middlewares/errorHandler");
 const ErrorResponse = require("./utils/ErrorResponse");
 const { officeAuthorization } = require("./middlewares/authorization");
@@ -41,9 +42,7 @@ app.use(
 app.use("/static", express.static(`${__dirname}/public`));
 
 // route setup
-app.use("/office", officeAuthorization, (req, res) => {
-  res.send("office");
-});
+app.use("/office", officeAuthorization, officeRouter);
 // app.use("/teacher");
 // app.use("/student");
 app.use("/", indexRouter);
