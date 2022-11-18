@@ -7,6 +7,7 @@ require("dotenv").config();
 const indexRouter = require("./routes/index");
 const errorHandler = require("./middlewares/errorHandler");
 const ErrorResponse = require("./utils/ErrorResponse");
+const { officeAuthorization } = require("./middlewares/authorization");
 
 const app = express();
 
@@ -27,18 +28,22 @@ app.engine(
 );
 
 // session
-app.use(session({
-  secret: process.env.SESSION_SECRET || "secret key",
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}))
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 
 // static directory
 app.use("/static", express.static(`${__dirname}/public`));
 
 // route setup
-// app.use("/office");
+app.use("/office", officeAuthorization, (req, res) => {
+  res.send("office");
+});
 // app.use("/teacher");
 // app.use("/student");
 app.use("/", indexRouter);
