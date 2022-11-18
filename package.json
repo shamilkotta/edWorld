@@ -4,7 +4,8 @@
   "description": "a students and teachers managment tool for educational institution",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "SET NODE_ENV=production&node server.js",
+    "dev": "SET NODE_ENV=development&nodemon index.js",
     "lint": "eslint . --ext .js",
     "pretty": "prettier --check .",
     "style": "eslint --fix . --ext .js",
