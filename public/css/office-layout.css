@@ -1,0 +1,62 @@
+.office-layout {
+  font-size: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.office-layout > .sidebar {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  position: fixed;
+}
+
+.office-layout > .sidebar {
+  margin-left: -200px;
+  transition: margin 0.1s linear;
+}
+
+.office-layout > .sidebar > div {
+  background-color: #eaeaea;
+}
+
+.office-layout > .sidebar > div .sidebar-items > a {
+  font-size: 1.3em;
+  padding: 10px 25px 10px 20px;
+  cursor: pointer;
+}
+
+.office-layout > .sidebar > div .sidebar-items > a {
+  color: #696969 !important;
+}
+
+.office-layout > .sidebar > div .sidebar-items img {
+  margin-bottom: 4px;
+}
+
+.office-layout > .sidebar > div .sidebar-items > a:hover {
+  background-color: rgb(246, 246, 246);
+  border-radius: 10px;
+}
+
+.office-layout > .main {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  height: 1000px;
+  overflow-y: auto !important;
+}
+
+@media screen and (min-width: 768px) {
+  .office-layout {
+    height: 100% !important;
+    min-height: 100%;
+    position: relative;
+  }
+
+  .office-layout > .sidebar {
+    position: relative;
+  }
+
+  .office-layout > .sidebar {
+    margin-left: 0px;
+  }
+}
