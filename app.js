@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
+const indexRouter = require("./routes/index");
 const errorHandler = require("./middlewares/errorHandler");
 const ErrorResponse = require("./utils/ErrorResponse");
 
@@ -16,10 +17,10 @@ app.use(cookieParser());
 app.use("/static", express.static(`${__dirname}/public`));
 
 // route setup
-app.use("/office");
-app.use("/teacher");
-app.use("/student");
-app.use("/");
+// app.use("/office");
+// app.use("/teacher");
+// app.use("/student");
+app.use("/", indexRouter);
 
 // 404 request
 app.use((req, res, next) => {
