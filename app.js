@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const { engine } = require("express-handlebars");
+const session = require("express-session");
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
@@ -24,6 +25,14 @@ app.engine(
     defaultLayout: "index",
   })
 );
+
+// session
+app.use(session({
+  secret: process.env.SESSION_SECRET || "secret key",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}))
 
 // static directory
 app.use("/static", express.static(`${__dirname}/public`));
