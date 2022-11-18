@@ -21,6 +21,7 @@ app.engine(
   "hbs",
   engine({
     extname: "hbs",
+    defaultLayout: "index",
   })
 );
 

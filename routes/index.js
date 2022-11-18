@@ -6,12 +6,16 @@ router.get("/", (req, res) => {
   res.send("/");
 });
 
-router.use("/login", (req, res) => {
-  res.send("/login");
+router.get("/login", (req, res) => {
+  res.render("login");
 });
 
-router.use("/office-login", (req, res) => {
-  res.send("/office");
+router.get("/office-login", (req, res) => {
+  res.render("office-login");
+});
+
+router.get("/forgot-password", (req, res) => {
+  res.render("forgot-pass");
 });
 
 module.exports = router;
