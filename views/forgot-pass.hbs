@@ -1,0 +1,66 @@
+<nav class="p-3">
+  <a href="/">
+    <img src="/static/svg/logo.svg" alt="edWorld" height="35px" />
+  </a>
+</nav>
+<section style="height: 90vh;">
+  <div class="container">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem;">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block my-auto">
+              <img
+                src="/static/svg/forgot_pass.svg"
+                alt="login form"
+                class="img-fluid p-3"
+                style="border-radius: 1rem 0 0 1rem;"
+              />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center my-auto">
+              <div class="card-body p-4 p-lg-5 my-5 text-black">
+                <form method="post">
+                  <h5
+                    class="fw-normal fs-3 mb-3 pb-3"
+                    style="letter-spacing: 1px;"
+                  >Forgot Password</h5>
+
+                  <div class="form-outline mb-4">
+                    <input
+                      type="email"
+                      id="registerId"
+                      name="registerId"
+                      class="form-control form-control-lg"
+                      required
+                    />
+                    <label class="form-label" for="registerId">Registered Email</label>
+                  </div>
+
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="role" id="role1" value="student" />
+                    <label class="form-check-label" for="role1">I'm student</label>
+                  </div>
+
+                  <div class="form-check form-check-inline mb-4">
+                    <input class="form-check-input" type="radio" name="role" id="role2" value="teacher" />
+                    <label class="form-check-label" for="role2">I'm a teacher</label>
+                  </div>
+
+                  <div class="pt-1 mb-4">
+                    <button
+                      class="btn btn-lg btn-block"
+                      style="background-color: #3BB77E; color: #FFF;"
+                      type="button"
+                    >Send confirm link</button>
+                  </div>
+                  <p class="pb-lg-2"> <a href="/login">Back to Login</a></p>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
