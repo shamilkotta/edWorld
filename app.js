@@ -4,6 +4,7 @@ const { engine } = require("express-handlebars");
 const session = require("express-session");
 require("dotenv").config();
 
+const connectDatabase = require("./config/database");
 const indexRouter = require("./routes/index");
 const officeRouter = require("./routes/office");
 const errorHandler = require("./middlewares/errorHandler");
@@ -16,6 +17,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// connect databse
+connectDatabase();
 
 // view engine setup
 app.set("views", "views");
