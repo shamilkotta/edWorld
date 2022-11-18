@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const { engine } = require("express-handlebars");
 require("dotenv").config();
 
 const indexRouter = require("./routes/index");
@@ -12,6 +13,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// view engine setup
+app.set("views", "views");
+app.set("view engine", "hbs");
+app.engine(
+  "hbs",
+  engine({
+    extname: "hbs",
+  })
+);
 
 // static directory
 app.use("/static", express.static(`${__dirname}/public`));
