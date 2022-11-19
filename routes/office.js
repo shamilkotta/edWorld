@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
 
 // get add batch view
 router.get("/batches/add-btach", (req, res) => {
-  res.render("", {
+  res.render("office/add-batch", {
     error: req.session.addBatchError,
     success: req.session.addBatchSuccess,
   });
@@ -31,7 +31,7 @@ router.post("/batches/add-btach", batchValidations, postAddBatch);
 
 // get add teacher view
 router.get("/teachers/add-teacher", (req, res) => {
-  res.render("", {
+  res.render("office/add-teacher", {
     error: req.session.addTeacherError,
     success: req.session.addTeacherSuccess,
   });
