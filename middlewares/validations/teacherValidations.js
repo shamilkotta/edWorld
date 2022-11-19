@@ -19,7 +19,9 @@ const teacherValidationSchema = yup.object().shape({
     .required("Phone number can not be empty")
     .integer("Enter a valid phone number")
     .positive("Enter a valid phone number")
-    .matches(/^[0]?[6789]\d{9}$/, "Enter a valid phone number"),
+    .test("isValidPhone", "Enter a valid phone number", (arg) =>
+      /^[0]?[6789]\d{9}$/.test(arg)
+    ),
   email: yup
     .string()
     .trim()
@@ -64,7 +66,7 @@ const teacherValidationSchema = yup.object().shape({
 
 module.exports = (req, res, next) => {
   teacherValidationSchema
-    .validate(req.body)
+    .validate(req.body, { stripUnknown: true, abortEarly: false })
     .then((data) => {
       req.validData = data;
       next();
