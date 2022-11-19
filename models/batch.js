@@ -7,6 +7,7 @@ const batchSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     uppercase: true,
+    immutable: true,
   },
   start_date: {
     type: Date,
@@ -29,6 +30,7 @@ const batchSchema = new mongoose.Schema({
   batch_head: {
     type: String,
     required: true,
+    unique: true,
   },
   fee_type: {
     type: [String],
