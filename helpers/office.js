@@ -1,3 +1,5 @@
+const bcrypt = require("bcrypt");
+
 const Batch = require("../models/batch");
 const Teacher = require("../models/teacher");
 
@@ -27,6 +29,20 @@ module.exports = {
           else if (count > 9 && count < 100) num = `0${count + 1}`;
           const code = `${pre}${num}`;
           resolve(code);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  createPassword: (date) =>
+    new Promise((resolve, reject) => {
+      const salt = Number(process.env.SALT) || 10;
+      console.log(`${date}`);
+      bcrypt
+        .hash(`${date}`, salt)
+        .then((hash) => {
+          resolve(hash);
         })
         .catch((err) => {
           reject(err);
