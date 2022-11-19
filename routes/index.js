@@ -11,9 +11,9 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/office-login", (req, res) => {
-  const error = req.session.officLoginError;
+  const error = req.session.officeLoginError;
   res.render("office-login", { error });
-  req.session.officLoginError = "";
+  req.session.officeLoginError = "";
 });
 
 router.post("/office-login", (req, res) => {
@@ -25,7 +25,7 @@ router.post("/office-login", (req, res) => {
     req.session.user = { role: "office" };
     res.redirect("/office");
   } else {
-    req.session.officLoginError = "Invalid user name or password";
+    req.session.officeLoginError = "Invalid user name or password";
     res.redirect("/office-login");
   }
 });
