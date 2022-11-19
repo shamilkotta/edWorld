@@ -2,20 +2,25 @@ const yup = require("yup");
 
 const batchValidationSchema = yup.object().shape({
   start_date: yup
-    .date("Invalid starting date")
+    .date()
+    .typeError("Invalid starting date")
     .required("Starting date is required")
     .min(new Date(), "Invalid starting date"),
   duration: yup
     .number("Duration of batch must be valid type")
+    .typeError("Invalid course duration")
     .required("Duration of batch is required")
     .positive("Enter valid duration"),
   fee: yup
     .number()
+    .typeError("Invalid fee amount")
     .required("Batch fee required")
     .positive("Enter a valid fee amount"),
   seat_num: yup
     .number()
+    .typeError("Invalid seat number")
     .required("Seat numbers are required")
+    .integer("Enter a valid seat number")
     .positive("Enter a valid seat number"),
   batch_head: yup
     .string()
