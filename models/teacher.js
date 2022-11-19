@@ -17,6 +17,7 @@ const teacherSchema = new mongoose.Schema({
   phone: {
     type: Number,
     required: true,
+    unique: true,
   },
   email: {
     type: String,
@@ -34,7 +35,7 @@ const teacherSchema = new mongoose.Schema({
     default: "Not specified",
     validate: {
       validator: (arg) =>
-        ["Male", "Femail", "Other", "Not specified"].includes(arg),
+        ["Male", "Female", "Other", "Not specified"].includes(arg),
     },
   },
   salary: {
@@ -88,6 +89,15 @@ const teacherSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  password_strong: {
+    type: Boolean,
+    default: false,
   },
 });
 
