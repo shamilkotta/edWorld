@@ -1,12 +1,6 @@
 const yup = require("yup");
 
 const teacherValidationSchema = yup.object().shape({
-  registerId: yup
-    .string()
-    .trim()
-    .uppercase()
-    .required("Register id can not be empty")
-    .max(4, "Register id can't be more than 4 characters long"),
   name: yup
     .string()
     .trim()
