@@ -1,12 +1,6 @@
 const yup = require("yup");
 
 const batchValidationSchema = yup.object().shape({
-  code: yup
-    .string()
-    .trim()
-    .uppercase()
-    .required("Batch code is required")
-    .max(4, "Batch code can not be greater than 4 charecters"),
   start_date: yup
     .date("Invalid starting date")
     .required("Starting date is required")
@@ -23,7 +17,12 @@ const batchValidationSchema = yup.object().shape({
     .number()
     .required("Seat numbers are required")
     .positive("Enter a valid seat number"),
-  batch_head: yup.string().trim().uppercase().required("Batch head reaquired"),
+  batch_head: yup
+    .string()
+    .trim()
+    .uppercase()
+    .required("Batch head reaquired")
+    .max(5, "Batch head id can not be greater than 5 charecters"),
   fee_type: yup
     .array()
     .of(yup.string("Invalid payment options"))
