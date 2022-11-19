@@ -1,7 +1,12 @@
 const express = require("express");
 
-const { postAddBatch, postAddTeacher } = require("../controllers/office");
+const {
+  postAddBatch,
+  postAddTeacher,
+  postAddStudent,
+} = require("../controllers/office");
 const batchValidations = require("../middlewares/validations/batchValidations");
+const studentValidations = require("../middlewares/validations/studentValidations");
 const teacherValidations = require("../middlewares/validations/teacherValidations");
 
 const router = express.Router();
@@ -39,6 +44,20 @@ router.get("/teachers/add-teacher", (req, res) => {
   req.session.addTeacherSuccess = "";
 });
 
+// add teacher
 router.post("/teachers/add-teacher", teacherValidations, postAddTeacher);
+
+// get add student view
+router.get("/students/add-student", (req, res) => {
+  res.render("office/add-student", {
+    error: req.session.addStudentError,
+    success: req.session.addStudentSuccess,
+  });
+  req.session.addStudentError = "";
+  req.session.addStudentSuccess = "";
+});
+
+// add student
+router.post("/students/add-student", studentValidations, postAddStudent);
 
 module.exports = router;
