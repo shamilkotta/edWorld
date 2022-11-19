@@ -1,13 +1,15 @@
+const { generateUniqueCode } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Teacher = require("../models/teacher");
 
 module.exports = {
-  postAddBatch: (req, res) => {
+  postAddBatch: async (req, res) => {
     if (req.validationErr) {
       req.session.addBatchError = req.validationErr;
       res.redirect("/batches/add-batch");
     } else {
       const data = req.validData;
+      data.code = await generateUniqueCode("batch");
       const batch = new Batch(data);
       batch
         .save()
@@ -17,19 +19,21 @@ module.exports = {
         })
         .catch((err) => {
           if (err.code === 11000)
-            req.session.addBatchError = "Duplicate batch code";
+            req.session.addBatchError =
+              "One teacher can only be head of one batch";
           else req.session.addBatchError = "Something went wrong";
           res.redirect("/batches/add-batch");
         });
     }
   },
 
-  postAddTeacher: (req, res) => {
+  postAddTeacher: async (req, res) => {
     if (req.validationErr) {
       req.session.addTeacherError = req.validationErr;
       res.redirect("/teachers/add-teacher");
     } else {
       const data = req.validData;
+      data.registerId = await generateUniqueCode("teacher");
       const teacher = new Teacher(data);
       teacher
         .save()
