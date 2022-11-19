@@ -1,5 +1,6 @@
 const { generateUniqueCode, createPassword } = require("../helpers/office");
 const Batch = require("../models/batch");
+const Student = require("../models/student");
 const Teacher = require("../models/teacher");
 
 module.exports = {
@@ -47,6 +48,30 @@ module.exports = {
             req.session.addTeacherError = "Duplicate email or phone number";
           else req.session.addTeacherError = "Something went wrong";
           res.redirect(303, "/office/teachers/add-teacher");
+        });
+    }
+  },
+
+  postAddStudent: async (req, res) => {
+    if (req.validationErr) {
+      req.session.addStudentError = req.validationErr;
+      res.redirect(303, "/office/students/add-student");
+    } else {
+      const data = req.validData;
+      data.registerId = await generateUniqueCode("student");
+      data.password = await createPassword(data.birth_date);
+      const student = new Student(data);
+      student
+        .save()
+        .then(() => {
+          req.session.addStudentSuccess = "New student added successfully";
+          res.redirect(303, "/office/students/add-student");
+        })
+        .catch((err) => {
+          if (err.code === 11000)
+            req.session.addStudentError = "Duplicate email or phone number";
+          else req.session.addStudentError = "Something went wrong";
+          res.redirect(303, "/office/students/add-student");
         });
     }
   },
