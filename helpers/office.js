@@ -2,8 +2,7 @@ const bcrypt = require("bcrypt");
 
 const Batch = require("../models/batch");
 const Teacher = require("../models/teacher");
-
-const Student = "";
+const Student = require("../models/student");
 
 module.exports = {
   generateUniqueCode: (data) =>
@@ -38,7 +37,6 @@ module.exports = {
   createPassword: (date) =>
     new Promise((resolve, reject) => {
       const salt = Number(process.env.SALT) || 10;
-      console.log(`${date}`);
       bcrypt
         .hash(`${date}`, salt)
         .then((hash) => {
