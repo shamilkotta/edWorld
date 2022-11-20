@@ -46,4 +46,35 @@ module.exports = {
           reject(err);
         });
     }),
+
+  getOpenTeachers: () =>
+    new Promise((resolve, reject) => {
+      Teacher.aggregate([
+        {
+          $lookup: {
+            from: "batches",
+            localField: "registerId",
+            foreignField: "batch_head",
+            as: "closed_batches",
+          },
+        },
+        {
+          $match: {
+            closed_batches: { $eq: [] },
+          },
+        },
+        {
+          $project: {
+            registerId: 1,
+            _id: 0,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
