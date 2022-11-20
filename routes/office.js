@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
 });
 
 // get add batch view
-router.get("/batches/add-btach", (req, res) => {
+router.get("/batches/add-batch", (req, res) => {
   res.render("office/add-batch", {
     error: req.session.addBatchError,
     success: req.session.addBatchSuccess,
@@ -32,7 +32,7 @@ router.get("/batches/add-btach", (req, res) => {
 });
 
 // create a batch
-router.post("/batches/add-btach", batchValidations, postAddBatch);
+router.post("/batches/add-batch", batchValidations, postAddBatch);
 
 // get add teacher view
 router.get("/teachers/add-teacher", (req, res) => {
