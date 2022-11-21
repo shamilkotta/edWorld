@@ -21,7 +21,7 @@ module.exports = {
         .catch((err) => {
           if (err.code === 11000)
             req.session.addBatchError =
-              "One teacher can only be head of one batch";
+              "This teacher already have a batch assigned";
           else req.session.addBatchError = "Something went wrong";
           res.redirect(303, "/office/batches/add-batch");
         });
