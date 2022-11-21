@@ -115,7 +115,8 @@ const editBatchSchema = yup.object().shape({
 
 module.exports = {
   createBatchValidation: (req, res, next) => {
-    req.body.fee_type.pop();
+    const feeType = req?.body?.fee_type;
+    if (feeType[feeType.length - 1] === "") req.body.fee_type.pop();
     createBatchSchema
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
