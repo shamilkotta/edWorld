@@ -80,6 +80,7 @@ module.exports = {
 
   getStudentsCountInBatch: (batchId) =>
     new Promise((resolve, reject) => {
+      batchId.toUpperCase();
       Batch.aggregate([
         {
           $match: {
