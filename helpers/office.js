@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const bcrypt = require("bcrypt");
 
 const Batch = require("../models/batch");
@@ -108,6 +109,74 @@ module.exports = {
       ])
         .then((data) => {
           resolve(data[0]);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getAllBatchesData: () =>
+    new Promise((resolve, reject) => {
+      Batch.aggregate([
+        {
+          $lookup: {
+            from: "teachers",
+            localField: "batch_head",
+            foreignField: "registerId",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  name: 1,
+                },
+              },
+            ],
+            as: "head",
+          },
+        },
+        {
+          $unwind: "$head",
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "code",
+            foreignField: "batch",
+            pipeline: [
+              {
+                $project: {
+                  registerId: 1,
+                  _id: 0,
+                },
+              },
+            ],
+            as: "students",
+          },
+        },
+        {
+          $addFields: {
+            head: "$head.name",
+            students: {
+              $size: "$students",
+            },
+          },
+        },
+      ])
+        .then((data) => {
+          const response = [];
+          const formatOptions = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          };
+          data.forEach((ele) => {
+            ele.start_date = ele?.start_date?.toLocaleDateString(
+              "en-IN",
+              formatOptions
+            );
+            response.push(ele);
+          });
+          resolve(response);
         })
         .catch((err) => {
           reject(err);
