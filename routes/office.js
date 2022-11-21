@@ -29,9 +29,13 @@ router.get("/", (req, res) => {
   res.render("office/index");
 });
 
+router.get("/batches", (req, res) => {
+  res.render("office/batches/index");
+});
+
 // get add batch view
 router.get("/batches/add-batch", (req, res) => {
-  res.render("office/add-batch", {
+  res.render("office/batches/add-batch", {
     error: req.session.addBatchError,
     success: req.session.addBatchSuccess,
   });
@@ -47,7 +51,7 @@ router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 
 // get add teacher view
 router.get("/teachers/add-teacher", (req, res) => {
-  res.render("office/add-teacher", {
+  res.render("office/teachers/add-teacher", {
     error: req.session.addTeacherError,
     success: req.session.addTeacherSuccess,
   });
@@ -58,9 +62,12 @@ router.get("/teachers/add-teacher", (req, res) => {
 // add teacher
 router.post("/teachers/add-teacher", createTeacherValidation, postAddTeacher);
 
+// edit teacher
+router.put("/teachers/edit-teacher");
+
 // get add student view
 router.get("/students/add-student", (req, res) => {
-  res.render("office/add-student", {
+  res.render("office/students/add-student", {
     error: req.session.addStudentError,
     success: req.session.addStudentSuccess,
   });
