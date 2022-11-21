@@ -3,7 +3,7 @@
 <section class="mt-5">
   <h4 class="mb-4">All Batches</h4>
   <div class="table-responsive">
-    <table class="table align-middle batches-table table-striped">
+    <table class="table table-striped">
       <thead class="bg-dark text-white">
         <tr>
           <th scope="col">Batch</th>
@@ -16,15 +16,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-        </tr>
+        {{#each allBatches}}
+          <tr>
+            <th scope="row">{{this.code}}</th>
+            <td>{{this.head}}</td>
+            <td>{{this.seat_num}}</td>
+            <td>{{this.students}}</td>
+            <td>{{this.start_date}}</td>
+            <td>{{this.duration}}</td>
+            <td>{{this.fee}}</td>
+          </tr>
+        {{/each}}
       </tbody>
     </table>
   </div>
