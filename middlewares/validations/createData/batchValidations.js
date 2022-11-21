@@ -1,5 +1,5 @@
 const yup = require("yup");
-const { getOpenTeachers } = require("../../helpers/office");
+const { getOpenTeachers } = require("../../../helpers/office");
 
 const batchValidationSchema = yup.object().shape({
   start_date: yup

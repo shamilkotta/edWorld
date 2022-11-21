@@ -1,5 +1,5 @@
 const yup = require("yup");
-const { getStudentsCountInBatch } = require("../../helpers/office");
+const { getStudentsCountInBatch } = require("../../../helpers/office");
 
 const studentValidationSchema = yup.object().shape({
   name: yup

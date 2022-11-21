@@ -5,9 +5,9 @@ const {
   postAddTeacher,
   postAddStudent,
 } = require("../controllers/office");
-const batchValidations = require("../middlewares/validations/batchValidations");
-const studentValidations = require("../middlewares/validations/studentValidations");
-const teacherValidations = require("../middlewares/validations/teacherValidations");
+const batchValidations = require("../middlewares/validations/createData/batchValidations");
+const studentValidations = require("../middlewares/validations/createData/studentValidations");
+const teacherValidations = require("../middlewares/validations/createData/teacherValidations");
 
 const router = express.Router();
 
