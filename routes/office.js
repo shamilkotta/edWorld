@@ -38,6 +38,9 @@ router.get("/batches/add-batch", (req, res) => {
   res.render("office/batches/add-batch", {
     error: req.session.addBatchError,
     success: req.session.addBatchSuccess,
+    helpers: {
+      today: () => new Date().toISOString().split("T")[0],
+    },
   });
   req.session.addBatchError = "";
   req.session.addBatchSuccess = "";
