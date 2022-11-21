@@ -77,4 +77,29 @@ module.exports = {
           reject(err);
         });
     }),
+
+  getStudentsCountInBatch: (batchId) =>
+    new Promise((resolve, reject) => {
+      Student.aggregate([
+        {
+          $group: {
+            _id: "$batch",
+            count: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $match: {
+            _id: batchId,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
