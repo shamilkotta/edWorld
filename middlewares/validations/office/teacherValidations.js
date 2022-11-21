@@ -1,13 +1,12 @@
 const yup = require("yup");
-const { getStudentsCountInBatch } = require("../../../helpers/office");
 
-const studentValidationSchema = yup.object().shape({
+const createTeacherSchema = yup.object().shape({
   name: yup
     .string()
     .trim()
     .required("Name can not be empty")
     .test("isPerfectString", "Please enter valid name", (arg) =>
-      /^[A-Za-z ]+$/.test(arg)
+      /^[A-Za-z]+$/.test(arg)
     ),
   phone: yup
     .number()
@@ -36,22 +35,12 @@ const studentValidationSchema = yup.object().shape({
     .test("isValidGenderOption", "Select valid gender option", (arg) =>
       ["Male", "Female", "Other", "Not specified"].includes(arg)
     ),
-  parent_name: yup
-    .string()
-    .trim()
-    .required("Name can not be empty")
-    .test("isPerfectString", "Please enter valid name", (arg) =>
-      /^[A-Za-z ]+$/.test(arg)
-    ),
-  parent_phone: yup
+  salary: yup
     .number()
-    .typeError("Invalid phone number")
-    .required("Phone number can not be empty")
-    .integer("Enter a valid phone number")
-    .positive("Enter a valid phone number")
-    .test("isValidPhone", "Enter a valid phone number", (arg) =>
-      /^[0]?[6789]\d{9}$/.test(arg)
-    ),
+    .typeError("Invalid salary")
+    .required("Salary can not be empty")
+    .positive("Enter valid salary")
+    .integer("Enter valid salary"),
   address: yup.object({
     house_name: yup.string().trim().default("").ensure(),
     place: yup.string().trim().required("Place can not be empty"),
@@ -64,24 +53,11 @@ const studentValidationSchema = yup.object().shape({
     district: yup.string().trim().required("District can not be empty"),
     state: yup.string().trim().required("State can not be empty"),
   }),
-  education: yup.string().trim().required("Education can not be empty"),
-  institute: yup.string().trim().required("Institute can not be empty"),
-  university: yup.string().trim().required("University can not be empty"),
-  batch: yup
-    .string()
-    .trim()
-    .uppercase()
-    .required("Batch is reaquired")
-    .max(5, "Batch code can not be greater than 5 charecters")
-    .test(
-      "isSeatsFull",
-      "This batch already full",
-      async (value, testContext) => {
-        const data = await getStudentsCountInBatch(value);
-        if (data.student_count < data.seat_num) return true;
-        return testContext.createError({ message: "This batch already full" });
-      }
-    ),
+  qualification: yup.string().trim().required("Qualification can not be empty"),
+  experience: yup
+    .number()
+    .typeError("Invalid experience count")
+    .required("Experience can not be empty"),
   profile: yup
     .string()
     .trim()
@@ -89,15 +65,17 @@ const studentValidationSchema = yup.object().shape({
     .required("Please porvide a profile image"),
 });
 
-module.exports = (req, res, next) => {
-  studentValidationSchema
-    .validate(req.body, { stripUnknown: true, abortEarly: false })
-    .then((data) => {
-      req.validData = data;
-      next();
-    })
-    .catch((err) => {
-      [req.validationErr] = err.errors;
-      next();
-    });
+module.exports = {
+  createTeacherValidation: (req, res, next) => {
+    createTeacherSchema
+      .validate(req.body, { stripUnknown: true, abortEarly: false })
+      .then((data) => {
+        req.validData = data;
+        next();
+      })
+      .catch((err) => {
+        [req.validationErr] = err.errors;
+        next();
+      });
+  },
 };

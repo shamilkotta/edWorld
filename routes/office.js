@@ -5,9 +5,16 @@ const {
   postAddTeacher,
   postAddStudent,
 } = require("../controllers/office");
-const batchValidations = require("../middlewares/validations/createData/batchValidations");
-const studentValidations = require("../middlewares/validations/createData/studentValidations");
-const teacherValidations = require("../middlewares/validations/createData/teacherValidations");
+const {
+  createBatchValidation,
+  editBatchValidation,
+} = require("../middlewares/validations/office/batchValidations");
+const {
+  createStudentValidation,
+} = require("../middlewares/validations/office/studentValidations");
+const {
+  createTeacherValidation,
+} = require("../middlewares/validations/office/teacherValidations");
 
 const router = express.Router();
 
@@ -32,7 +39,10 @@ router.get("/batches/add-batch", (req, res) => {
 });
 
 // create a batch
-router.post("/batches/add-batch", batchValidations, postAddBatch);
+router.post("/batches/add-batch", createBatchValidation, postAddBatch);
+
+// edit a batch
+router.put("/batches/edit-batch", editBatchValidation);
 
 // get add teacher view
 router.get("/teachers/add-teacher", (req, res) => {
@@ -45,7 +55,7 @@ router.get("/teachers/add-teacher", (req, res) => {
 });
 
 // add teacher
-router.post("/teachers/add-teacher", teacherValidations, postAddTeacher);
+router.post("/teachers/add-teacher", createTeacherValidation, postAddTeacher);
 
 // get add student view
 router.get("/students/add-student", (req, res) => {
@@ -58,6 +68,6 @@ router.get("/students/add-student", (req, res) => {
 });
 
 // add student
-router.post("/students/add-student", studentValidations, postAddStudent);
+router.post("/students/add-student", createStudentValidation, postAddStudent);
 
 module.exports = router;
