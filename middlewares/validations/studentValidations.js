@@ -1,4 +1,5 @@
 const yup = require("yup");
+const { getStudentsCountInBatch } = require("../../helpers/office");
 
 const studentValidationSchema = yup.object().shape({
   name: yup
@@ -71,7 +72,16 @@ const studentValidationSchema = yup.object().shape({
     .trim()
     .uppercase()
     .required("Batch is reaquired")
-    .max(5, "Batch code can not be greater than 5 charecters"),
+    .max(5, "Batch code can not be greater than 5 charecters")
+    .test(
+      "isSeatsFull",
+      "This batch already full",
+      async (value, testContext) => {
+        const data = await getStudentsCountInBatch(value);
+        if (data.student_count < data.seat_num) return true;
+        return testContext.createError({ message: "This batch already full" });
+      }
+    ),
   profile: yup
     .string()
     .trim()
