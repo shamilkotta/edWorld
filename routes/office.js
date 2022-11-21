@@ -38,7 +38,6 @@ router.get("/batches", async (req, res) => {
   } catch (err) {
     console.error(err);
   }
-
 });
 
 // get add batch view
