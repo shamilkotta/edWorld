@@ -80,23 +80,33 @@ module.exports = {
 
   getStudentsCountInBatch: (batchId) =>
     new Promise((resolve, reject) => {
-      Student.aggregate([
+      Batch.aggregate([
         {
-          $group: {
-            _id: "$batch",
-            count: {
-              $sum: 1,
-            },
+          $match: {
+            code: batchId,
           },
         },
         {
-          $match: {
-            _id: batchId,
+          $lookup: {
+            from: "students",
+            localField: "code",
+            foreignField: "batch",
+            as: "students",
+          },
+        },
+        {
+          $project: {
+            code: 1,
+            seat_num: 1,
+            _id: 0,
+            student_count: {
+              $size: "$students",
+            },
           },
         },
       ])
         .then((data) => {
-          resolve(data);
+          resolve(data[0]);
         })
         .catch((err) => {
           reject(err);
