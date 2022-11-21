@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const { generateUniqueCode, createPassword } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -23,6 +24,25 @@ module.exports = {
             req.session.addBatchError =
               "This teacher already have a batch assigned";
           else req.session.addBatchError = "Something went wrong";
+          res.redirect(303, "/office/batches/add-batch");
+        });
+    }
+  },
+
+  putEditBatch: (req, res) => {
+    if (req.validationErr) {
+      req.session.editBatchError = req.validationErr;
+      res.redirect(303, "/office/batches/add-batch");
+    } else {
+      const { code, batch_head, seat_num } = req.validData;
+      Batch.findOneAndUpdate({ code }, { batch_head, seat_num })
+        .then(() => {
+          req.session.addBatchSuccess = "Batch updated successfully";
+          res.redirect(303, "/office/batches/add-batch");
+        })
+        .catch((err) => {
+          console.error(err);
+          req.session.addBatchError = "Something went wrong";
           res.redirect(303, "/office/batches/add-batch");
         });
     }

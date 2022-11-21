@@ -4,6 +4,7 @@ const {
   postAddBatch,
   postAddTeacher,
   postAddStudent,
+  putEditBatch,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -42,7 +43,7 @@ router.get("/batches/add-batch", (req, res) => {
 router.post("/batches/add-batch", createBatchValidation, postAddBatch);
 
 // edit a batch
-router.put("/batches/edit-batch", editBatchValidation);
+router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 
 // get add teacher view
 router.get("/teachers/add-teacher", (req, res) => {
