@@ -78,6 +78,10 @@ const createStudentSchema = yup.object().shape({
       "This batch already full",
       async (value, testContext) => {
         const data = await getStudentsCountInBatch(value);
+        if (!data)
+          return testContext.createError({
+            message: "Invalid batch provided",
+          });
         if (data.student_count < data.seat_num) return true;
         return testContext.createError({ message: "This batch already full" });
       }
