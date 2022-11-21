@@ -24,8 +24,8 @@ module.exports = {
       model
         .countDocuments({})
         .then((count) => {
-          if (count < 10) num = `00${count + 1}`;
-          else if (count > 9 && count < 100) num = `0${count + 1}`;
+          if (count < 9) num = `00${count + 1}`;
+          else if (count > 8 && count < 99) num = `0${count + 1}`;
           const code = `${pre}${num}`;
           resolve(code);
         })
