@@ -1,4 +1,5 @@
 const yup = require("yup");
+const { getOpenTeachers } = require("../../helpers/office");
 
 const batchValidationSchema = yup.object().shape({
   start_date: yup
@@ -27,7 +28,22 @@ const batchValidationSchema = yup.object().shape({
     .trim()
     .uppercase()
     .required("Batch head reaquired")
-    .max(5, "Batch head id can not be greater than 5 charecters"),
+    .max(5, "Batch head id can not be greater than 5 charecters")
+    .test(
+      "isOpenTeacher",
+      "Batch head validation error",
+      async (value, testContext) => {
+        const data = await getOpenTeachers();
+        let flag = false;
+        data.forEach((ele) => {
+          if (value === ele.registerId) flag = true;
+        });
+        if (flag) return flag;
+        return testContext.createError({
+          message: "This teacher already have a batch assigned",
+        });
+      }
+    ),
   fee_type: yup
     .array()
     .of(yup.string("Invalid payment options"))
