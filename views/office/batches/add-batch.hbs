@@ -1,26 +1,45 @@
-{{> office/batches}}
+{{!-- {{> office/batches}} --}}
 
 <section class="mt-5">
   <h4 class="mb-4">Add new Batch</h4>
-  <form>
+  <form method="post" action="/office/batches/add-batch">
     <!-- 2 column grid layout with text inputs for the first and last names -->
     <div class="row mb-4">
       <div class="col">
         <div class="form-outline input-group-lg">
-          <input type="text" id="form6Example1" class="form-control" />
-          <label class="form-label" for="form6Example1">Starting Date</label>
+          <input
+            type="date"
+            id="start_date"
+            name="start_date"
+            class="form-control"
+            min="{{today}}"
+            required
+          />
+          <label class="form-label" for="start_date">Starting Date</label>
         </div>
       </div>
       <div class="col">
         <div class="form-outline input-group-lg">
-          <input type="text" id="form6Example2" class="form-control" />
-          <label class="form-label" for="form6Example2">Duration (months)</label>
+          <input
+            type="number"
+            id="duration"
+            name="duration"
+            class="form-control"
+            required
+          />
+          <label class="form-label" for="duration">Duration (months)</label>
         </div>
       </div>
       <div class="col">
         <div class="form-outline input-group-lg">
-          <input type="text" id="form6Example2" class="form-control" />
-          <label class="form-label" for="form6Example2">Fee</label>
+          <input
+            type="number"
+            id="fee"
+            name="fee"
+            class="form-control"
+            required
+          />
+          <label class="form-label" for="fee">Fee</label>
         </div>
       </div>
 
@@ -28,23 +47,84 @@
     <div class="row mb-4">
       <div class="col">
         <div class="form-outline input-group-lg">
-          <input type="text" id="form6Example2" class="form-control" />
-          <label class="form-label" for="form6Example2">Number of Seats</label>
+          <input
+            type="number"
+            id="seat_num"
+            name="seat_num"
+            class="form-control"
+            required
+          />
+          <label class="form-label" for="seat_num">Number of Seats</label>
         </div>
       </div>
       <div class="col">
         <div class="form-outline input-group-lg">
-          <input type="text" id="form6Example2" class="form-control" />
-          <label class="form-label" for="form6Example2">Batch head</label>
+          <input
+            type="text"
+            id="batch_head"
+            name="batch_head"
+            class="form-control"
+            required
+          />
+          <label class="form-label" for="batch_head">Batch head</label>
         </div>
       </div>
       <div class="col">
-        <div class="form-outline input-group-lg">
-          <input type="text" id="form6Example2" class="form-control" />
-          <label class="form-label" for="form6Example2">Fee payment options</label>
+        <label class="form-check-label" for="form11Example2">
+          Fee payment options
+        </label>
+        <div class="row ms-2">
+          <div class="form-check col">
+            <input
+              class="form-check-input"
+              name="fee_type"
+              type="checkbox"
+              value="One time"
+              id="one-time-read"
+              checked
+              disabled
+              required
+            />
+            <label class="form-check-label" for="one-time">One-time</label>
+          </div>
+          <div class="form-check col">
+            <input
+              class="form-check-input"
+              name="fee_type"
+              type="checkbox"
+              value="Installment"
+              id="installment"
+            />
+            <label
+              class="form-check-label"
+              for="installment"
+            >Installment</label>
+          </div>
+          <input
+            class="form-check-input"
+            name="fee_type"
+            type="checkbox"
+            value="One time"
+            id="one-time"
+            checked
+            hidden
+            required
+          />
+          <input
+            class="form-check-input"
+            hidden
+            name="fee_type"
+            type="checkbox"
+            value=""
+            id="one-time-1"
+            checked
+          />
         </div>
       </div>
     </div>
+
+    <p class="text-danger">{{error}}</p>
+    <p class="text-success">{{success}}</p>
 
     <!-- Submit button -->
     <button
