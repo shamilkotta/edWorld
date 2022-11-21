@@ -50,6 +50,7 @@ const createBatchSchema = yup.object().shape({
     ),
   fee_type: yup
     .array()
+    .typeError("Invalid fee type option")
     .of(yup.string("Invalid payment options"))
     .min(1, "Give atleast one payment options")
     .test(
@@ -114,6 +115,7 @@ const editBatchSchema = yup.object().shape({
 
 module.exports = {
   createBatchValidation: (req, res, next) => {
+    req.body.fee_type.pop();
     createBatchSchema
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
