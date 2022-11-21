@@ -8,6 +8,7 @@
   grid-column: 1/2;
   grid-row: 1/2;
   position: fixed;
+  z-index: 100 !important;
 }
 
 .office-layout > .sidebar {
@@ -21,11 +22,8 @@
 
 .office-layout > .sidebar > div .sidebar-items > a {
   font-size: 1.3em;
-  padding: 10px 25px 10px 20px;
+  padding: 10px 30px 10px 20px;
   cursor: pointer;
-}
-
-.office-layout > .sidebar > div .sidebar-items > a {
   color: #696969 !important;
 }
 

@@ -29,6 +29,7 @@
     {{! mdbootstrap }}
     <link rel="shortcut icon" href="/static/svg/icon.svg" type="image/x-icon" />
     <link rel="stylesheet" href="/static/css/office-layout.css" />
+    <link rel="stylesheet" href="/static/css/batches-partials.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
     <title>edWorld</title>
   </head>
@@ -52,19 +53,19 @@
             <img src="/static/svg/icon.svg" alt="edWorld" height="40px" />
           </div>
           <div class="sidebar-items d-flex flex-column">
-            <a href="">
+            <a href="/office">
               <img src="/static/icon/dashboard.svg" width="22px" alt="" />
               <span class="ms-2 d-md-none d-lg-inline">Dashboard</span>
             </a>
-            <a href="">
+            <a href="/office/batches">
               <img src="/static/icon/batch.svg" width="25px" alt="" />
               <span class="ms-2 d-md-none d-lg-inline">Batches</span>
             </a>
-            <a href="">
+            <a href="/office/teachers">
               <img src="/static/icon/teacher.svg" width="25px" alt="" />
               <span class="ms-2 d-md-none d-lg-inline">Teachers</span>
             </a>
-            <a href="">
+            <a href="/office/students">
               <img src="/static/icon/student.svg" width="25px" alt="" />
               <span class="ms-2 d-md-none d-lg-inline">Students</span>
             </a>
@@ -88,7 +89,12 @@
             />
           </div>
         </nav>
-        {{{body}}}
+        <div
+          class="px-4 py-2 d-flex flex-column align-items-center"
+          style="max-width: 1400px;"
+        >
+          {{{body}}}
+        </div>
       </section>
     </main>
 
