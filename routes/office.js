@@ -6,6 +6,7 @@ const {
   postAddStudent,
   putEditBatch,
 } = require("../controllers/office");
+const { getAllBatchesData } = require("../helpers/office");
 const {
   createBatchValidation,
   editBatchValidation,
@@ -29,8 +30,15 @@ router.get("/", (req, res) => {
   res.render("office/index");
 });
 
-router.get("/batches", (req, res) => {
-  res.render("office/batches/index");
+// view all batches
+router.get("/batches", async (req, res) => {
+  try {
+    const allBatches = await getAllBatchesData();
+    res.render("office/batches/index", { allBatches });
+  } catch (err) {
+    console.error(err);
+  }
+
 });
 
 // get add batch view
