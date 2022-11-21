@@ -1,5 +1,8 @@
 const yup = require("yup");
-const { getOpenTeachers } = require("../../../helpers/office");
+const {
+  getOpenTeachers,
+  getStudentsCountInBatch,
+} = require("../../../helpers/office");
 
 const createBatchSchema = yup.object().shape({
   start_date: yup
@@ -40,7 +43,8 @@ const createBatchSchema = yup.object().shape({
         });
         if (flag) return flag;
         return testContext.createError({
-          message: "This teacher already have a batch assigned",
+          message:
+            "This teacher already have a batch assigned or not a valid teacher Id",
         });
       }
     ),
@@ -58,12 +62,33 @@ const createBatchSchema = yup.object().shape({
 });
 
 const editBatchSchema = yup.object().shape({
+  code: yup
+    .string()
+    .required("Can't find batch")
+    .uppercase()
+    .max(5, "Batch code can not be greater than 5 charecters"),
   seat_num: yup
     .number()
     .typeError("Invalid seat number")
     .required("Seat numbers are required")
     .integer("Enter a valid seat number")
-    .positive("Enter a valid seat number"),
+    .positive("Enter a valid seat number")
+    .test(
+      "isAlreadyFull",
+      "Seat count can't be below of number of students",
+      async (value, testContext) => {
+        const data = await getStudentsCountInBatch(testContext.parent.code);
+        if (!data)
+          return testContext.createError({
+            message: "Invalid batch provided",
+          });
+        if (value < data.seat_num)
+          return testContext.createError({
+            message: `Seat count can't be below of number of students`,
+          });
+        return true;
+      }
+    ),
   batch_head: yup
     .string()
     .trim()
