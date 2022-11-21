@@ -3,9 +3,8 @@
 <section class="mt-5">
   <h4 class="mb-4">Add new Batch</h4>
   <form method="post" action="/office/batches/add-batch">
-    <!-- 2 column grid layout with text inputs for the first and last names -->
-    <div class="row mb-4">
-      <div class="col">
+    <div class="row mb-4" style="max-width: 1000px;">
+      <div class="col-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="date"
@@ -18,7 +17,7 @@
           <label class="form-label" for="start_date">Starting Date</label>
         </div>
       </div>
-      <div class="col">
+      <div class="col-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="number"
@@ -30,7 +29,7 @@
           <label class="form-label" for="duration">Duration (months)</label>
         </div>
       </div>
-      <div class="col">
+      <div class="col-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="number"
@@ -42,10 +41,7 @@
           <label class="form-label" for="fee">Fee</label>
         </div>
       </div>
-
-    </div>
-    <div class="row mb-4">
-      <div class="col">
+      <div class="col-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="number"
@@ -57,7 +53,7 @@
           <label class="form-label" for="seat_num">Number of Seats</label>
         </div>
       </div>
-      <div class="col">
+      <div class="col-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="text"
@@ -69,7 +65,7 @@
           <label class="form-label" for="batch_head">Batch head</label>
         </div>
       </div>
-      <div class="col">
+      <div class="col-6 col-md-4 my-3">
         <label class="form-check-label" for="form11Example2">
           Fee payment options
         </label>
