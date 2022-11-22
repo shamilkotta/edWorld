@@ -2,24 +2,28 @@
 
 <section class="mt-5">
   <h4 class="mb-4">All Batches</h4>
-  <div class="table-responsive">
+  <div class="form-outline mb-4">
+    <input type="text" class="form-control" id="datatable-search-input" />
+    <label class="form-label" for="datatable-search-input">Search</label>
+  </div>
+  <div class="datatable" id="datatable" data-mdb-max-width="1200">
     <table class="table table-striped" id="batches-table">
-      <thead class="bg-dark text-white">
-        <tr>
-          <th scope="col">Batch</th>
-          <th scope="col">Batch Head</th>
-          <th scope="col">Seats</th>
-          <th scope="col">Students</th>
-          <th scope="col">Start Date</th>
-          <th scope="col">Duration</th>
-          <th scope="col">Fee</th>
-          <th scope="col">View</th>
+      <thead>
+        <tr class="bg-dark">
+          <th class="th-sm">Batch</th>
+          <th class="th-sm">Batch Head</th>
+          <th class="th-sm">Seats</th>
+          <th class="th-sm">Students</th>
+          <th class="th-sm">Start Date</th>
+          <th class="th-sm">Duration</th>
+          <th class="th-sm">Fee</th>
+          <th class="th-sm">View</th>
         </tr>
       </thead>
       <tbody>
         {{#each allBatches}}
           <tr>
-            <th scope="row">{{this.code}}</th>
+            <td>{{this.code}}</td>
             <td>{{this.head}}</td>
             <td>{{this.seat_num}}</td>
             <td>{{this.students}}</td>
