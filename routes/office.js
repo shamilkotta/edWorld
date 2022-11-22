@@ -11,6 +11,7 @@ const {
   getAllTeachersData,
   getOpenTeachers,
   getOpenBatches,
+  getAllStudentsData,
 } = require("../helpers/office");
 const {
   createBatchValidation,
@@ -49,7 +50,6 @@ router.get("/batches", async (req, res) => {
 router.get("/batches/add-batch", async (req, res) => {
   try {
     const teachers = await getOpenTeachers();
-    console.log(teachers);
     res.render("office/batches/add-batch", {
       error: req.session.addBatchError,
       success: req.session.addBatchSuccess,
@@ -103,7 +103,7 @@ router.put("/teachers/edit-teacher");
 // view all students
 router.get("/students", async (req, res) => {
   try {
-    const allStudents = await getAllTeachersData();
+    const allStudents = await getAllStudentsData();
     res.render("office/students/index", { allStudents });
   } catch (err) {
     console.error(err);

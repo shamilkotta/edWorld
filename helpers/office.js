@@ -214,6 +214,12 @@ module.exports = {
         {
           $addFields: {
             batch: "$batch.code",
+            birth_date: {
+              $dateToString: {
+                format: "%m/%d/%Y",
+                date: "$birth_date",
+              },
+            },
           },
         },
         {
@@ -223,20 +229,7 @@ module.exports = {
         },
       ])
         .then((data) => {
-          const response = [];
-          const formatOptions = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          };
-          data.forEach((ele) => {
-            ele.birth_date = ele?.birth_date?.toLocaleDateString(
-              "en-US",
-              formatOptions
-            );
-            response.push(ele);
-          });
-          resolve(response);
+          resolve(data);
         })
         .catch((err) => {
           reject(err);
@@ -272,6 +265,34 @@ module.exports = {
           $project: {
             code: 1,
             _id: 0,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getAllStudentsData: () =>
+    new Promise((resolve, reject) => {
+      Student.aggregate([
+        {
+          $addFields: {
+            birth_date: {
+              $dateToString: {
+                format: "%m/%d/%Y",
+                date: "$birth_date",
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            password: 0,
           },
         },
       ])
