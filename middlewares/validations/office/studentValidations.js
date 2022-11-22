@@ -81,14 +81,17 @@ const createStudentSchema = yup.object().shape({
         const data = await getOpenBatches();
         if (!data)
           return testContext.createError({
-            message: "You can't assign a student to this batch, its already full or started",
+            message:
+              "You can't assign a student to this batch, its already full or started",
           });
         let flag = false;
         data.forEach((ele) => {
           if (value === ele.code) flag = true;
         });
         if (flag) return flag;
-        return testContext.createError({ message: "This batch already full or started" });
+        return testContext.createError({
+          message: "This batch already full or started",
+        });
       }
     ),
   profile: yup
