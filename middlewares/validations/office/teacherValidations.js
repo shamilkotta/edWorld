@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const yup = require("yup");
 
 const createTeacherSchema = yup.object().shape({
@@ -67,6 +68,17 @@ const createTeacherSchema = yup.object().shape({
 
 module.exports = {
   createTeacherValidation: (req, res, next) => {
+    const { house_name, place, post, pin, district, state, ...rest } = req.body;
+    const address = {
+      house_name,
+      place,
+      post,
+      pin,
+      district,
+      state,
+    };
+    req.body = rest;
+    req.body.address = address;
     createTeacherSchema
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
