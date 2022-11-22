@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const { engine } = require("express-handlebars");
 const session = require("express-session");
+const morgan = require("morgan");
 require("dotenv").config();
 
 const connectDatabase = require("./config/database");
@@ -31,6 +32,9 @@ app.engine(
     defaultLayout: "index",
   })
 );
+
+// logger
+app.use(morgan("dev"))
 
 // session
 app.use(
