@@ -6,7 +6,7 @@ const {
   postAddStudent,
   putEditBatch,
 } = require("../controllers/office");
-const { getAllBatchesData } = require("../helpers/office");
+const { getAllBatchesData, getAllTeachersData } = require("../helpers/office");
 const {
   createBatchValidation,
   editBatchValidation,
@@ -62,7 +62,7 @@ router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 // view all teachers
 router.get("/teachers", async (req, res) => {
   try {
-    const allTeachers = await getAllBatchesData();
+    const allTeachers = await getAllTeachersData();
     res.render("office/teachers/index", { allTeachers });
   } catch (err) {
     console.error(err);
