@@ -1,0 +1,39 @@
+{{> office/teachers}}
+
+<section class="mt-5">
+  <h4 class="mb-4">All Batches</h4>
+  <div class="table-responsive">
+    <table class="table table-striped" id="batches-table">
+      <thead class="bg-dark text-white">
+        <tr>
+          <th scope="col">Batch</th>
+          <th scope="col">Batch Head</th>
+          <th scope="col">Seats</th>
+          <th scope="col">Students</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">Duration</th>
+          <th scope="col">Fee</th>
+          <th scope="col">View</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each allTeachers}}
+          <tr>
+            <th scope="row">{{this.code}}</th>
+            <td>{{this.head}}</td>
+            <td>{{this.seat_num}}</td>
+            <td>{{this.students}}</td>
+            <td>{{this.start_date}}</td>
+            <td>{{this.duration}}</td>
+            <td>{{this.fee}}</td>
+            <td>
+              <a href="/office/teacher/{{this.code}}">
+                <img src="/static/icon/export.svg" width="20px" alt="" />
+              </a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>
