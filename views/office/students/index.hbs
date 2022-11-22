@@ -1,7 +1,7 @@
 {{> office/students}}
 
 <section class="mt-5">
-  <h4 class="mb-4">All Teachers</h4>
+  <h4 class="mb-4">All Students</h4>
   <div class="table-responsive">
     <table class="table table-striped align-middle" id="batches-table">
       <thead class="bg-dark text-white">
@@ -10,9 +10,9 @@
           <th scope="col">Name</th>
           <th scope="col">Contact</th>
           <th scope="col">Batch Assigned</th>
-          <th scope="col">Salary</th>
-          <th scope="col">Qualification</th>
-          <th scope="col">Experience</th>
+          <th scope="col">Parent</th>
+          <th scope="col">Education</th>
+          <th scope="col">University</th>
           <th scope="col">View</th>
         </tr>
       </thead>
@@ -36,9 +36,9 @@
               </a>
             </td>
             <td>{{this.batch}}</td>
-            <td>{{this.salary}}</td>
-            <td>{{this.qualification}}</td>
-            <td>{{this.experience}}</td>
+            <td>{{this.parent_name}}</td>
+            <td>{{this.education}}</td>
+            <td>{{this.university}}</td>
             <td>
               <a href="/office/teacher/{{this.registerId}}">
                 <img src="/static/icon/export.svg" width="20px" alt="" />
