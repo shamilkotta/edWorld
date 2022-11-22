@@ -67,6 +67,7 @@ module.exports = {
         {
           $project: {
             registerId: 1,
+            name: 1,
             _id: 0,
           },
         },
@@ -156,6 +157,24 @@ module.exports = {
         {
           $addFields: {
             head: "$head.name",
+            start_date: {
+              $dateToString: {
+                format: "%m/%d/%Y",
+                date: "$start_date",
+              },
+            },
+            end_date: {
+              $dateToString: {
+                format: "%m/%d/%Y",
+                date: {
+                  $dateAdd: {
+                    startDate: "$start_date",
+                    unit: "month",
+                    amount: "$duration",
+                  },
+                },
+              },
+            },
             students: {
               $size: "$students",
             },
@@ -163,20 +182,7 @@ module.exports = {
         },
       ])
         .then((data) => {
-          const response = [];
-          const formatOptions = {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          };
-          data.forEach((ele) => {
-            ele.start_date = ele?.start_date?.toLocaleDateString(
-              "en-US",
-              formatOptions
-            );
-            response.push(ele);
-          });
-          resolve(response);
+          resolve(data);
         })
         .catch((err) => {
           reject(err);
