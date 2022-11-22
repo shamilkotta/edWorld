@@ -242,4 +242,44 @@ module.exports = {
           reject(err);
         });
     }),
+
+  getOpenBatches: () =>
+    new Promise((resolve, reject) => {
+      const today = new Date();
+      Batch.aggregate([
+        {
+          $lookup: {
+            from: "students",
+            localField: "code",
+            foreignField: "batch",
+            as: "students",
+          },
+        },
+        {
+          $addFields: {
+            studentsCount: {
+              $size: "$students",
+            },
+          },
+        },
+        {
+          $match: {
+            start_date: { $gt: today },
+            $expr: { $lt: ["$studentsCount", "$seat_num"] },
+          },
+        },
+        {
+          $project: {
+            code: 1,
+            _id: 0,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
