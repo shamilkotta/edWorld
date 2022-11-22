@@ -35,11 +35,11 @@ module.exports = {
         });
     }),
 
-  createPassword: (date) =>
+  createPassword: (data) =>
     new Promise((resolve, reject) => {
       const salt = Number(process.env.SALT) || 10;
       bcrypt
-        .hash(`${date}`, salt)
+        .hash(`${data}`, salt)
         .then((hash) => {
           resolve(hash);
         })
@@ -171,6 +171,60 @@ module.exports = {
           };
           data.forEach((ele) => {
             ele.start_date = ele?.start_date?.toLocaleDateString(
+              "en-US",
+              formatOptions
+            );
+            response.push(ele);
+          });
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getAllTeachersData: () =>
+    new Promise((resolve, reject) => {
+      Teacher.aggregate([
+        {
+          $lookup: {
+            from: "batches",
+            localField: "registerId",
+            foreignField: "batch_head",
+            pipeline: [
+              {
+                $project: {
+                  code: 1,
+                  _id: 0,
+                },
+              },
+            ],
+            as: "batch",
+          },
+        },
+        {
+          $unwind: "$batch",
+        },
+        {
+          $addFields: {
+            batch: "$batch.code",
+          },
+        },
+        {
+          $project: {
+            password: 0,
+          },
+        },
+      ])
+        .then((data) => {
+          const response = [];
+          const formatOptions = {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          };
+          data.forEach((ele) => {
+            ele.birth_date = ele?.birth_date?.toLocaleDateString(
               "en-US",
               formatOptions
             );
