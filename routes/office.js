@@ -59,11 +59,24 @@ router.post("/batches/add-batch", createBatchValidation, postAddBatch);
 // edit a batch
 router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 
+// view all teachers
+router.get("/teachers", async (req, res) => {
+  try {
+    const allTeachers = await getAllBatchesData();
+    res.render("office/teachers/index", { allTeachers });
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 // get add teacher view
 router.get("/teachers/add-teacher", (req, res) => {
   res.render("office/teachers/add-teacher", {
     error: req.session.addTeacherError,
     success: req.session.addTeacherSuccess,
+    helpers: {
+      today: () => new Date().toISOString().split("T")[0],
+    },
   });
   req.session.addTeacherError = "";
   req.session.addTeacherSuccess = "";

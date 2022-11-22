@@ -171,7 +171,7 @@ module.exports = {
           };
           data.forEach((ele) => {
             ele.start_date = ele?.start_date?.toLocaleDateString(
-              "en-IN",
+              "en-US",
               formatOptions
             );
             response.push(ele);
