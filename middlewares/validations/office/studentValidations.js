@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const yup = require("yup");
 const { getStudentsCountInBatch } = require("../../../helpers/office");
 
@@ -95,6 +96,17 @@ const createStudentSchema = yup.object().shape({
 
 module.exports = {
   createStudentValidation: (req, res, next) => {
+    const { house_name, place, post, pin, district, state, ...rest } = req.body;
+    const address = {
+      house_name,
+      place,
+      post,
+      pin,
+      district,
+      state,
+    };
+    req.body = rest;
+    req.body.address = address;
     createStudentSchema
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
