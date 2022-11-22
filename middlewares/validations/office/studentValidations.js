@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const yup = require("yup");
-const { getStudentsCountInBatch } = require("../../../helpers/office");
+const { getOpenBatches } = require("../../../helpers/office");
 
 const createStudentSchema = yup.object().shape({
   name: yup
@@ -75,16 +75,20 @@ const createStudentSchema = yup.object().shape({
     .required("Batch is reaquired")
     .max(5, "Batch code can not be greater than 5 charecters")
     .test(
-      "isSeatsFull",
-      "This batch already full",
+      "isOpenBatch",
+      "This batch already full or started",
       async (value, testContext) => {
-        const data = await getStudentsCountInBatch(value);
+        const data = await getOpenBatches();
         if (!data)
           return testContext.createError({
-            message: "Invalid batch provided",
+            message: "You can't assign a student to this batch, its already full or started",
           });
-        if (data.student_count < data.seat_num) return true;
-        return testContext.createError({ message: "This batch already full" });
+        let flag = false;
+        data.forEach((ele) => {
+          if (value === ele.code) flag = true;
+        });
+        if (flag) return flag;
+        return testContext.createError({ message: "This batch already full or started" });
       }
     ),
   profile: yup
