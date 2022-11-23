@@ -5,10 +5,11 @@
   <form
     method="post"
     action="/office/students/add-student"
+    enctype="multipart/form-data"
     style="max-width: 1000px;"
   >
-    <div class="row mb-2">
-      <div class="col-6 col-md-4 my-3">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="text"
@@ -20,7 +21,7 @@
           <label class="form-label" for="name">Name</label>
         </div>
       </div>
-      <div class="col-6 col-md-4 my-3">
+      <div class="col-12 col-sm-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="number"
@@ -32,7 +33,7 @@
           <label class="form-label" for="phone">Phone</label>
         </div>
       </div>
-      <div class="col-6 col-md-4 my-3">
+      <div class="col-12 col-sm-6 col-md-4 my-3">
         <div class="form-outline input-group-lg">
           <input
             type="email"
@@ -44,111 +45,141 @@
           <label class="form-label" for="email">Email</label>
         </div>
       </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="birth_date"
-            name="birth_date"
-            class="form-control"
-            max="{{today}}"
-            onfocus="(this.type='date')"
-            onblur="if(!this.value)this.type='text'"
-            required
-          />
-          <label class="form-label" for="birth_date">Date of birth</label>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-12 col-md-8 row">
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="birth_date"
+              name="birth_date"
+              class="form-control"
+              max="{{today}}"
+              onfocus="(this.type='date')"
+              onblur="if(!this.value)this.type='text'"
+              required
+            />
+            <label class="form-label" for="birth_date">Date of birth</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="input-group-lg">
+            <select
+              class="form-select form-control form-select-lg"
+              name="gender"
+            >
+              <option selected value="Not specified">Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="parent_name"
+              name="parent_name"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="parent_name">Parent Name</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="number"
+              id="parent_phone"
+              name="parent_phone"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="parent_phone">Parent Phone</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="education"
+              name="education"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="education">Education</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="institute"
+              name="institute"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="institute">Institute</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="university"
+              name="university"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="university">University / Board</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="input-group-lg">
+            <select
+              class="form-select form-control form-select-lg"
+              name="batch"
+              required
+            >
+              <option selected value="">Batch</option>
+              {{#each openBatches}}
+                <option value="{{this.code}}">{{this.code}}</option>
+              {{/each}}
+            </select>
+          </div>
         </div>
       </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="input-group-lg">
-          <select class="form-select form-control form-select-lg" name="gender">
-            <option selected value="Not specified">Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
+
+      <div class="col-12 col-sm-6 col-md-4 row">
+        <div class="col-12 mt-auto">
+          <div class="border border-1 mx-auto p-2" style="width: fit-content;">
+            <img
+              src="/static/svg/user-add.svg"
+              alt="profile"
+              width="150px"
+              height="150px"
+              id="profile-preview"
+              class=""
+            />
+          </div>
         </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="parent_name"
-            name="parent_name"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="parent_name">Parent Name</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="parent_phone"
-            name="parent_phone"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="parent_phone">Parent Phone</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="education"
-            name="education"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="education">Education</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="institute"
-            name="institute"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="institute">Institute</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="university"
-            name="university"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="university">University / Board</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="input-group-lg">
-          <select class="form-select form-control form-select-lg" name="batch" required>
-            <option selected value="">Batch</option>
-            {{#each openBatches}}
-            <option value="{{this.code}}">{{this.code}}</option>
-            {{/each}}
-          </select>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="profile"
-            name="profile"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="profile">Profile</label>
+        <div class="col-12 my-3 align-items-center">
+          <div class="form-outline input-group-lg">
+            <input
+              type="file"
+              id="profile"
+              name="profile"
+              class="form-control"
+              accept="image/png, image/jpg, image/jpeg"
+              required
+            />
+          </div>
+          <div class="form-text">
+            Max. 1MB size (500 X 500 ratio recommended)
+          </div>
         </div>
       </div>
     </div>
@@ -247,3 +278,9 @@
     >Create student</button>
   </form>
 </section>
+
+<script>
+  document.getElementById('profile').onchange = function () { const src =
+  URL.createObjectURL(this.files[0])
+  document.getElementById('profile-preview').src = src }
+</script>
