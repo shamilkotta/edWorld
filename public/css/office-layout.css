@@ -12,7 +12,7 @@
 }
 
 .office-layout > .sidebar {
-  margin-left: -200px;
+  margin-left: -210px;
   transition: margin 0.1s linear;
 }
 
@@ -40,6 +40,10 @@
   grid-column: 2/3;
   grid-row: 1/2;
   overflow-y: auto !important;
+}
+
+.office-layout > .sidebar .logout > a {
+  color: #696969 !important;
 }
 
 @media screen and (min-width: 768px) {

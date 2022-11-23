@@ -2,6 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 
+// router level layout setting
+router.all("/*", (req, res, next) => {
+  req.app.locals.layout = "index";
+  next();
+});
+
 router.get("/", (req, res) => {
   res.send("/");
 });
@@ -29,6 +35,11 @@ router.post("/office-login", (req, res) => {
     res.redirect("/office-login");
   }
 });
+
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/office");
+})
 
 router.get("/forgot-password", (req, res) => {
   res.render("forgot-pass");

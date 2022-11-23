@@ -69,6 +69,10 @@
             </a>
           </div>
           <div class="mx-3 mx-md-2 mb-2 logout">
+            <a href="/logout" class="office-logout d-flex align-items-center" >
+              <img src="/static/icon/logout.svg" width="20" alt="logout">
+              <h6 class="ms-2 my-auto d-md-none d-lg-inline">Logout</h6>
+            </a>
           </div>
         </div>
       </section>
@@ -95,11 +99,11 @@
 
     <!-- MDB -->
     <script type="text/javascript" src="/static/mdb/js/mdb.min.js"></script>
-    <script>
+    {{!-- <script>
       const instance = new mdb.Datatable(document.getElementById('datatable'))
       document.getElementById('datatable-search-input').addEventListener('input',
       (e) => { instance.search(e.target.value); });
-    </script>
+    </script> --}}
     <script src="/static/js/script.js"></script>
   </body>
 </html>
