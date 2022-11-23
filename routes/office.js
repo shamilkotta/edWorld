@@ -23,6 +23,7 @@ const {
 const {
   createTeacherValidation,
 } = require("../middlewares/validations/office/teacherValidations");
+const profileUpload = require("../middlewares/uploadFile");
 
 const router = express.Router();
 
@@ -126,6 +127,11 @@ router.get("/students/add-student", async (req, res) => {
 });
 
 // add student
-router.post("/students/add-student", createStudentValidation, postAddStudent);
+router.post(
+  "/students/add-student",
+  profileUpload,
+  createStudentValidation,
+  postAddStudent
+);
 
 module.exports = router;
