@@ -64,7 +64,13 @@ module.exports = {
       try {
         const data = req.validData;
         data.registerId = await generateUniqueCode("teacher");
-        data.password = await createPassword(data.birth_date);
+        let date = data.birth_date;
+        date = date.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        data.password = await createPassword(date);
         const teacher = new Teacher(data);
         teacher
           .save()
@@ -108,7 +114,13 @@ module.exports = {
       try {
         const data = req.validData;
         data.registerId = await generateUniqueCode("student");
-        data.password = await createPassword(data.birth_date);
+        let date = data.birth_date;
+        date = date.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+        data.password = await createPassword(date);
         const student = new Student(data);
         student
           .save()
