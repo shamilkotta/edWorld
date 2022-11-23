@@ -96,7 +96,12 @@ router.get("/teachers/add-teacher", (req, res) => {
 });
 
 // add teacher
-router.post("/teachers/add-teacher", createTeacherValidation, postAddTeacher);
+router.post(
+  "/teachers/add-teacher",
+  profileUpload,
+  createTeacherValidation,
+  postAddTeacher
+);
 
 // edit teacher
 router.put("/teachers/edit-teacher");

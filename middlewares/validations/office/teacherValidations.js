@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const yup = require("yup");
+const fs = require("fs");
 
 const createTeacherSchema = yup.object().shape({
   name: yup
@@ -59,35 +60,45 @@ const createTeacherSchema = yup.object().shape({
     .number()
     .typeError("Invalid experience count")
     .required("Experience can not be empty"),
-  profile: yup
-    .string()
-    .trim()
-    .url("Provide a profile image")
-    .required("Please porvide a profile image"),
+  profile: yup.string().trim().required("Please porvide a profile image"),
 });
 
 module.exports = {
   createTeacherValidation: (req, res, next) => {
-    const { house_name, place, post, pin, district, state, ...rest } = req.body;
-    const address = {
-      house_name,
-      place,
-      post,
-      pin,
-      district,
-      state,
-    };
-    req.body = rest;
-    req.body.address = address;
-    createTeacherSchema
-      .validate(req.body, { stripUnknown: true, abortEarly: false })
-      .then((data) => {
-        req.validData = data;
-        next();
-      })
-      .catch((err) => {
-        [req.validationErr] = err.errors;
-        next();
-      });
+    if (req.validationErr) next();
+    else if (!req.file) {
+      req.validationErr = "Please upload a profile image";
+      next();
+    } else {
+      const { house_name, place, post, pin, district, state, ...rest } =
+        req.body;
+      const address = {
+        house_name,
+        place,
+        post,
+        pin,
+        district,
+        state,
+      };
+      req.body = rest;
+      req.body.address = address;
+      req.body.profile = `/static/uploads/profile/${req.file.filename}`;
+      createTeacherSchema
+        .validate(req.body, { stripUnknown: true, abortEarly: false })
+        .then((data) => {
+          req.validData = data;
+          next();
+        })
+        .catch((err) => {
+          fs.unlink(req.file.path, (fserr) => {
+            if (fserr)
+              console.error({
+                message: `Cant't remove ${req?.file?.path}`,
+                err: fserr,
+              });
+          })[req.validationErr] = err.errors;
+          next();
+        });
+    }
   },
 };

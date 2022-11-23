@@ -1,120 +1,143 @@
-{{> office/teachers}}
+{{!-- {{> office/teachers}} --}}
 
 <section class="mt-5">
   <h4 class="mb-4">Add new Teacher</h4>
   <form
     method="post"
     action="/office/teachers/add-teacher"
+    enctype="multipart/form-data"
     style="max-width: 1000px;"
   >
     <div class="row mb-2">
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="name"
-            name="name"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="name">Name</label>
+      <div class="col-12 col-md-8 row">
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="name">Name</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="number"
+              id="phone"
+              name="phone"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="phone">Phone</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="email">Email</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="birth_date"
+              name="birth_date"
+              class="form-control"
+              max="{{today}}"
+              onfocus="(this.type='date')"
+              onblur="if(!this.value)this.type='text'"
+              required
+            />
+            <label class="form-label" for="birth_date">Date of birth</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="input-group-lg">
+            <select
+              class="form-select form-control form-select-lg"
+              name="gender"
+            >
+              <option selected value="Not specified">Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="number"
+              id="salary"
+              name="salary"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="salary">Salary</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="qualification"
+              name="qualification"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="qualification">Qualification</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="number"
+              id="experience"
+              name="experience"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="experience">Experience</label>
+          </div>
         </div>
       </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="phone"
-            name="phone"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="phone">Phone</label>
+      <div class="col-12 col-md-4 row">
+        <div class="col-12 mt-auto">
+          <div class="border border-1 mx-auto p-2" style="width: fit-content;">
+            <img
+              src="/static/svg/user-add.svg"
+              alt="profile"
+              width="150px"
+              height="150px"
+              id="profile-preview"
+              class=""
+            />
+          </div>
         </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="email">Email</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="birth_date"
-            name="birth_date"
-            class="form-control"
-            max="{{today}}"
-            onfocus="(this.type='date')"
-            onblur="if(!this.value)this.type='text'"
-            required
-          />
-          <label class="form-label" for="birth_date">Date of birth</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="input-group-lg">
-          <select class="form-select form-control form-select-lg" name="gender">
-            <option selected value="Not specified">Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="salary"
-            name="salary"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="salary">Salary</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="text"
-            id="qualification"
-            name="qualification"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="qualification">Qualification</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="experience"
-            name="experience"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="experience">Experience</label>
-        </div>
-      </div>
-      <div class="col-6 col-md-4 my-3">
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="profile"
-            name="profile"
-            class="form-control"
-            required
-          />
-          <label class="form-label" for="profile">Profile</label>
+        <div class="col-12 col-sm-6 col-md-12 my-3">
+          <div class="form-outline input-group-lg">
+            <input
+              type="file"
+              id="profile"
+              name="profile"
+              class="form-control"
+              accept="image/png, image/jpg, image/jpeg"
+              required
+            />
+          </div>
+          <div class="form-text">
+            Max. 1MB size (500 X 500 ratio recommended)
+          </div>
         </div>
       </div>
     </div>
@@ -128,7 +151,7 @@
         >Address</span>
       </div>
       <div class="row">
-        <div class="col-6 col-md-4 my-3">
+        <div class="col-12 col-sm-6 col-md-4 my-3">
           <div class="form-outline input-group-lg">
             <input
               type="text"
@@ -139,7 +162,7 @@
             <label class="form-label" for="house_name">House Name</label>
           </div>
         </div>
-        <div class="col-6 col-md-4 my-3">
+        <div class="col-12 col-sm-6 col-md-4 my-3">
           <div class="form-outline input-group-lg">
             <input
               type="text"
@@ -151,7 +174,7 @@
             <label class="form-label" for="place">Place</label>
           </div>
         </div>
-        <div class="col-6 col-md-4 my-3">
+        <div class="col-12 col-sm-6 col-md-4 my-3">
           <div class="form-outline input-group-lg">
             <input
               type="text"
@@ -163,7 +186,7 @@
             <label class="form-label" for="post">Post</label>
           </div>
         </div>
-        <div class="col-6 col-md-4 my-3">
+        <div class="col-12 col-sm-6 col-md-4 my-3">
           <div class="form-outline input-group-lg">
             <input
               type="number"
@@ -175,7 +198,7 @@
             <label class="form-label" for="pin">Pin Code</label>
           </div>
         </div>
-        <div class="col-6 col-md-4 my-3">
+        <div class="col-12 col-sm-6 col-md-4 my-3">
           <div class="form-outline input-group-lg">
             <input
               type="text"
@@ -187,7 +210,7 @@
             <label class="form-label" for="district">District</label>
           </div>
         </div>
-        <div class="col-6 col-md-4 my-3">
+        <div class="col-12 col-sm-6 col-md-4 my-3">
           <div class="form-outline input-group-lg">
             <input
               type="text"
@@ -213,3 +236,9 @@
     >Create teacher</button>
   </form>
 </section>
+
+<script>
+  document.getElementById('profile').onchange = function () { const src =
+  URL.createObjectURL(this.files[0])
+  document.getElementById('profile-preview').src = src }
+</script>
