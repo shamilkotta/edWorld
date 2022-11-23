@@ -1,4 +1,5 @@
 const express = require("express");
+const { postLogin } = require("../controllers");
 
 const router = express.Router();
 
@@ -13,13 +14,29 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("login");
+  if (req.session.loggedIn && req.session.user.role === "student")
+    res.redirect("/student");
+  else if (req.session.loggedIn && req.session.user.role === "teacher")
+    res.redirect("/teacher");
+  else {
+    const error = req.session.loginError;
+    res.render("login", { error });
+    req.session.loginError = "";
+  }
 });
 
+router.post("/login", postLogin);
+
 router.get("/office-login", (req, res) => {
-  const error = req.session.officeLoginError;
-  res.render("office-login", { error });
-  req.session.officeLoginError = "";
+  if (req.session.loggedIn && req.session.user.role === "office")
+    res.redirect("/office");
+  else if (req.session.loggedIn && req.session.user !== "office")
+    res.redirect("/404");
+  else {
+    const error = req.session.officeLoginError;
+    res.render("office-login", { error });
+    req.session.officeLoginError = "";
+  }
 });
 
 router.post("/office-login", (req, res) => {
@@ -28,7 +45,7 @@ router.post("/office-login", (req, res) => {
   const pass = process.env.OFFICE_PASS || "admin123";
   if (username === name && password === pass) {
     req.session.loggedIn = true;
-    req.session.user = { role: "office" };
+    req.session.user = { username: name, role: "office" };
     res.redirect("/office");
   } else {
     req.session.officeLoginError = "Invalid user name or password";
@@ -39,10 +56,14 @@ router.post("/office-login", (req, res) => {
 router.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/office");
-})
+});
 
 router.get("/forgot-password", (req, res) => {
   res.render("forgot-pass");
+});
+
+router.get("/update-password", (req, res) => {
+  res.render("update-password");
 });
 
 module.exports = router;
