@@ -8,9 +8,11 @@ require("dotenv").config();
 const connectDatabase = require("./config/database");
 const indexRouter = require("./routes/index");
 const officeRouter = require("./routes/office");
+const teacherRouter = require("./routes/teacher");
+const studentRouter = require("./routes/student");
 const errorHandler = require("./middlewares/errorHandler");
 const ErrorResponse = require("./utils/ErrorResponse");
-const { officeAuthorization } = require("./middlewares/authorization");
+const { officeAuthorization, teacherAuthorization, studentAuthorization } = require("./middlewares/authorization");
 
 const app = express();
 
@@ -51,8 +53,8 @@ app.use("/static", express.static(`${__dirname}/public`));
 
 // route setup
 app.use("/office", officeAuthorization, officeRouter);
-// app.use("/teacher");
-// app.use("/student");
+app.use("/teacher", teacherAuthorization, teacherRouter);
+app.use("/student", studentAuthorization, studentRouter);
 app.use("/", indexRouter);
 
 // 404 request
