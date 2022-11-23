@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+const fs = require("fs");
+
 const { generateUniqueCode, createPassword } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -104,11 +106,25 @@ module.exports = {
             if (err.code === 11000)
               req.session.addStudentError = "Duplicate email or phone number";
             else req.session.addStudentError = "Something went wrong";
+            fs.unlink(req.file.path, (fserr) => {
+              if (fserr)
+                console.error({
+                  message: `Cant't remove ${req?.file?.path}`,
+                  err: fserr,
+                });
+            });
             res.redirect(303, "/office/students/add-student");
           });
       } catch (err) {
         console.error(err);
         req.session.addStudentError = "Something went wrong";
+        fs.unlink(req.file.path, (fserr) => {
+          if (fserr)
+            console.error({
+              message: `Cant't remove ${req?.file?.path}`,
+              err: fserr,
+            });
+        });
         res.redirect(303, "/office/students/add-student");
       }
     }
