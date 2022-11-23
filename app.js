@@ -34,7 +34,7 @@ app.engine(
 );
 
 // logger
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 
 // session
 app.use(
