@@ -31,6 +31,7 @@
             name="duration"
             class="form-control"
             required
+            min="0"
           />
           <label class="form-label" for="duration">Duration (months)</label>
         </div>
@@ -43,6 +44,7 @@
             name="fee"
             class="form-control"
             required
+            min="0"
           />
           <label class="form-label" for="fee">Fee</label>
         </div>
@@ -55,16 +57,21 @@
             name="seat_num"
             class="form-control"
             required
+            min="0"
           />
           <label class="form-label" for="seat_num">Number of Seats</label>
         </div>
       </div>
       <div class="col-6 col-md-4 my-3">
         <div class="input-group-lg">
-          <select class="form-select form-control form-select-lg" name="batch_head" required>
+          <select
+            class="form-select form-control form-select-lg"
+            name="batch_head"
+            required
+          >
             <option selected value="">Batch Head</option>
             {{#each openTeachers}}
-            <option value="{{this.registerId}}">{{this.name}}</option>
+              <option value="{{this.registerId}}">{{this.name}}</option>
             {{/each}}
           </select>
         </div>
