@@ -5,12 +5,13 @@ const {
   postAddTeacher,
   postAddStudent,
   putEditBatch,
+  getAddBatch,
+  getAddTeacher,
+  getAddStudent,
 } = require("../controllers/office");
 const {
   getAllBatchesData,
   getAllTeachersData,
-  getOpenTeachers,
-  getOpenBatches,
   getAllStudentsData,
 } = require("../helpers/office");
 const {
@@ -40,31 +41,16 @@ router.get("/", (req, res) => {
 // view all batches
 router.get("/batches", async (req, res) => {
   try {
+    // get all batches data to display in table
     const allBatches = await getAllBatchesData();
     res.render("office/batches/index", { allBatches });
   } catch (err) {
-    console.error(err);
+    res.render("office/batches/index", { allBatches: [] });
   }
 });
 
 // get add batch view
-router.get("/batches/add-batch", async (req, res) => {
-  try {
-    const teachers = await getOpenTeachers();
-    res.render("office/batches/add-batch", {
-      error: req.session.addBatchError,
-      success: req.session.addBatchSuccess,
-      openTeachers: teachers,
-      helpers: {
-        today: () => new Date().toISOString().split("T")[0],
-      },
-    });
-    req.session.addBatchError = "";
-    req.session.addBatchSuccess = "";
-  } catch (err) {
-    console.error(err);
-  }
-});
+router.get("/batches/add-batch", getAddBatch);
 
 // create a batch
 router.post("/batches/add-batch", createBatchValidation, postAddBatch);
@@ -75,25 +61,16 @@ router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 // view all teachers
 router.get("/teachers", async (req, res) => {
   try {
+    // get all teachers data to display in table
     const allTeachers = await getAllTeachersData();
     res.render("office/teachers/index", { allTeachers });
   } catch (err) {
-    console.error(err);
+    res.render("office/teachers/index", { allTeachers: [] });
   }
 });
 
 // get add teacher view
-router.get("/teachers/add-teacher", (req, res) => {
-  res.render("office/teachers/add-teacher", {
-    error: req.session.addTeacherError,
-    success: req.session.addTeacherSuccess,
-    helpers: {
-      today: () => new Date().toISOString().split("T")[0],
-    },
-  });
-  req.session.addTeacherError = "";
-  req.session.addTeacherSuccess = "";
-});
+router.get("/teachers/add-teacher", getAddTeacher);
 
 // add teacher
 router.post(
@@ -109,27 +86,16 @@ router.put("/teachers/edit-teacher");
 // view all students
 router.get("/students", async (req, res) => {
   try {
+    // get all students data to display in table
     const allStudents = await getAllStudentsData();
     res.render("office/students/index", { allStudents });
   } catch (err) {
-    console.error(err);
+    res.render("office/students/index", { allStudents: [] });
   }
 });
 
 // get add student view
-router.get("/students/add-student", async (req, res) => {
-  const openBatches = await getOpenBatches();
-  res.render("office/students/add-student", {
-    error: req.session.addStudentError,
-    success: req.session.addStudentSuccess,
-    openBatches,
-    helpers: {
-      today: () => new Date().toISOString().split("T")[0],
-    },
-  });
-  req.session.addStudentError = "";
-  req.session.addStudentSuccess = "";
-});
+router.get("/students/add-student", getAddStudent);
 
 // add student
 router.post(

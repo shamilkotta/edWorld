@@ -1,12 +1,45 @@
 /* eslint-disable camelcase */
 const fs = require("fs");
 
-const { generateUniqueCode, createPassword } = require("../helpers/office");
+const {
+  generateUniqueCode,
+  createPassword,
+  getOpenTeachers,
+  getOpenBatches,
+} = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
 const Teacher = require("../models/teacher");
 
 module.exports = {
+  getAddBatch: async (req, res) => {
+    try {
+      // open teachers to lead a bach
+      const teachers = await getOpenTeachers();
+      res.render("office/batches/add-batch", {
+        error: req.session.addBatchError,
+        success: req.session.addBatchSuccess,
+        openTeachers: teachers,
+        helpers: {
+          today: () => new Date().toISOString().split("T")[0],
+        },
+      });
+      req.session.addBatchError = "";
+      req.session.addBatchSuccess = "";
+    } catch (err) {
+      res.render("office/batches/add-batch", {
+        error: req.session.addBatchError,
+        success: req.session.addBatchSuccess,
+        openTeachers: [],
+        helpers: {
+          today: () => new Date().toISOString().split("T")[0],
+        },
+      });
+      req.session.addBatchError = "";
+      req.session.addBatchSuccess = "";
+    }
+  },
+
   postAddBatch: async (req, res) => {
     if (req.validationErr) {
       req.session.addBatchError = req.validationErr;
@@ -14,6 +47,7 @@ module.exports = {
     } else {
       try {
         const data = req.validData;
+        // generating batch code -->BH00X
         data.code = await generateUniqueCode("batch");
         const batch = new Batch(data);
         batch
@@ -30,7 +64,6 @@ module.exports = {
             res.redirect(303, "/office/batches/add-batch");
           });
       } catch (err) {
-        console.error(err);
         req.session.addBatchError = "Something went wrong";
         res.redirect(303, "/office/batches/add-batch");
       }
@@ -56,6 +89,18 @@ module.exports = {
     }
   },
 
+  getAddTeacher: (req, res) => {
+    res.render("office/teachers/add-teacher", {
+      error: req.session.addTeacherError,
+      success: req.session.addTeacherSuccess,
+      helpers: {
+        today: () => new Date().toISOString().split("T")[0],
+      },
+    });
+    req.session.addTeacherError = "";
+    req.session.addTeacherSuccess = "";
+  },
+
   postAddTeacher: async (req, res) => {
     if (req.validationErr) {
       req.session.addTeacherError = req.validationErr;
@@ -63,6 +108,7 @@ module.exports = {
     } else {
       try {
         const data = req.validData;
+        // generating register id --> TR00X
         data.registerId = await generateUniqueCode("teacher");
         let date = data.birth_date;
         date = date.toLocaleDateString("en-IN", {
@@ -70,6 +116,7 @@ module.exports = {
           month: "2-digit",
           year: "numeric",
         });
+        // genraing password from DOB
         data.password = await createPassword(date);
         const teacher = new Teacher(data);
         teacher
@@ -92,7 +139,6 @@ module.exports = {
             res.redirect(303, "/office/teachers/add-teacher");
           });
       } catch (err) {
-        console.error(err);
         req.session.addTeacherError = "Something went wrong";
         fs.unlink(req.file.path, (fserr) => {
           if (fserr)
@@ -106,6 +152,20 @@ module.exports = {
     }
   },
 
+  getAddStudent: async (req, res) => {
+    const openBatches = await getOpenBatches();
+    res.render("office/students/add-student", {
+      error: req.session.addStudentError,
+      success: req.session.addStudentSuccess,
+      openBatches,
+      helpers: {
+        today: () => new Date().toISOString().split("T")[0],
+      },
+    });
+    req.session.addStudentError = "";
+    req.session.addStudentSuccess = "";
+  },
+
   postAddStudent: async (req, res) => {
     if (req.validationErr) {
       req.session.addStudentError = req.validationErr;
@@ -113,6 +173,7 @@ module.exports = {
     } else {
       try {
         const data = req.validData;
+        // generating register id --> ST00X
         data.registerId = await generateUniqueCode("student");
         let date = data.birth_date;
         date = date.toLocaleDateString("en-IN", {
@@ -120,6 +181,7 @@ module.exports = {
           month: "2-digit",
           year: "numeric",
         });
+        // genraing password from DOB
         data.password = await createPassword(date);
         const student = new Student(data);
         student
@@ -142,7 +204,6 @@ module.exports = {
             res.redirect(303, "/office/students/add-student");
           });
       } catch (err) {
-        console.error(err);
         req.session.addStudentError = "Something went wrong";
         fs.unlink(req.file.path, (fserr) => {
           if (fserr)
