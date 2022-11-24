@@ -7,6 +7,9 @@ const createTeacherSchema = yup.object().shape({
     .string()
     .trim()
     .required("Name can not be empty")
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    )
     .test("isPerfectString", "Please enter valid name", (arg) =>
       /^[A-Za-z]+$/.test(arg)
     ),
@@ -44,18 +47,57 @@ const createTeacherSchema = yup.object().shape({
     .positive("Enter valid salary")
     .integer("Enter valid salary"),
   address: yup.object({
-    house_name: yup.string().trim().default("").ensure(),
-    place: yup.string().trim().required("Place can not be empty"),
-    post: yup.string().trim().required("Post can not be empty"),
+    house_name: yup
+      .string()
+      .trim()
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      )
+      .default("")
+      .ensure(),
+    place: yup
+      .string()
+      .trim()
+      .required("Place can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    post: yup
+      .string()
+      .trim()
+      .required("Post can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
     pin: yup
-      .number()
-      .typeError("Invalid pin code")
+      .string()
+      .trim()
       .required("Pin code can not be empty")
-      .integer("Enter a valid pin code"),
-    district: yup.string().trim().required("District can not be empty"),
-    state: yup.string().trim().required("State can not be empty"),
+      .test("isValidPin", "Enter a valid PIN code", (arg) =>
+        /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(arg)
+      ),
+    district: yup
+      .string()
+      .trim()
+      .required("District can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    state: yup
+      .string()
+      .trim()
+      .required("State can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
   }),
-  qualification: yup.string().trim().required("Qualification can not be empty"),
+  qualification: yup
+    .string()
+    .trim()
+    .required("Qualification can not be empty")
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    ),
   experience: yup
     .number()
     .typeError("Invalid experience count")
@@ -86,6 +128,7 @@ module.exports = {
       createTeacherSchema
         .validate(req.body, { stripUnknown: true, abortEarly: false })
         .then((data) => {
+          console.log(data);
           req.validData = data;
           next();
         })
@@ -96,7 +139,9 @@ module.exports = {
                 message: `Cant't remove ${req?.file?.path}`,
                 err: fserr,
               });
-          })[req.validationErr] = err.errors;
+          });
+          const validationErr = err.errors[0];
+          req.validationErr = validationErr;
           next();
         });
     }

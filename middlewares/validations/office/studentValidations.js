@@ -7,6 +7,9 @@ const { getOpenBatches } = require("../../../helpers/office");
 const createStudentSchema = yup.object().shape({
   name: yup
     .string()
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    )
     .trim()
     .required("Name can not be empty")
     .test("isPerfectString", "Please enter valid name", (arg) =>
@@ -43,6 +46,9 @@ const createStudentSchema = yup.object().shape({
     .string()
     .trim()
     .required("Name can not be empty")
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    )
     .test("isPerfectString", "Please enter valid name", (arg) =>
       /^[A-Za-z ]+$/.test(arg)
     ),
@@ -56,20 +62,71 @@ const createStudentSchema = yup.object().shape({
       /^[0]?[6789]\d{9}$/.test(arg)
     ),
   address: yup.object({
-    house_name: yup.string().trim().default("").ensure(),
-    place: yup.string().trim().required("Place can not be empty"),
-    post: yup.string().trim().required("Post can not be empty"),
+    house_name: yup
+      .string()
+      .trim()
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      )
+      .default("")
+      .ensure(),
+    place: yup
+      .string()
+      .trim()
+      .required("Place can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    post: yup
+      .string()
+      .trim()
+      .required("Post can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
     pin: yup
-      .number()
-      .typeError("Invalid pin code")
+      .string()
+      .trim()
       .required("Pin code can not be empty")
-      .integer("Enter a valid pin code"),
-    district: yup.string().trim().required("District can not be empty"),
-    state: yup.string().trim().required("State can not be empty"),
+      .test("isValidPin", "Enter a valid PIN code", (arg) =>
+        /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(arg)
+      ),
+    district: yup
+      .string()
+      .trim()
+      .required("District can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    state: yup
+      .string()
+      .trim()
+      .required("State can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
   }),
-  education: yup.string().trim().required("Education can not be empty"),
-  institute: yup.string().trim().required("Institute can not be empty"),
-  university: yup.string().trim().required("University can not be empty"),
+  education: yup
+    .string()
+    .trim()
+    .required("Education can not be empty")
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    ),
+  institute: yup
+    .string()
+    .trim()
+    .required("Institute can not be empty")
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    ),
+  university: yup
+    .string()
+    .trim()
+    .required("University can not be empty")
+    .transform((value) =>
+      value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+    ),
   batch: yup
     .string()
     .trim()
@@ -132,7 +189,9 @@ module.exports = {
                 message: `Cant't remove ${req?.file?.path}`,
                 err: fserr,
               });
-          })[req.validationErr] = err.errors;
+          });
+          const validationErr = err.errors[0];
+          req.validationErr = validationErr;
           next();
         });
     }
