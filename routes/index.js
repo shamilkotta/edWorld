@@ -63,7 +63,9 @@ router.get("/forgot-password", (req, res) => {
 });
 
 router.get("/update-password", (req, res) => {
-  res.render("update-password");
+  if (["teacher", "student"].includes(req.session?.user?.role))
+    res.render("update-password");
+  else res.redirect("/login");
 });
 
 module.exports = router;
