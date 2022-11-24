@@ -41,9 +41,13 @@ router.get("/", (req, res) => {
 // view all batches
 router.get("/batches", async (req, res) => {
   try {
+    let { page = 1, limit = 10 } = req.query;
+    const { search = "", sort = "code" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
     // get all batches data to display in table
-    const allBatches = await getAllBatchesData();
-    res.render("office/batches/index", { allBatches });
+    const data = await getAllBatchesData(page, limit, search, sort);
+    res.render("office/batches/index", { ...data, search });
   } catch (err) {
     res.render("office/batches/index", { allBatches: [] });
   }
@@ -61,9 +65,13 @@ router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 // view all teachers
 router.get("/teachers", async (req, res) => {
   try {
+    let { page = 1, limit = 10 } = req.query;
+    const { search = "", sort = "code" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
     // get all teachers data to display in table
-    const allTeachers = await getAllTeachersData();
-    res.render("office/teachers/index", { allTeachers });
+    const data = await getAllTeachersData(page, limit, search, sort);
+    res.render("office/teachers/index", { ...data });
   } catch (err) {
     res.render("office/teachers/index", { allTeachers: [] });
   }
@@ -86,9 +94,13 @@ router.put("/teachers/edit-teacher");
 // view all students
 router.get("/students", async (req, res) => {
   try {
+    let { page = 1, limit = 10 } = req.query;
+    const { search = "", sort = "code" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
     // get all students data to display in table
-    const allStudents = await getAllStudentsData();
-    res.render("office/students/index", { allStudents });
+    const data = await getAllStudentsData(page, limit, search, sort);
+    res.render("office/students/index", { ...data });
   } catch (err) {
     res.render("office/students/index", { allStudents: [] });
   }
