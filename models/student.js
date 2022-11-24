@@ -63,7 +63,7 @@ const studentSchema = new mongoose.Schema({
       trim: true,
     },
     pin: {
-      type: Number,
+      type: String,
       required: true,
     },
     district: {
