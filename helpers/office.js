@@ -50,6 +50,7 @@ module.exports = {
 
   getOpenTeachers: () =>
     new Promise((resolve, reject) => {
+      const today = new Date();
       Teacher.aggregate([
         {
           $lookup: {
@@ -60,8 +61,32 @@ module.exports = {
           },
         },
         {
+          $unwind: {
+            path: "$closed_batches",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $match: {
-            closed_batches: { $eq: [] },
+            $or: [
+              {
+                closed_batches: { $exists: false },
+              },
+              {
+                $expr: {
+                  $lt: [
+                    {
+                      $dateAdd: {
+                        startDate: "$closed_batches.start_date",
+                        unit: "month",
+                        amount: "$closed_batches.duration",
+                      },
+                    },
+                    today,
+                  ],
+                },
+              },
+            ],
           },
         },
         {
@@ -209,7 +234,7 @@ module.exports = {
           },
         },
         {
-          $unwind: "$batch",
+          $unwind: { path: "$batch", preserveNullAndEmptyArrays: true },
         },
         {
           $addFields: {
@@ -257,7 +282,7 @@ module.exports = {
         },
         {
           $match: {
-            start_date: { $gt: today },
+            start_date: { $gte: today },
             $expr: { $lt: ["$studentsCount", "$seat_num"] },
           },
         },
