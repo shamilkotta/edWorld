@@ -141,8 +141,17 @@ module.exports = {
         });
     }),
 
-  getAllBatchesData: () =>
+  getAllBatchesData: (page, limit, search, sort) =>
     new Promise((resolve, reject) => {
+      page -= 1;
+
+      if (sort === "code") sort = [sort];
+      else sort = sort.split(",");
+
+      const sortBy = {};
+      if (sort[1] && sort[1] === "1") sortBy[sort[0]] = -1;
+      else sortBy[sort[0]] = 1;
+
       Batch.aggregate([
         {
           $lookup: {
@@ -205,9 +214,51 @@ module.exports = {
             },
           },
         },
+        // search
+        {
+          $match: {
+            $or: [
+              { code: { $regex: search, $options: "i" } },
+              { head: { $regex: search, $options: "i" } },
+              { start_date: { $regex: search, $options: "i" } },
+              { end_date: { $regex: search, $options: "i" } },
+              { fee: { $regex: search, $options: "i" } },
+            ],
+          },
+        },
+        {
+          $sort: sortBy,
+        },
+        // transforming results
+        {
+          $facet: {
+            allBatches: [
+              {
+                $skip: page * limit,
+              },
+              {
+                $limit: limit,
+              },
+            ],
+            total: [{ $count: "total" }],
+          },
+        },
+        {
+          $unwind: {
+            path: "$total",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            total: "$total.total",
+            page: page + 1,
+            limit,
+          },
+        },
       ])
         .then((data) => {
-          resolve(data);
+          resolve(data[0]);
         })
         .catch((err) => {
           reject(err);
