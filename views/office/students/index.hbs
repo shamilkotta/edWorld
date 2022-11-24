@@ -9,7 +9,7 @@
           <th scope="col">Id</th>
           <th scope="col">Name</th>
           <th scope="col">Contact</th>
-          <th scope="col">Batch Assigned</th>
+          <th scope="col">Batch</th>
           <th scope="col">Parent</th>
           <th scope="col">Education</th>
           <th scope="col">University</th>
@@ -21,18 +21,29 @@
           <tr>
             <td scope="row">{{this.registerId}}</td>
             <td class="d-flex align-items-center">
-              <img src="/static/img/profile.jpg" style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px" width="40px" height="40px" class="me-2" alt="{{this.name}}">
+              <img
+                src="{{this.profile}}"
+                style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
+                width="40px"
+                height="40px"
+                class="me-2"
+                alt="{{this.name}}"
+              />
               <div>
-                <span class="fs-6 text-black fw-normal">{{this.name}}</span><br>
-                <span class="text-muted" style="font-size: 13px;">{{this.birth_date}}</span>
+                <span class="fs-6 text-black fw-normal">{{this.name}}</span><br
+                />
+                <span
+                  class="text-muted"
+                  style="font-size: 13px;"
+                >{{this.birth_date}}</span>
               </div>
             </td>
             <td>
               <a href="tel:{{this.phone}}" class="me-1">
-                <img src="/static/icon/phone.svg" width="34px" alt="call">
+                <img src="/static/icon/phone.svg" width="34px" alt="call" />
               </a>
               <a href="mailto:{{this.email}}">
-                <img src="/static/icon/mail.svg" width="34px" alt="mail">
+                <img src="/static/icon/mail.svg" width="34px" alt="mail" />
               </a>
             </td>
             <td>{{this.batch}}</td>
@@ -40,7 +51,7 @@
             <td>{{this.education}}</td>
             <td>{{this.university}}</td>
             <td>
-              <a href="/office/teacher/{{this.registerId}}">
+              <a href="/office/student/{{this.registerId}}">
                 <img src="/static/icon/export.svg" width="20px" alt="" />
               </a>
             </td>

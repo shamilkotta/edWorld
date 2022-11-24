@@ -12,7 +12,11 @@ const teacherRouter = require("./routes/teacher");
 const studentRouter = require("./routes/student");
 const errorHandler = require("./middlewares/errorHandler");
 const ErrorResponse = require("./utils/ErrorResponse");
-const { officeAuthorization, teacherAuthorization, studentAuthorization } = require("./middlewares/authorization");
+const {
+  officeAuthorization,
+  teacherAuthorization,
+  studentAuthorization,
+} = require("./middlewares/authorization");
 
 const app = express();
 

@@ -21,21 +21,36 @@
           <tr>
             <td scope="row">{{this.registerId}}</td>
             <td class="d-flex align-items-center">
-              <img src="/static/img/profile.jpg" style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px" width="40px" height="40px" class="me-2" alt="{{this.name}}">
+              <img
+                src="{{this.profile}}"
+                style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
+                width="40px"
+                height="40px"
+                class="me-2"
+                alt="{{this.name}}"
+              />
               <div>
-                <span class="fs-6 text-black fw-normal">{{this.name}}</span><br>
-                <span class="text-muted" style="font-size: 13px;">{{this.birth_date}}</span>
+                <span class="fs-6 text-black fw-normal">{{this.name}}</span><br
+                />
+                <span
+                  class="text-muted"
+                  style="font-size: 13px;"
+                >{{this.birth_date}}</span>
               </div>
             </td>
             <td>
               <a href="tel:{{this.phone}}" class="me-1">
-                <img src="/static/icon/phone.svg" width="34px" alt="call">
+                <img src="/static/icon/phone.svg" width="34px" alt="call" />
               </a>
               <a href="mailto:{{this.email}}">
-                <img src="/static/icon/mail.svg" width="34px" alt="mail">
+                <img src="/static/icon/mail.svg" width="34px" alt="mail" />
               </a>
             </td>
-            <td>{{this.batch}}</td>
+            {{#if this.batch}}
+              <td>{{this.batch}}</td>
+            {{else}}
+              <td> - </td>
+            {{/if}}
             <td>{{this.salary}}</td>
             <td>{{this.qualification}}</td>
             <td>{{this.experience}}</td>
