@@ -352,8 +352,17 @@ module.exports = {
         });
     }),
 
-  getAllStudentsData: () =>
+  getAllStudentsData: (page, limit, search, sort) =>
     new Promise((resolve, reject) => {
+      page -= 1;
+
+      if (sort === "registerId") sort = [sort];
+      else sort = sort.split(",");
+
+      const sortBy = {};
+      if (sort[1] && sort[1] === "1") sortBy[sort[0]] = -1;
+      else sortBy[sort[0]] = 1;
+
       Student.aggregate([
         {
           $addFields: {
@@ -371,9 +380,51 @@ module.exports = {
             password: 0,
           },
         },
+        // search
+        {
+          $match: {
+            $or: [
+              { registerId: { $regex: search, $options: "i" } },
+              { name: { $regex: search, $options: "i" } },
+              { batch: { $regex: search, $options: "i" } },
+              { education: { $regex: search, $options: "i" } },
+              { phone: { $regex: search, $options: "i" } },
+            ],
+          },
+        },
+        {
+          $sort: sortBy,
+        },
+        // transforming results
+        {
+          $facet: {
+            allStudents: [
+              {
+                $skip: page * limit,
+              },
+              {
+                $limit: limit,
+              },
+            ],
+            total: [{ $count: "total" }],
+          },
+        },
+        {
+          $unwind: {
+            path: "$total",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            total: "$total.total",
+            page: page + 1,
+            limit,
+          },
+        },
       ])
         .then((data) => {
-          resolve(data);
+          resolve(data[0]);
         })
         .catch((err) => {
           reject(err);
