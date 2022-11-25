@@ -17,7 +17,6 @@ document.getElementById("profile").onchange = function () {
 // pattern validation
 function validateName(input) {
   if (/^[A-Za-z ]+$/.test(input.value)) {
-    // input is valid -- reset the error message
     input.setCustomValidity("");
   } else {
     input.setCustomValidity(`Enter a valid name`);
@@ -26,7 +25,6 @@ function validateName(input) {
 
 function validatePhone(input) {
   if (/^[0]?[6789]\d{9}$/.test(input.value)) {
-    // input is valid -- reset the error message
     input.setCustomValidity("");
   } else {
     input.setCustomValidity(`Enter a valid phone number`);
@@ -39,7 +37,6 @@ function validateEmail(input) {
       input.value
     )
   ) {
-    // input is valid -- reset the error message
     input.setCustomValidity("");
   } else {
     input.setCustomValidity(`Enter a valid email`);
@@ -48,9 +45,26 @@ function validateEmail(input) {
 
 function validatePinCode(input) {
   if (/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(input.value)) {
-    // input is valid -- reset the error message
     input.setCustomValidity("");
   } else {
     input.setCustomValidity(`Enter a valid pin code`);
+  }
+}
+
+function checkConfirmPass(input) {
+  if (input.value !== document.getElementById("password").value)
+    input.setCustomValidity("Password Must be Matching.");
+  else input.setCustomValidity("");
+}
+
+function validatePassword(input) {
+  if (
+    /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])(?!.*\s).{8,16})/.test(
+      input.value
+    )
+  ) {
+    input.setCustomValidity("");
+  } else {
+    input.setCustomValidity("Password must contain : \n Atleast One uppper case letter and lower case letter \nAtleast one digit and special charecter \nCan not contain white spaces \nAnd must be 8 to 16 charecters long");
   }
 }
