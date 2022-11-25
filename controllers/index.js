@@ -1,8 +1,11 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const Teacher = require("../models/teacher");
 const Student = require("../models/student");
 const { createPassword } = require("../helpers/office");
+const { compileHTMLEmailTemplate } = require("../helpers");
+const sendMail = require("../config/nodemailer");
 
 module.exports = {
   getLogin: (req, res) => {
@@ -115,6 +118,57 @@ module.exports = {
     } else {
       req.session.updatePassError = "Please enter a strong password";
       res.redirect("/update-password");
+    }
+  },
+
+  postForgotPass: async (req, res) => {
+    const { role } = req.body;
+    let { email } = req.body;
+    if (!email.trim() || !role) {
+      req.session.forgotPassMessage = "Enter your email and account type";
+      res.redirect(303, "/forgot-password");
+    } else {
+      email = email.trim();
+
+      let model;
+      if (role === "teacher") model = Teacher;
+      else model = Student;
+
+      let token;
+      let emailContent;
+      const emailTemplatePath = `./utils/reset-password-email.html`;
+
+      try {
+        // find user and sign a jwt with 10 min exp
+        const user = await model.findOne({ email });
+        if (user) {
+          const key = process.env.JWT_KEY || "jwt-key";
+          token = jwt.sign(
+            { email: user.email, registerId: user.registerId },
+            key,
+            { expiresIn: 60 * 10 }
+          );
+
+          // reading email template and sending email
+          const resetUrl = `http://localhost:5000/reset-password/${token}`;
+          emailContent = await compileHTMLEmailTemplate(emailTemplatePath, {
+            resetUrl,
+          });
+          // send mail
+          sendMail(email, "Password reset link", emailContent).then(() => {
+            req.session.forgotPassMessage =
+              "We've sent a password reset link to your email (only valid for 10 min)";
+            res.redirect(303, "/forgot-password");
+          });
+        } else {
+          req.session.forgotPassMessage = "Can't send send reset password link";
+          res.redirect(303, "/forgot-password");
+        }
+      } catch (error) {
+        req.session.forgotPassMessage =
+          "Somthing went wrong, can't send reset password link";
+        res.redirect(303, "/forgot-password");
+      }
     }
   },
 };
