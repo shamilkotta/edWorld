@@ -125,7 +125,7 @@ module.exports = {
     const { role } = req.body;
     let { email } = req.body;
     if (!email.trim() || !role) {
-      req.session.forgotPassMessage = "Enter your email and account type";
+      req.session.forgotPassErr = "Enter your email and account type";
       res.redirect(303, "/forgot-password");
     } else {
       email = email.trim();
@@ -144,7 +144,7 @@ module.exports = {
         if (user) {
           const key = process.env.JWT_KEY || "jwt-key";
           token = jwt.sign(
-            { email: user.email, registerId: user.registerId },
+            { email: user.email, registerId: user.registerId, role },
             key,
             { expiresIn: 60 * 10 }
           );
@@ -156,19 +156,90 @@ module.exports = {
           });
           // send mail
           sendMail(email, "Password reset link", emailContent).then(() => {
-            req.session.forgotPassMessage =
+            req.session.forgotPassSucc =
               "We've sent a password reset link to your email (only valid for 10 min)";
             res.redirect(303, "/forgot-password");
           });
         } else {
-          req.session.forgotPassMessage = "Can't send send reset password link";
+          req.session.forgotPassErr = "Can't send send reset password link";
           res.redirect(303, "/forgot-password");
         }
       } catch (error) {
-        req.session.forgotPassMessage =
+        req.session.forgotPassErr =
           "Somthing went wrong, can't send reset password link";
         res.redirect(303, "/forgot-password");
       }
     }
+  },
+
+  getResetPass: (req, res) => {
+    const { id } = req.params;
+    const key = process.env.JWT_KEY || "jwt-key";
+    jwt.verify(id, key, (err) => {
+      if (err) {
+        if (err.message === "jwt expired") {
+          res.render("reset-password", {
+            error: "",
+            linkError: "Reset link expired,",
+          });
+        } else {
+          res.render("reset-password", {
+            error: "",
+            linkError: "Invalid password reset link,",
+          });
+        }
+      } else {
+        res.render("reset-password", {
+          error: req.session.resetPassErr,
+          linkError: "",
+          token: id,
+        });
+        req.session.resetPassErr = "";
+      }
+    });
+  },
+
+  postResetPass: (req, res) => {
+    const { id } = req.params;
+    const { password, confirmPassword } = req.body;
+    const key = process.env.JWT_KEY || "jwt-key";
+    jwt.verify(id, key, async (err, data) => {
+      if (err) res.redirect(303, `/reset-password/${id}`);
+      else if (
+        !/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])(?!.*\s).{8,16})/.test(
+          password
+        )
+      ) {
+        req.session.resetPassErr = "Please enter a strong password";
+        res.redirect(303, `/reset-password/${id}`);
+      } else if (password !== confirmPassword) {
+        req.session.resetPassErr = "Passwords Must be Matching";
+        res.redirect(303, `/reset-password/${id}`);
+      } else {
+        try {
+          const newPass = await createPassword(password);
+          const { registerId, role } = data;
+          let model;
+          if (role === "teacher") model = Teacher;
+          else model = Student;
+          const result = await model.updateOne(
+            { registerId },
+            { password: newPass, password_strong: true }
+          );
+          if (result.acknowledged && result.modifiedCount) {
+            req.session.loggedIn = true;
+            req.session.user = {
+              registerId,
+              role,
+              isPasswordStrong: true,
+            };
+            res.redirect(`/${role}`);
+          } else throw new Error("Something went wrong! try again");
+        } catch (error) {
+          req.session.resetPassErr = "Something went wrong, Please try again";
+          res.redirect(303, `/reset-password/${id}`);
+        }
+      }
+    });
   },
 };

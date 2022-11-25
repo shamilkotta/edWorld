@@ -6,6 +6,8 @@ const {
   getOfficeLogin,
   postUpdatePassword,
   postForgotPass,
+  getResetPass,
+  postResetPass,
 } = require("../controllers");
 const { loginRedirection } = require("../middlewares/authorization");
 
@@ -38,11 +40,18 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/forgot-password", (req, res) => {
-  res.render("forgot-pass", { message: req.session.forgotPassMessage });
-  req.session.forgotPassMessage = "";
+  res.render("forgot-pass", {
+    error: req.session.forgotPassErr,
+    success: req.session.forgotPassSucc,
+  });
+  req.session.forgotPassErr = "";
+  req.session.forgotPassSucc = "";
 });
 
 router.post("/forgot-password", postForgotPass);
+
+router.get("/reset-password/:id", getResetPass);
+router.post("/reset-password/:id", postResetPass);
 
 router.get("/update-password", (req, res) => {
   if (["teacher", "student"].includes(req.session?.user?.role)) {
