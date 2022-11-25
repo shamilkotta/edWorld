@@ -37,7 +37,7 @@ module.exports = {
 
   createPassword: (data) =>
     new Promise((resolve, reject) => {
-      const salt = Number(process.env.SALT) || 10;
+      const salt = parseInt(process.env.SALT, 10) || 10;
       bcrypt
         .hash(`${data}`, salt)
         .then((hash) => {
@@ -193,13 +193,14 @@ module.exports = {
             head: "$head.name",
             start_date: {
               $dateToString: {
-                format: "%m/%d/%Y",
+                format: "%d/%m/%Y",
                 date: "$start_date",
+                timezone: "+05:30",
               },
             },
             end_date: {
               $dateToString: {
-                format: "%m/%d/%Y",
+                format: "%d/%m/%Y",
                 date: {
                   $dateAdd: {
                     startDate: "$start_date",
@@ -207,6 +208,7 @@ module.exports = {
                     amount: "$duration",
                   },
                 },
+                timezone: "+05:30",
               },
             },
             students: {
@@ -301,8 +303,9 @@ module.exports = {
             batch: "$batch.code",
             birth_date: {
               $dateToString: {
-                format: "%m/%d/%Y",
+                format: "%d/%m/%Y",
                 date: "$birth_date",
+                timezone: "+05:30",
               },
             },
           },
@@ -419,8 +422,9 @@ module.exports = {
           $addFields: {
             birth_date: {
               $dateToString: {
-                format: "%m/%d/%Y",
+                format: "%d/%m/%Y",
                 date: "$birth_date",
+                timezone: "+05:30",
               },
             },
           },
