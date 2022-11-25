@@ -8,6 +8,9 @@ const {
   getAddBatch,
   getAddTeacher,
   getAddStudent,
+  getSingleBatch,
+  getSingleTeacher,
+  getSingleStudent,
 } = require("../controllers/office");
 const {
   getAllBatchesData,
@@ -46,7 +49,7 @@ router.get("/batches", async (req, res) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     // get all batches data to display in table
-    const data = await getAllBatchesData(page, limit, search, sort);
+    const data = await getAllBatchesData({ page, limit, search, sort });
     res.render("office/batches/index", { ...data, search });
   } catch (err) {
     res.render("office/batches/index", { allBatches: [] });
@@ -62,6 +65,9 @@ router.post("/batches/add-batch", createBatchValidation, postAddBatch);
 // edit a batch
 router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
 
+// view individual batch
+router.get("/batch/:code", getSingleBatch);
+
 // view all teachers
 router.get("/teachers", async (req, res) => {
   try {
@@ -70,7 +76,7 @@ router.get("/teachers", async (req, res) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     // get all teachers data to display in table
-    const data = await getAllTeachersData(page, limit, search, sort);
+    const data = await getAllTeachersData({ page, limit, search, sort });
     res.render("office/teachers/index", { ...data });
   } catch (err) {
     res.render("office/teachers/index", { allTeachers: [] });
@@ -91,6 +97,9 @@ router.post(
 // edit teacher
 router.put("/teachers/edit-teacher");
 
+// view individual teacher
+router.get("/teacher/:registerId", getSingleTeacher);
+
 // view all students
 router.get("/students", async (req, res) => {
   try {
@@ -99,7 +108,7 @@ router.get("/students", async (req, res) => {
     page = parseInt(page, 10);
     limit = parseInt(limit, 10);
     // get all students data to display in table
-    const data = await getAllStudentsData(page, limit, search, sort);
+    const data = await getAllStudentsData({ page, limit, search, sort });
     res.render("office/students/index", { ...data });
   } catch (err) {
     res.render("office/students/index", { allStudents: [] });
@@ -116,5 +125,8 @@ router.post(
   createStudentValidation,
   postAddStudent
 );
+
+// view individual student
+router.get("/student/:registerId", getSingleStudent);
 
 module.exports = router;

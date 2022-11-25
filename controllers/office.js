@@ -6,6 +6,10 @@ const {
   createPassword,
   getOpenTeachers,
   getOpenBatches,
+  getAllStudentsData,
+  getBatch,
+  getTeacher,
+  getStudent,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -214,6 +218,49 @@ module.exports = {
         });
         res.redirect(303, "/office/students/add-student");
       }
+    }
+  },
+
+  getSingleBatch: async (req, res) => {
+    const { code } = req.params;
+    try {
+      const batch = await getBatch(code);
+      const students = await getAllStudentsData({ search: code });
+      if (batch[0]) {
+        res.render("office/batches/batch", { batch, students });
+      } else {
+        res.redirect("/office/batches");
+      }
+    } catch (error) {
+      res.redirect("/office/batches");
+    }
+  },
+
+  getSingleTeacher: async (req, res) => {
+    const { registerId } = req.params;
+    try {
+      const teacher = await getTeacher(registerId);
+      if (teacher[0]) {
+        res.render("office/teachers/teacher", { teacher });
+      } else {
+        res.redirect("/office/teachers");
+      }
+    } catch (error) {
+      res.redirect("/office/teachers");
+    }
+  },
+
+  getSingleStudent: async (req, res) => {
+    const { registerId } = req.params;
+    try {
+      const student = await getStudent(registerId);
+      if (student[0]) {
+        res.render("office/students/student", { student });
+      } else {
+        res.redirect("/office/students");
+      }
+    } catch (error) {
+      res.redirect("/office/students");
     }
   },
 };
