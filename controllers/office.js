@@ -10,6 +10,8 @@ const {
   getBatch,
   getTeacher,
   getStudent,
+  getAllBatchesData,
+  getAllTeachersData,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -71,6 +73,20 @@ module.exports = {
         req.session.addBatchError = "Something went wrong";
         res.redirect(303, "/office/batches/add-batch");
       }
+    }
+  },
+
+  getAllBatches: async (req, res) => {
+    try {
+      let { page = 1, limit = 10 } = req.query;
+      const { search = "", sort = "code" } = req.query;
+      page = parseInt(page, 10);
+      limit = parseInt(limit, 10);
+      // get all batches data to display in table
+      const data = await getAllBatchesData({ page, limit, search, sort });
+      res.render("office/batches/index", { ...data, search });
+    } catch (err) {
+      res.render("office/batches/index", { allBatches: [] });
     }
   },
 
@@ -156,6 +172,20 @@ module.exports = {
     }
   },
 
+  getAllTeachers: async (req, res) => {
+    try {
+      let { page = 1, limit = 10 } = req.query;
+      const { search = "", sort = "code" } = req.query;
+      page = parseInt(page, 10);
+      limit = parseInt(limit, 10);
+      // get all teachers data to display in table
+      const data = await getAllTeachersData({ page, limit, search, sort });
+      res.render("office/teachers/index", { ...data });
+    } catch (err) {
+      res.render("office/teachers/index", { allTeachers: [] });
+    }
+  },
+
   getAddStudent: async (req, res) => {
     const openBatches = await getOpenBatches();
     res.render("office/students/add-student", {
@@ -218,6 +248,20 @@ module.exports = {
         });
         res.redirect(303, "/office/students/add-student");
       }
+    }
+  },
+
+  getAllStudents: async (req, res) => {
+    try {
+      let { page = 1, limit = 10 } = req.query;
+      const { search = "", sort = "code" } = req.query;
+      page = parseInt(page, 10);
+      limit = parseInt(limit, 10);
+      // get all students data to display in table
+      const data = await getAllStudentsData({ page, limit, search, sort });
+      res.render("office/students/index", { ...data });
+    } catch (err) {
+      res.render("office/students/index", { allStudents: [] });
     }
   },
 

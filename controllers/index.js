@@ -242,4 +242,28 @@ module.exports = {
       }
     });
   },
+
+  logout: (req, res) => {
+    let role;
+    if (req.session.loggedIn) role = req.session.user.role;
+    req.session.destroy();
+    if (role === "office") res.redirect("/office-login");
+    else res.redirect("/login");
+  },
+
+  getForgotPass: (req, res) => {
+    res.render("forgot-pass", {
+      error: req.session.forgotPassErr,
+      success: req.session.forgotPassSucc,
+    });
+    req.session.forgotPassErr = "";
+    req.session.forgotPassSucc = "";
+  },
+
+  getUpdatePass: (req, res) => {
+    if (["teacher", "student"].includes(req.session?.user?.role)) {
+      res.render("update-password", { error: req.session.updatePassError });
+      req.session.updatePassError = "";
+    } else res.redirect("/login");
+  },
 };
