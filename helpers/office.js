@@ -141,7 +141,7 @@ module.exports = {
         });
     }),
 
-  getAllBatchesData: (page, limit, search, sort) =>
+  getAllBatchesData: ({ page = 1, limit = 10, search = "", sort = "code" }) =>
     new Promise((resolve, reject) => {
       page -= 1;
 
@@ -267,7 +267,12 @@ module.exports = {
         });
     }),
 
-  getAllTeachersData: (page, limit, search, sort) =>
+  getAllTeachersData: ({
+    page = 1,
+    limit = 10,
+    search = "",
+    sort = "registerId",
+  }) =>
     new Promise((resolve, reject) => {
       page -= 1;
 
@@ -406,7 +411,12 @@ module.exports = {
         });
     }),
 
-  getAllStudentsData: (page, limit, search, sort) =>
+  getAllStudentsData: ({
+    page = 1,
+    limit = 10,
+    search = "",
+    sort = "registerId",
+  }) =>
     new Promise((resolve, reject) => {
       page -= 1;
 
@@ -480,6 +490,60 @@ module.exports = {
       ])
         .then((data) => {
           resolve(data[0]);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getBatch: (code) =>
+    new Promise((resolve, reject) => {
+      code = code.toUpperCase();
+      Batch.aggregate([
+        {
+          $match: {
+            code,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getTeacher: (registerId) =>
+    new Promise((resolve, reject) => {
+      registerId = registerId.toUpperCase();
+      Teacher.aggregate([
+        {
+          $match: {
+            registerId,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getStudent: (registerId) =>
+    new Promise((resolve, reject) => {
+      registerId = registerId.toUpperCase();
+      Student.aggregate([
+        {
+          $match: {
+            registerId,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
         })
         .catch((err) => {
           reject(err);
