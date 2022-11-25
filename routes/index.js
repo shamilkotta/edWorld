@@ -5,6 +5,7 @@ const {
   getLogin,
   getOfficeLogin,
 } = require("../controllers");
+const { loginRedirection } = require("../middlewares/authorization");
 
 const router = express.Router();
 
@@ -18,17 +19,20 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/login", getLogin);
+router.get("/login", loginRedirection, getLogin);
 
-router.post("/login", postLogin);
+router.post("/login", loginRedirection, postLogin);
 
-router.get("/office-login", getOfficeLogin);
+router.get("/office-login", loginRedirection, getOfficeLogin);
 
-router.post("/office-login", postOfficeLogin);
+router.post("/office-login", loginRedirection, postOfficeLogin);
 
 router.get("/logout", (req, res) => {
+  let role;
+  if (req.session.loggedIn) role = req.session.user.role;
   req.session.destroy();
-  res.redirect("/office");
+  if (role === "office") res.redirect("/office-login");
+  else res.redirect("/login");
 });
 
 router.get("/forgot-password", (req, res) => {
@@ -36,9 +40,10 @@ router.get("/forgot-password", (req, res) => {
 });
 
 router.get("/update-password", (req, res) => {
-  if (["teacher", "student"].includes(req.session?.user?.role))
-    res.render("update-password");
-  else res.redirect("/login");
+  if (["teacher", "student"].includes(req.session?.user?.role)) {
+    res.render("update-password", { error: req.session.updatePassError });
+    req.session.updatePassError = "";
+  } else res.redirect("/login");
 });
 
 router.get("/404", (req, res) => {

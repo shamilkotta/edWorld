@@ -23,4 +23,14 @@ module.exports = {
     } else if (req.session.loggedIn) next(new ErrorResponse(404));
     else res.redirect("/login");
   },
+
+  loginRedirection: (req, res, next) => {
+    if (req.session.loggedIn && req.session.user.role === "office")
+      res.redirect("/office");
+    else if (req.session.loggedIn && req.session.user.role === "teacher")
+      res.redirect("/teacher");
+    else if (req.session.loggedIn && req.session.user.role === "student")
+      res.redirect("/student");
+    else next();
+  },
 };

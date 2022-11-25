@@ -5,15 +5,9 @@ const Student = require("../models/student");
 
 module.exports = {
   getLogin: (req, res) => {
-    if (req.session.loggedIn && req.session.user.role === "student")
-      res.redirect("/student");
-    else if (req.session.loggedIn && req.session.user.role === "teacher")
-      res.redirect("/teacher");
-    else {
-      const error = req.session.loginError;
-      res.render("login", { error });
-      req.session.loginError = "";
-    }
+    const error = req.session.loginError;
+    res.render("login", { error });
+    req.session.loginError = "";
   },
 
   postLogin: async (req, res) => {
@@ -65,34 +59,22 @@ module.exports = {
   },
 
   getOfficeLogin: (req, res) => {
-    if (req.session.loggedIn && req.session.user.role === "office")
-      res.redirect("/office");
-    else if (req.session.loggedIn && req.session.user !== "office")
-      res.redirect("/404");
-    else {
-      const error = req.session.officeLoginError;
-      res.render("office-login", { error });
-      req.session.officeLoginError = "";
-    }
+    const error = req.session.officeLoginError;
+    res.render("office-login", { error });
+    req.session.officeLoginError = "";
   },
 
   postOfficeLogin: (req, res) => {
-    if (req.session.loggedIn && req.session.user.role === "office")
+    const { username, password } = req.body;
+    const name = process.env.OFFICE || "admin";
+    const pass = process.env.OFFICE_PASS || "admin123";
+    if (username === name && password === pass) {
+      req.session.loggedIn = true;
+      req.session.user = { username: name, role: "office" };
       res.redirect("/office");
-    else if (req.session.loggedIn && req.session.user !== "office")
-      res.redirect("/404");
-    else {
-      const { username, password } = req.body;
-      const name = process.env.OFFICE || "admin";
-      const pass = process.env.OFFICE_PASS || "admin123";
-      if (username === name && password === pass) {
-        req.session.loggedIn = true;
-        req.session.user = { username: name, role: "office" };
-        res.redirect("/office");
-      } else {
-        req.session.officeLoginError = "Invalid user name or password";
-        res.redirect("/office-login");
-      }
+    } else {
+      req.session.officeLoginError = "Invalid user name or password";
+      res.redirect("/office-login");
     }
   },
 };
