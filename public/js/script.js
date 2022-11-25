@@ -16,19 +16,13 @@ document.getElementById("profile").onchange = function () {
 
 // pattern validation
 function validateName(input) {
-  if (/^[A-Za-z ]+$/.test(input.value)) {
-    input.setCustomValidity("");
-  } else {
-    input.setCustomValidity(`Enter a valid name`);
-  }
+  if (/^[A-Za-z ]+$/.test(input.value)) input.setCustomValidity("");
+  else input.setCustomValidity(`Enter a valid name`);
 }
 
 function validatePhone(input) {
-  if (/^[0]?[6789]\d{9}$/.test(input.value)) {
-    input.setCustomValidity("");
-  } else {
-    input.setCustomValidity(`Enter a valid phone number`);
-  }
+  if (/^[0]?[6789]\d{9}$/.test(input.value)) input.setCustomValidity("");
+  else input.setCustomValidity(`Enter a valid phone number`);
 }
 
 function validateEmail(input) {
@@ -36,19 +30,15 @@ function validateEmail(input) {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
       input.value
     )
-  ) {
+  )
     input.setCustomValidity("");
-  } else {
-    input.setCustomValidity(`Enter a valid email`);
-  }
+  else input.setCustomValidity(`Enter a valid email`);
 }
 
 function validatePinCode(input) {
-  if (/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(input.value)) {
+  if (/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(input.value))
     input.setCustomValidity("");
-  } else {
-    input.setCustomValidity(`Enter a valid pin code`);
-  }
+  else input.setCustomValidity(`Enter a valid pin code`);
 }
 
 function checkConfirmPass(input) {
@@ -62,9 +52,10 @@ function validatePassword(input) {
     /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])(?!.*\s).{8,16})/.test(
       input.value
     )
-  ) {
+  )
     input.setCustomValidity("");
-  } else {
-    input.setCustomValidity("Password must contain : \n Atleast One uppper case letter and lower case letter \nAtleast one digit and special charecter \nCan not contain white spaces \nAnd must be 8 to 16 charecters long");
-  }
+  else
+    input.setCustomValidity(
+      "Password must contain : \n Atleast One uppper case letter and lower case letter \nAtleast one digit and special charecter \nCan not contain white spaces \nAnd must be 8 to 16 charecters long"
+    );
 }
