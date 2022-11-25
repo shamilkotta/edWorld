@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center my-auto">
               <div class="card-body p-4 p-lg-5 my-5 text-black">
-                <form method="post">
+                <form method="post" action="/forgot-password">
                   <h5
                     class="fw-normal fs-3 mb-3 pb-3"
                     style="letter-spacing: 1px;"
@@ -28,12 +28,13 @@
                   <div class="form-outline mb-4">
                     <input
                       type="email"
-                      id="registerId"
-                      name="registerId"
+                      id="email"
+                      name="email"
                       class="form-control form-control-lg"
                       required
+                      oninput="validateEmail(this)"
                     />
-                    <label class="form-label" for="registerId">Registered Email</label>
+                    <label class="form-label" for="email">Registered Email</label>
                   </div>
 
                   <div class="form-check form-check-inline">
@@ -43,6 +44,7 @@
                       name="role"
                       id="role1"
                       value="student"
+                      required
                     />
                     <label class="form-check-label" for="role1">I'm student</label>
                   </div>
@@ -54,16 +56,19 @@
                       name="role"
                       id="role2"
                       value="teacher"
+                      required
                     />
                     <label class="form-check-label" for="role2">I'm a teacher</label>
                   </div>
+
+                  <p class="text-warning">{{message}}</p>
 
                   <div class="pt-1 mb-4">
                     <button
                       class="btn btn-lg btn-block"
                       style="background-color: #3BB77E; color: #FFF;"
-                      type="button"
-                    >Send confirm link</button>
+                      type="submit"
+                    >Send reset link</button>
                   </div>
                   <p class="pb-lg-2"> <a href="/login">Back to Login</a></p>
                 </form>

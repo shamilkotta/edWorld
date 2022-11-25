@@ -5,6 +5,7 @@ const {
   getLogin,
   getOfficeLogin,
   postUpdatePassword,
+  postForgotPass,
 } = require("../controllers");
 const { loginRedirection } = require("../middlewares/authorization");
 
@@ -37,8 +38,11 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/forgot-password", (req, res) => {
-  res.render("forgot-pass");
+  res.render("forgot-pass", { message: req.session.forgotPassMessage });
+  req.session.forgotPassMessage = "";
 });
+
+router.post("/forgot-password", postForgotPass);
 
 router.get("/update-password", (req, res) => {
   if (["teacher", "student"].includes(req.session?.user?.role)) {
