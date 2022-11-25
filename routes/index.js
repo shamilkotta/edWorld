@@ -4,6 +4,7 @@ const {
   postOfficeLogin,
   getLogin,
   getOfficeLogin,
+  postUpdatePassword,
 } = require("../controllers");
 const { loginRedirection } = require("../middlewares/authorization");
 
@@ -45,6 +46,16 @@ router.get("/update-password", (req, res) => {
     req.session.updatePassError = "";
   } else res.redirect("/login");
 });
+
+router.post(
+  "/update-password",
+  (req, res, next) => {
+    if (!req.session.loggedIn || req.session.user.role === "office")
+      res.redirect(303, "/login");
+    else next();
+  },
+  postUpdatePassword
+);
 
 router.get("/404", (req, res) => {
   res.render("404");

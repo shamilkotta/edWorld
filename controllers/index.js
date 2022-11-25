@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 
 const Teacher = require("../models/teacher");
 const Student = require("../models/student");
+const { createPassword } = require("../helpers/office");
 
 module.exports = {
   getLogin: (req, res) => {
@@ -75,6 +76,45 @@ module.exports = {
     } else {
       req.session.officeLoginError = "Invalid user name or password";
       res.redirect("/office-login");
+    }
+  },
+
+  postUpdatePassword: async (req, res) => {
+    const { password, confirmPassword } = req.body;
+    if (
+      /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])(?!.*\s).{8,16})/.test(password)
+    ) {
+      if (password === confirmPassword) {
+        try {
+          const newPass = await createPassword(password);
+          const { registerId, role } = req.session.user;
+          let model;
+          if (role === "teacher") model = Teacher;
+          else model = Student;
+          const result = await model.updateOne(
+            { registerId },
+            { password: newPass, password_strong: true }
+          );
+          if (result.acknowledged && result.modifiedCount) {
+            req.session.loggedIn = true;
+            req.session.user = {
+              registerId,
+              role,
+              isPasswordStrong: true,
+            };
+            res.redirect(`/${role}`);
+          } else throw new Error("Something went wrong! try again");
+        } catch (err) {
+          req.session.updatePassError = "Something went wrong! try again";
+          res.redirect("/update-password");
+        }
+      } else {
+        req.session.updatePassError = "Passwords Must be Matching";
+        res.redirect("/update-password");
+      }
+    } else {
+      req.session.updatePassError = "Please enter a strong password";
+      res.redirect("/update-password");
     }
   },
 };
