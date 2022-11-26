@@ -7,7 +7,6 @@ const {
   getOpenTeachers,
   getOpenBatches,
   getAllStudentsData,
-  getBatch,
   getTeacher,
   getStudent,
   getAllBatchesData,
@@ -268,10 +267,16 @@ module.exports = {
   getSingleBatch: async (req, res) => {
     const { code } = req.params;
     try {
-      const batch = await getBatch(code);
+      // const batch = await getBatch(code);
+      const { allBatches: batch } = await getAllBatchesData({ search: code });
       const students = await getAllStudentsData({ search: code });
+      const openTeachers = await getOpenTeachers();
       if (batch[0]) {
-        res.render("office/batches/batch", { batch, students });
+        res.render("office/batches/batch", {
+          batch: batch[0],
+          ...students,
+          openTeachers,
+        });
       } else {
         res.redirect("/office/batches");
       }

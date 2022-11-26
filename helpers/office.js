@@ -496,24 +496,6 @@ module.exports = {
         });
     }),
 
-  getBatch: (code) =>
-    new Promise((resolve, reject) => {
-      code = code.toUpperCase();
-      Batch.aggregate([
-        {
-          $match: {
-            code,
-          },
-        },
-      ])
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    }),
-
   getTeacher: (registerId) =>
     new Promise((resolve, reject) => {
       registerId = registerId.toUpperCase();
