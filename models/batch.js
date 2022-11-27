@@ -32,7 +32,6 @@ const batchSchema = new mongoose.Schema({
     required: true,
     trim: true,
     uppercase: true,
-    unique: true,
   },
   fee_type: {
     type: [String],
