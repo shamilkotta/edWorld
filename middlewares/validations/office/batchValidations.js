@@ -2,6 +2,7 @@ const yup = require("yup");
 const {
   getOpenTeachers,
   getStudentsCountInBatch,
+  getAllBatchesData,
 } = require("../../../helpers/office");
 
 const createBatchSchema = yup.object().shape({
@@ -83,7 +84,7 @@ const editBatchSchema = yup.object().shape({
           return testContext.createError({
             message: "Invalid batch provided",
           });
-        if (value < data.seat_num)
+        if (value < data.student_count)
           return testContext.createError({
             message: `Seat count can't be below of number of students`,
           });
@@ -101,11 +102,15 @@ const editBatchSchema = yup.object().shape({
       "Batch head validation error",
       async (value, testContext) => {
         const data = await getOpenTeachers();
+        const { allBatches: batch } = await getAllBatchesData({
+          search: testContext.parent.code,
+        });
         let flag = false;
         data.forEach((ele) => {
           if (value === ele.registerId) flag = true;
         });
         if (flag) return flag;
+        if (value === batch[0].batch_head) return true;
         return testContext.createError({
           message: "This teacher already have a batch assigned",
         });
@@ -130,6 +135,7 @@ module.exports = {
   },
 
   editBatchValidation: (req, res, next) => {
+    req.body.code = req.params.code;
     editBatchSchema
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
