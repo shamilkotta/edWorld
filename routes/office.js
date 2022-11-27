@@ -49,7 +49,7 @@ router.get("/batches/add-batch", getAddBatch);
 router.post("/batches/add-batch", createBatchValidation, postAddBatch);
 
 // edit a batch
-router.put("/batches/edit-batch", editBatchValidation, putEditBatch);
+router.put("/batch/edit-batch/:code", editBatchValidation, putEditBatch);
 
 // view individual batch
 router.get("/batch/:code", getSingleBatch);
