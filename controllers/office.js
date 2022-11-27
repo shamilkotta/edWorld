@@ -91,19 +91,25 @@ module.exports = {
 
   putEditBatch: (req, res) => {
     if (req.validationErr) {
-      req.session.editBatchError = req.validationErr;
-      res.redirect(303, "/office/batches/add-batch");
+      res.status(400).json({
+        success: false,
+        message: req.validationErr,
+      });
     } else {
       const { code, batch_head, seat_num } = req.validData;
       Batch.findOneAndUpdate({ code }, { batch_head, seat_num })
         .then(() => {
-          req.session.addBatchSuccess = "Batch updated successfully";
-          res.redirect(303, "/office/batches/add-batch");
+          res.status(200).json({
+            success: true,
+            message: "Batch updated successfully",
+            data: { batch_head, seat_num },
+          });
         })
-        .catch((err) => {
-          console.error(err);
-          req.session.addBatchError = "Something went wrong";
-          res.redirect(303, "/office/batches/add-batch");
+        .catch(() => {
+          res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+          });
         });
     }
   },
