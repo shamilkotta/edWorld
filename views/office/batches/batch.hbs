@@ -1,17 +1,18 @@
 <div class="d-flex">
-{{> office/batches}}
-<div class="tab-bar mb-4 ms-2 mt-2">
-  <div class="d-flex py-3 px-4 justify-content-center align-items-center">
-    <a
-      data-mdb-toggle="modal" data-mdb-target="#editBatch"
-      class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
-      style="cursor: pointer;"
-    >
-      <img src="/static/icon/document-upload.svg" width="25px" alt="" />
-      <span class="ms-2">Edit Batch Details</span>
-    </a>
+  {{> office/batches}}
+  <div class="tab-bar mb-4 ms-2 mt-2">
+    <div class="d-flex py-3 px-4 justify-content-center align-items-center">
+      <a
+        data-mdb-toggle="modal"
+        data-mdb-target="#editBatch"
+        class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
+        style="cursor: pointer;"
+      >
+        <img src="/static/icon/document-upload.svg" width="25px" alt="" />
+        <span class="ms-2">Edit Batch Details</span>
+      </a>
+    </div>
   </div>
-</div>
 </div>
 
 <section class="mt-5">
@@ -123,7 +124,7 @@
   >
     <div class="mx-2">
       <span class="text-muted">Batch:</span>
-      <span class="fw-bold">{{batch.code}}</span>
+      <span class="fw-bold" id="batch-code">{{batch.code}}</span>
     </div>
     <div style="color: #bbbbbb;">|</div>
     <div class="mx-2">
@@ -147,12 +148,18 @@
     </div>
     <div style="color: #bbbbbb;">|</div>
     <div class="mx-2">
+      <span class="text-muted">Seats:</span>
+      <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
       <span class="text-muted">Batch Head: </span>
-      <span class="fw-bold">{{batch.head}}
-        <span
-          class="text-muted"
-          style="font-size: 15px;"
-        >({{batch.batch_head}})</span></span><br />
+      <span class="fw-bold" id="batch-head-name">{{batch.head}}</span>
+      <span
+        class="text-muted"
+        style="font-size: 15px;"
+        id="batch-head"
+      >({{batch.batch_head}})</span><br />
     </div>
   </div>
 
@@ -217,47 +224,114 @@
   </div>
 </section>
 
-{{!-- edit data modal --}}
-<div class="modal fade" id="editBatch" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{! edit data modal }}
+<div
+  class="modal fade"
+  id="editBatch"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Edit - {{batch.code}}</h5>
-        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="staticBackdropLabel">Edit -
+          {{batch.code}}</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
-        <form action="">
+        <form action="" id="eidtBatchForm">
 
-        <div class="form-outline input-group-lg">
-          <input
-            type="number"
-            id="seat_num"
-            name="seat_num"
-            class="form-control"
-            required
-            value="{{batch.seat_num}}"
-            min="{{batch.students}}"
-          />
-          <label class="form-label" for="seat_num">Number of Seats</label>
-        </div>
-        <div class="input-group-lg mt-3">
-          <label class="form-label" for="batch_head">Batch Head</label>
-          <select
-            class="form-select form-control form-select-lg"
-            name="batch_head"
-            required
-          >
-            <option selected value="{{batch.batch_head}}">{{batch.head}}</option>
-            {{#each openTeachers}}
-              <option value="{{this.registerId}}">{{this.name}}</option>
-            {{/each}}
-          </select>
-        </div>
+          <div class="form-outline input-group-lg">
+            <input
+              type="number"
+              id="seat_num"
+              name="seat_num"
+              class="form-control"
+              required
+              value="{{batch.seat_num}}"
+              min="{{batch.students}}"
+            />
+            <label class="form-label" for="seat_num">Number of Seats</label>
+          </div>
+          <div class="input-group-lg mt-3">
+            <label class="form-label" for="batch_head">Batch Head</label>
+            <select
+              class="form-select form-control form-select-lg"
+              name="batch_head"
+              id="batch-head-select"
+              required
+            >
+              <option
+                selected
+                value="{{batch.batch_head}}"
+              >{{batch.head}}</option>
+              {{#each openTeachers}}
+                <option value="{{this.registerId}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <p id="response"></p>
+          <div class="mt-3 d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-outline-success"
+            >Update</button>
+          </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-success">Update</button>
       </div>
     </div>
   </div>
 </div>
+
+<script>  
+// Edit batch details
+const form = document.getElementById("eidtBatchForm");
+const code = document.getElementById("batch-code").innerText;
+const res = document.getElementById("response");
+const seat = document.getElementById("seat-num");
+const head = document.getElementById("batch-head");
+const headName = document.getElementById("batch-head-name");
+const sel = document.getElementById("batch-head-select");
+
+function formSubmit(e) {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+  const dataToSend = Object.fromEntries(formData);
+  fetch(`http://localhost:5000/office/batch/edit-batch/${code}`, {
+    method: "PUT",
+    body: JSON.stringify(dataToSend),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        res.classList.add("text-success");
+        res.classList.remove("text-danger");
+        seat.innerText = dataToSend.seat_num;
+        head.innerText = `(${dataToSend.batch_head})`;
+        const { text } = sel.options[sel.selectedIndex];
+        headName.innerText = text;
+      } else {
+        res.classList.add("text-danger");
+        res.classList.remove("text-success");
+      }
+      res.innerText = response.message;
+    })
+    .catch((error) => {
+      res.classList.add("text-danger");
+      res.classList.remove("text-success");
+      res.innerText = "Somthing went wrong";
+    });
+}
+
+form.addEventListener("submit", formSubmit);
+</script>
