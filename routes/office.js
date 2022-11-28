@@ -14,6 +14,7 @@ const {
   getAllBatches,
   getAllTeachers,
   getAllStudents,
+  putEditTeacher,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -24,6 +25,7 @@ const {
 } = require("../middlewares/validations/office/studentValidations");
 const {
   createTeacherValidation,
+  editTeacherValidation,
 } = require("../middlewares/validations/office/teacherValidations");
 const profileUpload = require("../middlewares/uploadFile");
 
@@ -69,7 +71,11 @@ router.post(
 );
 
 // edit teacher
-router.put("/teachers/edit-teacher");
+router.put(
+  "/teacher/edit-teacher/:registerId",
+  editTeacherValidation,
+  putEditTeacher
+);
 
 // view individual teacher
 router.get("/teacher/:registerId", getSingleTeacher);
