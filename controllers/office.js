@@ -7,7 +7,6 @@ const {
   getOpenTeachers,
   getOpenBatches,
   getAllStudentsData,
-  getStudent,
   getAllBatchesData,
   getAllTeachersData,
 } = require("../helpers/office");
@@ -332,9 +331,9 @@ module.exports = {
   getSingleStudent: async (req, res) => {
     const { registerId } = req.params;
     try {
-      const student = await getStudent(registerId);
-      if (student[0]) {
-        res.render("office/students/student", { student });
+      const { allStudents } = await getAllStudentsData({ search: registerId });
+      if (allStudents[0]) {
+        res.render("office/students/student", { student: allStudents[0] });
       } else {
         res.redirect("/office/students");
       }

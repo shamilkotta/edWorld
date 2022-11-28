@@ -502,22 +502,4 @@ module.exports = {
           reject(err);
         });
     }),
-
-  getStudent: (registerId) =>
-    new Promise((resolve, reject) => {
-      registerId = registerId.toUpperCase();
-      Student.aggregate([
-        {
-          $match: {
-            registerId,
-          },
-        },
-      ])
-        .then((data) => {
-          resolve(data);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    }),
 };
