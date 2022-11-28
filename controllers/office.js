@@ -7,7 +7,6 @@ const {
   getOpenTeachers,
   getOpenBatches,
   getAllStudentsData,
-  getTeacher,
   getStudent,
   getAllBatchesData,
   getAllTeachersData,
@@ -191,6 +190,31 @@ module.exports = {
     }
   },
 
+  putEditTeacher: (req, res) => {
+    if (req.validationErr) {
+      res.status(400).json({
+        success: false,
+        message: req.validationErr,
+      });
+    } else {
+      const { registerId, salary, experience } = req.validData;
+      Teacher.findOneAndUpdate({ registerId }, { salary, experience })
+        .then(() => {
+          res.status(200).json({
+            success: true,
+            message: "Teacher updated successfully",
+            data: { salary, experience },
+          });
+        })
+        .catch(() => {
+          res.status(500).json({
+            success: false,
+            message: "Something went wrong",
+          });
+        });
+    }
+  },
+
   getAddStudent: async (req, res) => {
     const openBatches = await getOpenBatches();
     res.render("office/students/add-student", {
@@ -294,9 +318,9 @@ module.exports = {
   getSingleTeacher: async (req, res) => {
     const { registerId } = req.params;
     try {
-      const teacher = await getTeacher(registerId);
-      if (teacher[0]) {
-        res.render("office/teachers/teacher", { teacher });
+      const { allTeachers } = await getAllTeachersData({ search: registerId });
+      if (allTeachers[0]) {
+        res.render("office/teachers/teacher", { teacher: allTeachers[0] });
       } else {
         res.redirect("/office/teachers");
       }
