@@ -8,7 +8,7 @@
         class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
         style="cursor: pointer;"
       >
-        <img src="/static/icon/document-upload.svg" width="25px" alt="" />
+        <img src="/static/icon/document-edit.svg" width="25px" alt="" />
         <span class="ms-2">Edit Teacher Details</span>
       </a>
     </div>
@@ -145,43 +145,51 @@
       </div>
     </div>
     <div class="px-4 h-100">
-      <div class="d-flex mt-5 flex-wrap" style="column-gap: 50px; row-gap: 20px;">
+      <div class="d-flex mt-3 mt-md-5 mb-4 flex-wrap" style="column-gap: 50px; row-gap: 20px;">
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Batch</span><br>
+          <span class="fw-bold fs-6 mb-0">Batch</span><br>
           {{#if teacher.batch}}
-            <span class="text-muted fs-5 mt-0">{{teacher.batch}}</span>
+            <span class="text-muted fs-6 mt-0">{{teacher.batch}}</span>
             <a href="/office/batch/{{teacher.batch}}" class="mt-0">
               <img src="/static/icon/export.svg" width="15px" alt="{{teacher.batch}}" />
             </a>
           {{else}}
-            <span class="text-muted fs-5 mt-0">-</span>
+            <span class="text-muted fs-6 mt-0">-</span>
           {{/if}}
           
         </div>
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Date of birth</span><br>
-          <span class="text-muted fs-5 mt-0">{{teacher.birth_date}}</span>
+          <span class="fw-bold fs-6 mb-0">Phone</span><br>
+          <span class="text-muted fs-6 mt-0">{{teacher.phone}}</span>
         </div>
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Gender</span><br>
-          <span class="text-muted fs-5 mt-0">{{teacher.gender}}</span>
+          <span class="fw-bold fs-6 mb-0">Email</span><br>
+          <span class="text-muted fs-6 mt-0">{{teacher.email}}</span>
         </div>
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Qualification</span><br>
-          <span class="text-muted fs-5 mt-0">{{teacher.qualification}}</span>
+          <span class="fw-bold fs-6 mb-0">Date of birth</span><br>
+          <span class="text-muted fs-6 mt-0">{{teacher.birth_date}}</span>
         </div>
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Experience</span><br>
-          <span class="text-muted fs-5 mt-0" id="experience">{{teacher.experience}}</span>
+          <span class="fw-bold fs-6 mb-0">Gender</span><br>
+          <span class="text-muted fs-6 mt-0">{{teacher.gender}}</span>
         </div>
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Salary</span><br>
-          <span class="text-muted fs-5 mt-0" id="salary">{{teacher.salary}}</span>
+          <span class="fw-bold fs-6 mb-0">Qualification</span><br>
+          <span class="text-muted fs-6 mt-0">{{teacher.qualification}}</span>
         </div>
         <div class="">
-          <span class="fw-bold fs-5 mb-0">Address</span><br>
-          <span class="text-muted fs-5 mt-0">
-            {{teacher.address.house_name}} {{teacher.address.place}},<br>
+          <span class="fw-bold fs-6 mb-0">Experience</span><br>
+          <span class="text-muted fs-6 mt-0" id="experience">{{teacher.experience}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Salary</span><br>
+          <span class="text-muted fs-6 mt-0" id="salary">{{teacher.salary}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Address</span><br>
+          <span class="text-muted fs-6 mt-0">
+            {{teacher.address.house_name}} <br> {{teacher.address.place}},<br>
             {{teacher.address.post}}, {{teacher.address.pin}},<br>
             {{teacher.address.district}}, {{teacher.address.state}}, IN
           </span>
