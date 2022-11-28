@@ -69,10 +69,10 @@ module.exports = {
         },
         {
           $set: {
-            "batch_head": ""
-          }
+            batch_head: "",
+          },
         }
-      )
+      );
       Teacher.aggregate([
         {
           $lookup: {

@@ -120,7 +120,9 @@ const editTeacherSchema = yup.object().shape({
       "isValidExperience",
       "Experience count can't be below of current experience count",
       async (value, testContext) => {
-        const { allTeachers } = await getAllTeachersData({ search: testContext.parent.registerId });
+        const { allTeachers } = await getAllTeachersData({
+          search: testContext.parent.registerId,
+        });
         const data = allTeachers[0];
         if (!data)
           return testContext.createError({
@@ -194,5 +196,5 @@ module.exports = {
         [req.validationErr] = err.errors;
         next();
       });
-  }
+  },
 };

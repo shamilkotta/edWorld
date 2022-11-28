@@ -41,6 +41,7 @@ router.get("/forgot-password", getForgotPass);
 router.post("/forgot-password", postForgotPass);
 
 router.get("/reset-password/:id", getResetPass);
+
 router.post("/reset-password/:id", postResetPass);
 
 router.get("/update-password", getUpdatePass);
