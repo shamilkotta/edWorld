@@ -49,8 +49,30 @@ module.exports = {
     }),
 
   getOpenTeachers: () =>
-    new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-async-promise-executor
+    new Promise(async (resolve, reject) => {
       const today = new Date();
+      await Batch.updateMany(
+        {
+          $expr: {
+            $lt: [
+              {
+                $dateAdd: {
+                  startDate: "$start_date",
+                  unit: "month",
+                  amount: "$duration",
+                },
+              },
+              today,
+            ],
+          },
+        },
+        {
+          $set: {
+            "batch_head": ""
+          }
+        }
+      )
       Teacher.aggregate([
         {
           $lookup: {
@@ -68,25 +90,7 @@ module.exports = {
         },
         {
           $match: {
-            $or: [
-              {
-                closed_batches: { $exists: false },
-              },
-              {
-                $expr: {
-                  $lt: [
-                    {
-                      $dateAdd: {
-                        startDate: "$closed_batches.start_date",
-                        unit: "month",
-                        amount: "$closed_batches.duration",
-                      },
-                    },
-                    today,
-                  ],
-                },
-              },
-            ],
+            closed_batches: { $exists: false },
           },
         },
         {
@@ -170,7 +174,10 @@ module.exports = {
           },
         },
         {
-          $unwind: "$head",
+          $unwind: {
+            path: "$head",
+            preserveNullAndEmptyArrays: true,
+          },
         },
         {
           $lookup: {
@@ -490,24 +497,6 @@ module.exports = {
       ])
         .then((data) => {
           resolve(data[0]);
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    }),
-
-  getTeacher: (registerId) =>
-    new Promise((resolve, reject) => {
-      registerId = registerId.toUpperCase();
-      Teacher.aggregate([
-        {
-          $match: {
-            registerId,
-          },
-        },
-      ])
-        .then((data) => {
-          resolve(data);
         })
         .catch((err) => {
           reject(err);
