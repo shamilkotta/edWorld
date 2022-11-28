@@ -1,6 +1,186 @@
-{{> office/students}}
+<div class="d-flex flex-wrap">
+  {{> office/students}}
+</div>
 
 <section class="mt-5">
-  <h4 class="mb-4">{{student}}</h4>
-  
+  <div
+    class="d-flex flex-column flex-md-row justify-content-evenly mb-4 shadow py-2"
+    style="font-size: 18px;"
+  >
+    <div class="d-flex flex-column justify-content-center align-items-center border-end border-1 my-5 px-4 " style="min-width: 25%;">
+      <img  
+        src="{{student.profile}}"
+        style="border-radius: 50%; border: 3px solid #3BB77E; padding: 1px"
+        width="100px"
+        height="100px"
+        class="me-2"
+        alt="{{student.name}}"
+      >
+      <span class="fw-bold mt-2 fs-4">{{student.name}}</span>
+      <span class="text-muted fs-6" style="margin-top: -8px;" id="student-code">ID: {{student.registerId}}</span>
+      <div class="mt-2">
+        <a href="tel:{{student.phone}}" class="me-1">
+          <img src="/static/icon/phone.svg" width="34px" alt="call" />
+        </a>
+        <a href="mailto:{{student.email}}">
+          <img src="/static/icon/mail.svg" width="34px" alt="mail" />
+        </a>
+        <a href="sms:{{student.phone}}?body=Hi {{student.name}}">
+          <img src="/static/icon/message.svg" width="34px" alt="text" />
+        </a>
+      </div>
+    </div>
+    <div class="px-4 h-100">
+      <div class="d-flex mt-2 mt-md-5 mb-4 flex-wrap" style="column-gap: 50px; row-gap: 20px;">
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Batch</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.batch}}</span>
+          <a href="/office/batch/{{student.batch}}" class="mt-0">
+            <img src="/static/icon/export.svg" width="15px" alt="{{student.batch}}" />
+          </a>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Phone</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.phone}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Email</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.email}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Date of birth</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.birth_date}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Gender</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.gender}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Parent</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.parent_name}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Parent Phone</span><br>
+          <span class="text-muted fs-6 mt-0">{{student.parent_phone}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Education</span><br>
+          <span class="text-muted fs-6 mt-0" id="experience">{{student.education}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Institute</span><br>
+          <span class="text-muted fs-6 mt-0" id="salary">{{student.institute}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-6 mb-0">Address</span><br>
+          <span class="text-muted fs-6 mt-0">
+            {{student.address.house_name}} <br> {{student.address.place}},<br>
+            {{student.address.post}}, {{student.address.pin}},<br>
+            {{student.address.district}}, {{student.address.state}}, IN
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container-fluid">
+    <div class="row gy-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="card shadow mb-0">
+          <div class="card-body">
+            <div class="d-flex align-items-end justify-content-between mb-2">
+              <div class="me-2">
+                <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
+                  Clients</p>
+              </div>
+              <p class="fs-2 lh-1 mb-0 text-success">27</p>
+            </div>
+            <div class="progress" style="height: 3px">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 30%"
+                aria-valuenow="30"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card shadow mb-0">
+          <div class="card-body">
+            <div class="d-flex align-items-end justify-content-between mb-2">
+              <div class="me-2">
+
+                <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
+                  Projects</p>
+              </div>
+              <p class="fs-2 lh-1 mb-0 text-success">375</p>
+            </div>
+            <div class="progress" style="height: 3px">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 70%"
+                aria-valuenow="70"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card shadow mb-0">
+          <div class="card-body">
+            <div class="d-flex align-items-end justify-content-between mb-2">
+              <div class="me-2">
+
+                <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
+                  Invoices</p>
+              </div>
+              <p class="fs-2 lh-1 mb-0 text-success">140</p>
+            </div>
+            <div class="progress" style="height: 3px">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 55%"
+                aria-valuenow="55"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card shadow mb-0">
+          <div class="card-body">
+            <div class="d-flex align-items-end justify-content-between mb-2">
+              <div class="me-2">
+
+                <p class="text-sm text-uppercase text-muted lh-1 mb-0">All Projects</p>
+              </div>
+              <p class="fs-2 lh-1 mb-0 text-success">41</p>
+            </div>
+            <div class="progress" style="height: 3px">
+              <div
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 35%"
+                aria-valuenow="35"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
