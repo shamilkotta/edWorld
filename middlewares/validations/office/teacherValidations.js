@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const yup = require("yup");
 const fs = require("fs");
+const { getAllTeachersData } = require("../../../helpers/office");
 
 const createTeacherSchema = yup.object().shape({
   name: yup
@@ -105,6 +106,41 @@ const createTeacherSchema = yup.object().shape({
   profile: yup.string().trim().required("Please porvide a profile image"),
 });
 
+const editTeacherSchema = yup.object().shape({
+  registerId: yup
+    .string()
+    .required("Can't find teacher")
+    .uppercase()
+    .max(5, "Batch code can not be greater than 5 charecters"),
+  experience: yup
+    .number()
+    .typeError("Invalid experience count")
+    .required("Experience are required")
+    .test(
+      "isValidExperience",
+      "Experience count can't be below of current experience count",
+      async (value, testContext) => {
+        const { allTeachers } = await getAllTeachersData({ search: testContext.parent.registerId });
+        const data = allTeachers[0];
+        if (!data)
+          return testContext.createError({
+            message: "Invalid register id",
+          });
+        if (value < data.experience)
+          return testContext.createError({
+            message: `Experience count can't be below of current experience count`,
+          });
+        return true;
+      }
+    ),
+  salary: yup
+    .number()
+    .typeError("Invalid salary")
+    .required("Salary can not be empty")
+    .positive("Enter valid salary")
+    .integer("Enter valid salary"),
+});
+
 module.exports = {
   createTeacherValidation: (req, res, next) => {
     if (req.validationErr) next();
@@ -128,7 +164,6 @@ module.exports = {
       createTeacherSchema
         .validate(req.body, { stripUnknown: true, abortEarly: false })
         .then((data) => {
-          console.log(data);
           req.validData = data;
           next();
         })
@@ -146,4 +181,18 @@ module.exports = {
         });
     }
   },
+
+  editTeacherValidation: (req, res, next) => {
+    req.body.registerId = req.params.registerId;
+    editTeacherSchema
+      .validate(req.body, { stripUnknown: true, abortEarly: false })
+      .then((data) => {
+        req.validData = data;
+        next();
+      })
+      .catch((err) => {
+        [req.validationErr] = err.errors;
+        next();
+      });
+  }
 };
