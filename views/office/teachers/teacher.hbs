@@ -1,6 +1,294 @@
-{{> office/teachers}}
+<div class="d-flex flex-wrap">
+  {{> office/teachers}}
+  <div class="tab-bar mb-4 ms-2 mt-2">
+    <div class="d-flex py-3 px-4 justify-content-center align-items-center">
+      <a
+        data-mdb-toggle="modal"
+        data-mdb-target="#editTeacher"
+        class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
+        style="cursor: pointer;"
+      >
+        <img src="/static/icon/document-upload.svg" width="25px" alt="" />
+        <span class="ms-2">Edit Teacher Details</span>
+      </a>
+    </div>
+  </div>
+</div>
 
 <section class="mt-5">
-  <h4 class="mb-4">{{teacher}}</h4>
-  
+ <section>
+    <div class="container-fluid">
+      <div class="row gy-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
+                    Clients</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">27</p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: 30%"
+                  aria-valuenow="30"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
+                    Projects</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">375</p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: 70%"
+                  aria-valuenow="70"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
+                    Invoices</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">140</p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: 55%"
+                  aria-valuenow="55"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-muted lh-1 mb-0">All Projects</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">41</p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: 35%"
+                  aria-valuenow="35"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div
+    class="d-flex flex-column flex-md-row justify-content-evenly mt-4 shadow py-2"
+    style="font-size: 18px;"
+  >
+    <div class="d-flex flex-column justify-content-center align-items-center border-end border-1 my-5 px-4 " style="min-width: 25%;">
+      <img  
+        src="{{teacher.profile}}"
+        style="border-radius: 50%; border: 3px solid #3BB77E; padding: 1px"
+        width="100px"
+        height="100px"
+        class="me-2"
+        alt="{{teacher.name}}"
+      >
+      <span class="fw-bold mt-2 fs-4">{{teacher.name}}</span>
+      <span class="text-muted fs-6" style="margin-top: -8px;" id="teacher-code">ID: {{teacher.registerId}}</span>
+      <div class="mt-2">
+        <a href="tel:{{teacher.phone}}" class="me-1">
+          <img src="/static/icon/phone.svg" width="34px" alt="call" />
+        </a>
+        <a href="mailto:{{teacher.email}}">
+          <img src="/static/icon/mail.svg" width="34px" alt="mail" />
+        </a>
+        <a href="sms:{{teacher.phone}}?body=Hi {{teacher.name}}">
+          <img src="/static/icon/message.svg" width="34px" alt="text" />
+        </a>
+      </div>
+    </div>
+    <div class="px-4 h-100">
+      <div class="d-flex mt-5 flex-wrap" style="column-gap: 50px; row-gap: 20px;">
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Batch</span><br>
+          {{#if teacher.batch}}
+            <span class="text-muted fs-5 mt-0">{{teacher.batch}}</span>
+            <a href="/office/batch/{{teacher.batch}}" class="mt-0">
+              <img src="/static/icon/export.svg" width="15px" alt="{{teacher.batch}}" />
+            </a>
+          {{else}}
+            <span class="text-muted fs-5 mt-0">-</span>
+          {{/if}}
+          
+        </div>
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Date of birth</span><br>
+          <span class="text-muted fs-5 mt-0">{{teacher.birth_date}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Gender</span><br>
+          <span class="text-muted fs-5 mt-0">{{teacher.gender}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Qualification</span><br>
+          <span class="text-muted fs-5 mt-0">{{teacher.qualification}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Experience</span><br>
+          <span class="text-muted fs-5 mt-0" id="experience">{{teacher.experience}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Salary</span><br>
+          <span class="text-muted fs-5 mt-0" id="salary">{{teacher.salary}}</span>
+        </div>
+        <div class="">
+          <span class="fw-bold fs-5 mb-0">Address</span><br>
+          <span class="text-muted fs-5 mt-0">
+            {{teacher.address.house_name}} {{teacher.address.place}},<br>
+            {{teacher.address.post}}, {{teacher.address.pin}},<br>
+            {{teacher.address.district}}, {{teacher.address.state}}, IN
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+
+{{! edit data modal }}
+<div
+  class="modal fade"
+  id="editTeacher"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Edit -
+          {{teacher.name}}</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="" id="eidtTeacherForm">
+          <div class="form-outline input-group-lg">
+            <input
+              type="number"
+              id="experience"
+              name="experience"
+              class="form-control"
+              required
+              value="{{teacher.experience}}"
+              min="{{teacher.experience}}"
+            />
+            <label class="form-label" for="experience">Experience</label>
+          </div>
+          <div class="form-outline input-group-lg mt-4">
+            <input
+              type="number"
+              id="salary"
+              name="salary"
+              class="form-control"
+              required
+              value="{{teacher.salary}}"
+              min="0"
+            />
+            <label class="form-label" for="salary">Salary</label>
+          </div>
+          <p id="response"></p>
+          <div class="mt-3 d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-outline-success"
+            >Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>  
+// Edit batch details
+const form = document.getElementById("eidtTeacherForm");
+const code = document.getElementById("teacher-code").innerText.split(" ")[1];
+const res = document.getElementById("response");
+const experience = document.getElementById("experience");
+const salary = document.getElementById("salary");
+
+function formSubmit(e) {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+  const dataToSend = Object.fromEntries(formData);
+  fetch(`http://localhost:5000/office/teacher/edit-teacher/${code}`, {
+    method: "PUT",
+    body: JSON.stringify(dataToSend),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        res.classList.add("text-success");
+        res.classList.remove("text-danger");
+        experience.innerText = dataToSend.experience;
+        salary.innerText = dataToSend.salary;
+      } else {
+        res.classList.add("text-danger");
+        res.classList.remove("text-success");
+      }
+      res.innerText = response.message;
+    })
+    .catch((error) => {
+      res.classList.add("text-danger");
+      res.classList.remove("text-success");
+      res.innerText = "Somthing went wrong";
+    });
+}
+
+form.addEventListener("submit", formSubmit);
+</script>
