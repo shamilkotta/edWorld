@@ -156,6 +156,8 @@ module.exports = {
       if (sort[1] && sort[1] === "1") sortBy[sort[0]] = -1;
       else sortBy[sort[0]] = 1;
 
+      const today = new Date();
+
       Batch.aggregate([
         {
           $lookup: {
@@ -198,6 +200,32 @@ module.exports = {
         {
           $addFields: {
             head: "$head.name",
+            batch_status: {
+              $cond: {
+                if: {
+                  $lt: [today, "$start_date"],
+                },
+                then: "Yet to start",
+                else: {
+                  $cond: {
+                    if: {
+                      $gt: [
+                        {
+                          $dateAdd: {
+                            startDate: "$start_date",
+                            unit: "month",
+                            amount: "$duration",
+                          },
+                        },
+                        today,
+                      ],
+                    },
+                    then: "Active",
+                    else: "Completed",
+                  },
+                },
+              },
+            },
             start_date: {
               $dateToString: {
                 format: "%d/%m/%Y",
