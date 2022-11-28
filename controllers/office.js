@@ -305,6 +305,13 @@ module.exports = {
           batch: batch[0],
           ...students,
           openTeachers,
+          helpers: {
+            batchStatus: (status) => {
+              if (status === "Active") return "success";
+              if (status === "Completed") return "dark";
+              return "danger";
+            },
+          },
         });
       } else {
         res.redirect("/office/batches");
