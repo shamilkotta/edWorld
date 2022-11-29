@@ -142,4 +142,18 @@ module.exports = {
       });
     }
   },
+
+  getStudent: async (req, res) => {
+    const { registerId } = req.params;
+    try {
+      const { allStudents } = await getAllStudentsData({ search: registerId });
+      if (allStudents[0]) {
+        res.render("teacher/student", { student: allStudents[0] });
+      } else {
+        res.redirect("/teacher/classroom");
+      }
+    } catch (error) {
+      res.redirect("/teacher/classroom");
+    }
+  },
 };
