@@ -3,7 +3,10 @@
     <img src="/static/svg/logo.svg" alt="edWorld" height="35px" />
   </a>
   <div>
-    <a href="">
+    <a
+      data-mdb-toggle="modal"
+      data-mdb-target="#editDetails"
+    >
       <img src="/static/icon/setting.svg" alt="logout" height="28px" >
     </a>
     <a href="/logout" class="ms-3">
@@ -13,7 +16,7 @@
 </nav>
 
 <main class="container-fluid px-3" style="max-width: 1500px;">
-  <div class="d-flex flex-wrap">
+  <div class="d-flex flex-wrap justify-content-end">
     <div class="tab-bar mb-4 ms-2 mt-2">
       <a
         href="/teacher/classroom"
@@ -156,9 +159,6 @@
               <span class="fw-bold fs-6 mb-0">Batch</span><br>
               {{#if teacher.batch}}
                 <span class="text-muted fs-6 mt-0">{{teacher.batch}}</span>
-                <a href="/office/batch/{{teacher.batch}}" class="mt-0">
-                  <img src="/static/icon/export.svg" width="15px" alt="{{teacher.batch}}" />
-                </a>
               {{else}}
                 <span class="text-muted fs-6 mt-0">-</span>
               {{/if}}
@@ -166,11 +166,11 @@
             </div>
             <div class="">
               <span class="fw-bold fs-6 mb-0">Phone</span><br>
-              <span class="text-muted fs-6 mt-0">{{teacher.phone}}</span>
+              <span class="text-muted fs-6 mt-0" id="teacher-phone">{{teacher.phone}}</span>
             </div>
             <div class="">
               <span class="fw-bold fs-6 mb-0">Email</span><br>
-              <span class="text-muted fs-6 mt-0">{{teacher.email}}</span>
+              <span class="text-muted fs-6 mt-0" id="teacher-email">{{teacher.email}}</span>
             </div>
             <div class="">
               <span class="fw-bold fs-6 mb-0">Date of birth</span><br>
@@ -194,7 +194,7 @@
             </div>
             <div class="">
               <span class="fw-bold fs-6 mb-0">Address</span><br>
-              <span class="text-muted fs-6 mt-0">
+              <span class="text-muted fs-6 mt-0" id="teacher-address">
                 {{teacher.address.house_name}} <br> {{teacher.address.place}},<br>
                 {{teacher.address.post}}, {{teacher.address.pin}},<br>
                 {{teacher.address.district}}, {{teacher.address.state}}, IN
@@ -205,3 +205,299 @@
       </div>
     </section>
 </main>
+
+{{! edit data modal }}
+<div
+  class="modal fade"
+  id="editDetails"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header pb-0">
+        <ul class="nav nav-tabs m-0" id="ex1" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link active"
+              id="ex1-tab-1"
+              data-mdb-toggle="tab"
+              href="#ex1-tabs-1"
+              role="tab"
+              aria-controls="ex1-tabs-1"
+              aria-selected="true"
+              >Basic Details</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              id="ex1-tab-2"
+              data-mdb-toggle="tab"
+              href="#ex1-tabs-2"
+              role="tab"
+              aria-controls="ex1-tabs-2"
+              aria-selected="false"
+              >Password</a
+            >
+          </li>
+        </ul>
+        
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body pb-0">
+        <div class="tab-content" id="ex1-content">
+          <div
+            class="tab-pane fade show active"
+            id="ex1-tabs-1"
+            role="tabpanel"
+            aria-labelledby="ex1-tab-1"
+          >
+           {{!-- basic details form --}}
+            <form action="" id="eidtDetailsForm">
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  class="form-control"
+                  value="{{teacher.phone}}"
+                  required
+                  oninput="validatePhone(this)"
+                />
+                <label class="form-label" for="phone">Phone</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  value="{{teacher.email}}"
+                  required
+                  oninput="validateEmail(this)"
+                />
+                <label class="form-label" for="email">Email</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="house_name"
+                  name="house_name"
+                  class="form-control"
+                  value="{{teacher.address.house_name}}"
+                />
+                <label class="form-label" for="house_name">House Name</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="place"
+                  name="place"
+                  class="form-control"
+                  value="{{teacher.address.place}}"
+                  required
+                />
+                <label class="form-label" for="place">Place</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="post"
+                  name="post"
+                  class="form-control"
+                  value="{{teacher.address.post}}"
+                  required
+                />
+                <label class="form-label" for="post">Post</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="pin"
+                  name="pin"
+                  class="form-control"
+                  value="{{teacher.address.pin}}"
+                  required
+                  oninput="validatePinCode(this)"
+                />
+                <label class="form-label" for="pin">Pin Code</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="district"
+                  name="district"
+                  class="form-control"
+                  value="{{teacher.address.district}}"
+                  required
+                />
+                <label class="form-label" for="district">District</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  class="form-control"
+                  value="{{teacher.address.state}}"
+                  required
+                />
+                <label class="form-label" for="state">State</label>
+              </div>
+
+              <p id="response-details"></p>
+              <div class="mt-3 d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="btn btn-outline-success"
+                >Update</button>
+              </div>
+            </form>
+
+          </div>
+          <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+            <form action="" id="changePassowrdForm">
+              <h5
+                class="fw-normal fs-4 mb-3 pb-3"
+                style="letter-spacing: 1px;"
+              >Change your password</h5>
+
+              <div class="form-outline mb-3">
+                <input
+                  type="password"
+                  id="currentPassword"
+                  name="currentPassword"
+                  class="form-control form-control-lg"
+                  required
+                />
+                <label class="form-label" for="currentPassword">Current Password</label>
+              </div>
+              <div class="form-outline mb-3">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control form-control-lg"
+                  required
+                  oninput="validatePassword(this)"
+                />
+                <label class="form-label" for="password">New Password</label>
+              </div>
+              <div class="form-outline mb-3">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  class="form-control form-control-lg"
+                  required
+                  oninput="checkConfirmPass(this)"
+                />
+                <label class="form-label" for="confirmPassword">Confirm
+                  Password</label>
+              </div>
+
+              <p id="response-pass"></p>
+
+              <div class="mt-3 d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="btn btn-outline-success"
+                >Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>  
+// Edit details
+const detailsForm = document.getElementById("eidtDetailsForm");
+const passwordForm = document.getElementById("changePassowrdForm");
+
+const detailsRes = document.getElementById("response-details");
+const passwordRes = document.getElementById("response-pass");
+
+const phone = document.getElementById("teacher-phone");
+const email = document.getElementById("teacher-email");
+const address = document.getElementById("teacher-address");
+
+function detailsFormSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(detailsForm);
+  const dataToSend = Object.fromEntries(formData);
+
+  fetch(`http://localhost:5000/teacher/edit-basic-details`, {
+    method: "PUT",
+    body: JSON.stringify(dataToSend),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        detailsRes.classList.add("text-success");
+        detailsRes.classList.remove("text-danger");
+        phone.innerText = dataToSend.phone
+        email.innerText = dataToSend.email
+        address.innerHTML = `${dataToSend.house_name} <br> ${dataToSend.place},<br>
+                ${dataToSend.post}, ${dataToSend.pin},<br>
+                ${dataToSend.district}, ${dataToSend.state}, IN`
+        
+      } else {
+        detailsRes.classList.add("text-danger");
+        detailsRes.classList.remove("text-success");
+      }
+      detailsRes.innerText = response.message;
+    })
+    .catch((error) => {
+      detailsRes.classList.add("text-danger");
+      detailsRes.classList.remove("text-success");
+      detailsRes.innerText = "Somthing went wrong";
+    });
+}
+
+function passwordFormSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(passwordForm);
+  const dataToSend = Object.fromEntries(formData);
+
+  fetch(`http://localhost:5000/teacher/change-password`, {
+    method: "PUT",
+    body: JSON.stringify(dataToSend),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        passwordRes.classList.add("text-success");
+        passwordRes.classList.remove("text-danger");
+        
+      } else {
+        passwordRes.classList.add("text-danger");
+        passwordRes.classList.remove("text-success");
+      }
+      passwordRes.innerText = response.message;
+    })
+    .catch((error) => {
+      passwordRes.classList.add("text-danger");
+      passwordRes.classList.remove("text-success");
+      passwordRes.innerText = "Somthing went wrong";
+    });
+}
+
+detailsForm.addEventListener("submit", detailsFormSubmit);
+passwordForm.addEventListener("submit", passwordFormSubmit);
+</script>
