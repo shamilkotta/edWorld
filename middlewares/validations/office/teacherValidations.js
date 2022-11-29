@@ -143,6 +143,68 @@ const editTeacherSchema = yup.object().shape({
     .integer("Enter valid salary"),
 });
 
+const editTeacherSchemaForUser = yup.object().shape({
+  phone: yup
+    .number()
+    .typeError("Invalid phone number")
+    .required("Phone number can not be empty")
+    .integer("Enter a valid phone number")
+    .positive("Enter a valid phone number")
+    .test("isValidPhone", "Enter a valid phone number", (arg) =>
+      /^[0]?[6789]\d{9}$/.test(arg)
+    ),
+  email: yup
+    .string()
+    .trim()
+    .required("Email can not be empty")
+    .email("Enter a valid email"),
+  address: yup.object({
+    house_name: yup
+      .string()
+      .trim()
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      )
+      .default("")
+      .ensure(),
+    place: yup
+      .string()
+      .trim()
+      .required("Place can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    post: yup
+      .string()
+      .trim()
+      .required("Post can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    pin: yup
+      .string()
+      .trim()
+      .required("Pin code can not be empty")
+      .test("isValidPin", "Enter a valid PIN code", (arg) =>
+        /^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(arg)
+      ),
+    district: yup
+      .string()
+      .trim()
+      .required("District can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+    state: yup
+      .string()
+      .trim()
+      .required("State can not be empty")
+      .transform((value) =>
+        value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
+      ),
+  }),
+});
+
 module.exports = {
   createTeacherValidation: (req, res, next) => {
     if (req.validationErr) next();
@@ -184,9 +246,33 @@ module.exports = {
     }
   },
 
-  editTeacherValidation: (req, res, next) => {
+  editTeacherValidationOffice: (req, res, next) => {
     req.body.registerId = req.params.registerId;
     editTeacherSchema
+      .validate(req.body, { stripUnknown: true, abortEarly: false })
+      .then((data) => {
+        req.validData = data;
+        next();
+      })
+      .catch((err) => {
+        [req.validationErr] = err.errors;
+        next();
+      });
+  },
+
+  editTeacherValidationUser: (req, res, next) => {
+    const { house_name, place, post, pin, district, state, ...rest } = req.body;
+    const address = {
+      house_name,
+      place,
+      post,
+      pin,
+      district,
+      state,
+    };
+    req.body = rest;
+    req.body.address = address;
+    editTeacherSchemaForUser
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
         req.validData = data;
