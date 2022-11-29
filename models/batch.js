@@ -44,6 +44,13 @@ const batchSchema = new mongoose.Schema({
         arg.every((ele) => ["One time", "Installment"].includes(ele)),
     },
   },
+  working_days: {
+    type: [Number],
+  },
+  current_month: {
+    type: Number,
+    default: 1,
+  },
 });
 
 module.exports = mongoose.model("Batch", batchSchema);
