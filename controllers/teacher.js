@@ -33,7 +33,25 @@ module.exports = {
       else {
         const { allBatches } = await getAllBatchesData({ search: batch.code });
         const students = await getAllStudentsData({ search: batch.code });
-        res.render("teacher/classroom", { batch: allBatches[0], ...students });
+        res.render("teacher/classroom", {
+          batch: allBatches[0],
+          ...students,
+          helpers: {
+            superfix: (index, inc = false) => {
+              console.log(index);
+              if (inc) {
+                if (index === 0 || index === "0") return "1<sup>st</sup>";
+                if (index === 1 || index === "1") return "2<sup>nd</sup>";
+                if (index === 2 || index === "2") return "3<sup>rd</sup>";
+                return `${index + 1}<sup>th</sup>`;
+              }
+              if (index === 1 || index === "1") return "1<sup>st</sup>";
+              if (index === 2 || index === "2") return "2<sup>nd</sup>";
+              if (index === 3 || index === "3") return "3<sup>rd</sup>";
+              return `${index}<sup>th</sup>`;
+            },
+          },
+        });
       }
     } catch (error) {
       res.redirect("/teacher");
@@ -154,6 +172,47 @@ module.exports = {
       }
     } catch (error) {
       res.redirect("/teacher/classroom");
+    }
+  },
+
+  putTotalWrokingDays: async (req, res) => {
+    try {
+      // eslint-disable-next-line camelcase
+      const { working_days } = req.body;
+      const { registerId } = req.session.user;
+      const days = parseInt(working_days, 10);
+      if (Number.isNaN(days))
+        res.status(400).json({
+          success: false,
+          message: "Please enter a valid number",
+        });
+      else {
+        const result = await Batch.updateOne(
+          { batch_head: registerId },
+          {
+            // eslint-disable-next-line camelcase
+            $push: { working_days },
+            $inc: { current_month: 1 },
+          }
+        );
+
+        if (result.acknowledged && result.modifiedCount) {
+          res.status(200).json({
+            success: true,
+            message: "Working days added successfully",
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: "Can't add working days, please login again",
+          });
+        }
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Something went wrong",
+      });
     }
   },
 };

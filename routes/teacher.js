@@ -5,6 +5,7 @@ const {
   editDetails,
   changePassword,
   getStudent,
+  putTotalWrokingDays,
 } = require("../controllers/teacher");
 const {
   editTeacherValidationUser,
@@ -27,5 +28,7 @@ router.put("/edit-basic-details", editTeacherValidationUser, editDetails);
 router.put("/change-password", changePassword);
 
 router.get("/classroom/:registerId", getStudent);
+
+router.put("/add-total-working-days", putTotalWrokingDays);
 
 module.exports = router;
