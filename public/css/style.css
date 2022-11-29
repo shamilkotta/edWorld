@@ -5,3 +5,57 @@ ul {
 a {
   text-decoration: none;
 }
+
+.working-days {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.working-days::-webkit-scrollbar {
+  display: none;
+}
+*/
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.working-days {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.working-days-card-add {
+  height: 100px;
+  width: 200px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-weight: bolder;
+  margin: 0 5px;
+  cursor: auto;
+  background-color: #ffffff;
+  color: #434343;
+}
+
+.working-days-card {
+  height: 100px;
+  width: 200px !important;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-weight: bolder;
+  margin: 0 5px;
+  cursor: auto;
+  background-color: #ffffff;
+  color: #3bb77e;
+}
+
+.working-days-card-text {
+  color: #91919143;
+}

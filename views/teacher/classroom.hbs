@@ -187,6 +187,25 @@
       </div>
     </div>
 
+    <h6 class="mb-2 mt-5">Monthly Working Days</h6>
+    <div class="px-1 py-3 rounded working-days">
+      
+      <div class="btn working-days-card-add {{#if batch.month_end}}{{else}}disabled{{/if}}" {{#if batch.month_end}}data-mdb-toggle="modal" data-mdb-target="#addWorkingDays"{{/if}} >
+        <img src="/static/icon/note-add.svg" alt="add">
+        <div>Add new</div>
+      </div>
+      <div class="d-flex flex-row-reverse">
+      {{#each batch.working_days}}
+        <div class="btn working-days-card pt-2 px-2">
+          <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this}}</div>
+          <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} Month</div>
+        </div>
+      {{/each}}
+      </div>
+      
+    </div>
+
+
     <h6 class="mb-4 mt-5">All Students</h6>
     <div class="table-responsive">
       <table class="table table-striped align-middle" id="batches-table">
@@ -251,9 +270,10 @@
 </main>
 
 {{! edit data modal }}
+{{#if batch.month_end}}
 <div
   class="modal fade"
-  id="editBatch"
+  id="addWorkingDays"
   tabindex="-1"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
@@ -261,8 +281,8 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Edit -
-          {{batch.code}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Working Days -
+          {{{superfix batch.current_month}}} month</h5>
         <button
           type="button"
           class="btn-close"
@@ -270,47 +290,53 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">
-        <form action="" id="eidtBatchForm">
+      <div class="modal-body pb-0">
+        <form action="" id="addWorkingDaysForm">
 
           <div class="form-outline input-group-lg">
             <input
               type="number"
-              id="seat_num"
-              name="seat_num"
+              id="working_days"
+              name="working_days"
               class="form-control"
               required
-              value="{{batch.seat_num}}"
-              min="{{batch.students}}"
+              min="0"
             />
-            <label class="form-label" for="seat_num">Number of Seats</label>
+            <label class="form-label" for="working_days">Number of Seats</label>
           </div>
-          <div class="input-group-lg mt-3">
-            <label class="form-label" for="batch_head">Batch Head</label>
-            <select
-              class="form-select form-control form-select-lg"
-              name="batch_head"
-              id="batch-head-select"
-              required
-            >
-              <option
-                selected
-                value="{{batch.batch_head}}"
-              >{{batch.head}}</option>
-              {{#each openTeachers}}
-                <option value="{{this.registerId}}">{{this.name}}</option>
-              {{/each}}
-            </select>
-          </div>
-          <p id="response"></p>
+          <p id="addWorkingDaysForm-response"></p>
           <div class="mt-3 d-flex justify-content-end">
             <button
               type="submit"
               class="btn btn-outline-success"
-            >Update</button>
+            >Add</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+{{/if}}
+
+
+<script>
+  const form = document.getElementById("addWorkingDaysForm")
+  const response = document.getElementById("addWorkingDaysForm-response")
+  const formSubmit = (e) => {
+    e.preventDefault()
+    const formData = new FormData(form);
+    const dataToSend = Object.fromEntries(formData);
+
+    fetch("/teacher/add-total-working-days", {
+      method: "PUT",
+      body: JSON.stringify(dataToSend),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      location.reload()
+    })
+  }
+
+  form.addEventListener("submit", formSubmit)
+</script>
