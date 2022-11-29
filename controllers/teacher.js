@@ -4,6 +4,7 @@ const {
   getAllStudentsData,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
+const Teacher = require("../models/teacher");
 
 module.exports = {
   getTeacherView: async (req, res) => {
@@ -33,5 +34,46 @@ module.exports = {
     } catch (error) {
       res.redirect("/teacher");
     }
+  },
+
+  editDetails: async (req, res) => {
+    try {
+      if (req.validationErr) {
+        res.status(400).json({
+          success: false,
+          message: req.validationErr,
+        });
+      } else {
+        const data = req.validData;
+        const { registerId } = req.session.user;
+        const result = await Teacher.updateOne({ registerId }, data, {
+          runValidators: true,
+        });
+        if (result.acknowledged && result.modifiedCount)
+          res.status(200).json({
+            success: true,
+            message: "Updated successfully",
+          });
+        else throw new Error("Something went wrong! try again");
+      }
+    } catch (error) {
+      if (error.code === 11000)
+        res.status(400).json({
+          success: false,
+          message: "Email or phone number already in use",
+        });
+      else
+        res.status(500).json({
+          success: false,
+          message: "Something went wrong! try again",
+        });
+    }
+  },
+
+  changePassword: (req, res) => {
+    res.status(200).json({
+      success: true,
+      message: "chagned",
+    });
   },
 };
