@@ -1,17 +1,20 @@
 <div class="d-flex flex-wrap">
   {{> office/teachers}}
   <div class="tab-bar mb-4 ms-2 mt-2">
-    <div class="d-flex py-3 px-4 justify-content-center align-items-center">
-      <a
-        data-mdb-toggle="modal"
-        data-mdb-target="#editTeacher"
+    <a
+      data-mdb-toggle="modal"
+      data-mdb-target="#editTeacher"
+      class="btn d-flex py-3 px-4 justify-content-center align-items-center rounded-3"
+      style="background-color: #f1f1f1;"
+    >
+      <div
         class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
         style="cursor: pointer;"
       >
         <img src="/static/icon/document-edit.svg" width="25px" alt="" />
         <span class="ms-2">Edit Teacher Details</span>
-      </a>
-    </div>
+      </div>
+    </a>
   </div>
 </div>
 
