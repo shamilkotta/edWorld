@@ -95,7 +95,11 @@ module.exports = {
       });
     } else {
       const { code, batch_head, seat_num } = req.validData;
-      Batch.findOneAndUpdate({ code }, { batch_head, seat_num })
+      Batch.findOneAndUpdate(
+        { code },
+        { batch_head, seat_num },
+        { runValidators: true }
+      )
         .then(() => {
           res.status(200).json({
             success: true,
@@ -197,7 +201,11 @@ module.exports = {
       });
     } else {
       const { registerId, salary, experience } = req.validData;
-      Teacher.findOneAndUpdate({ registerId }, { salary, experience })
+      Teacher.findOneAndUpdate(
+        { registerId },
+        { salary, experience },
+        { runValidators: true }
+      )
         .then(() => {
           res.status(200).json({
             success: true,
