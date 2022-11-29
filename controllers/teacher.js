@@ -1,9 +1,13 @@
+const bcrypt = require("bcrypt");
+
 const {
   getAllTeachersData,
   getAllBatchesData,
   getAllStudentsData,
+  createPassword,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
+const Student = require("../models/student");
 const Teacher = require("../models/teacher");
 
 module.exports = {
@@ -70,10 +74,72 @@ module.exports = {
     }
   },
 
-  changePassword: (req, res) => {
-    res.status(200).json({
-      success: true,
-      message: "chagned",
-    });
+  changePassword: async (req, res) => {
+    const { currentPassword, password, confirmPassword } = req.body;
+    const { registerId, role } = req.session.user;
+    // selecting user based on role
+    let model;
+    if (role === "teacher") model = Teacher;
+    else model = Student;
+
+    try {
+      // finding user based on reigster id
+      const user = await model.findOne({ registerId });
+      if (!user)
+        return res.status(400).json({
+          success: false,
+          message: "Can't find the user, please login again",
+        });
+
+      // if user exists > comparing current passswords
+      const match = await bcrypt.compare(currentPassword, user.password);
+      if (!match)
+        return res.status(400).json({
+          success: false,
+          message: "Current password not matching",
+        });
+
+      // validating new passwords
+      if (
+        /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W])(?!.*\s).{8,16})/.test(
+          password
+        )
+      ) {
+        if (password === confirmPassword) {
+          // if so creating new pass hash
+          const newPass = await createPassword(password);
+          // updating databse with new pass
+          const result = await model.updateOne(
+            { registerId },
+            { password: newPass, password_strong: true }
+          );
+
+          if (result.acknowledged && result.modifiedCount) {
+            return res.status(200).json({
+              success: true,
+              message: "Password changed succesfully",
+            });
+          }
+          return res.status(500).json({
+            success: false,
+            message: "Something went wrong! try again",
+          });
+        }
+        return res.status(400).json({
+          success: false,
+          message: "Password must be matching",
+        });
+      }
+      return res.status(400).json({
+        success: false,
+        message: "Enter a strong password",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: "Something went wrong! try again",
+      });
+    }
   },
 };
