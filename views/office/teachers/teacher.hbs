@@ -222,7 +222,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body pb-0">
         <form action="" id="eidtTeacherForm">
           <div class="form-outline input-group-lg">
             <input
@@ -274,7 +274,7 @@ function formSubmit(e) {
 
   const formData = new FormData(form);
   const dataToSend = Object.fromEntries(formData);
-  fetch(`http://localhost:5000/office/teacher/edit-teacher/${code}`, {
+  fetch(`/office/teacher/edit-teacher/${code}`, {
     method: "PUT",
     body: JSON.stringify(dataToSend),
     headers: {

@@ -261,7 +261,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body pb-0">
         <form action="" id="eidtBatchForm">
 
           <div class="form-outline input-group-lg">
@@ -321,7 +321,7 @@ function formSubmit(e) {
 
   const formData = new FormData(form);
   const dataToSend = Object.fromEntries(formData);
-  fetch(`http://localhost:5000/office/batch/edit-batch/${code}`, {
+  fetch(`/office/batch/edit-batch/${code}`, {
     method: "PUT",
     body: JSON.stringify(dataToSend),
     headers: {

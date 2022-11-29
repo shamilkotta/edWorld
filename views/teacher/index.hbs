@@ -480,7 +480,7 @@ function detailsFormSubmit(e) {
   const formData = new FormData(detailsForm);
   const dataToSend = Object.fromEntries(formData);
 
-  fetch(`http://localhost:5000/teacher/edit-basic-details`, {
+  fetch(`/teacher/edit-basic-details`, {
     method: "PUT",
     body: JSON.stringify(dataToSend),
     headers: {
@@ -516,7 +516,7 @@ function passwordFormSubmit(e) {
   const formData = new FormData(passwordForm);
   const dataToSend = Object.fromEntries(formData);
 
-  fetch(`http://localhost:5000/teacher/change-password`, {
+  fetch(`/teacher/change-password`, {
     method: "PUT",
     body: JSON.stringify(dataToSend),
     headers: {
