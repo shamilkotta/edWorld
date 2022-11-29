@@ -226,6 +226,31 @@ module.exports = {
                 },
               },
             },
+            month_end: {
+              $cond: {
+                if: {
+                  $and: [
+                    {
+                      $lt: ["$current_month", "$duration"],
+                    },
+                    {
+                      $lt: [
+                        {
+                          $dateAdd: {
+                            startDate: "$start_date",
+                            unit: "month",
+                            amount: "$current_month",
+                          },
+                        },
+                        today,
+                      ],
+                    },
+                  ],
+                },
+                then: true,
+                else: false,
+              },
+            },
             start_date: {
               $dateToString: {
                 format: "%d/%m/%Y",
