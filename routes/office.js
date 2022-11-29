@@ -25,7 +25,7 @@ const {
 } = require("../middlewares/validations/office/studentValidations");
 const {
   createTeacherValidation,
-  editTeacherValidation,
+  editTeacherValidationOffice,
 } = require("../middlewares/validations/office/teacherValidations");
 const profileUpload = require("../middlewares/uploadFile");
 
@@ -73,7 +73,7 @@ router.post(
 // edit teacher
 router.put(
   "/teacher/edit-teacher/:registerId",
-  editTeacherValidation,
+  editTeacherValidationOffice,
   putEditTeacher
 );
 
