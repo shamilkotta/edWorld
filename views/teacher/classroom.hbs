@@ -18,7 +18,7 @@
 </nav>
 
 <main class="container-fluid px-3" style="max-width: 1500px;">
-  <div class="d-flex flex-wrap">
+  <div class="d-flex flex-wrap justify-content-end">
     <div class="tab-bar mb-4 ms-2 mt-2">
       <a
         href="/teacher"
@@ -314,27 +314,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  // Edit batch details const form = document.getElementById("eidtBatchForm");
-  const code = document.getElementById("batch-code").innerText; const res =
-  document.getElementById("response"); const seat =
-  document.getElementById("seat-num"); const head =
-  document.getElementById("batch-head"); const headName =
-  document.getElementById("batch-head-name"); const sel =
-  document.getElementById("batch-head-select"); function formSubmit(e) {
-  e.preventDefault(); const formData = new FormData(form); const dataToSend =
-  Object.fromEntries(formData);
-  fetch(`http://localhost:5000/office/batch/edit-batch/${code}`, { method:
-  "PUT", body: JSON.stringify(dataToSend), headers: { "Content-Type":
-  "application/json", }, }) .then((response) => response.json())
-  .then((response) => { if (response.success) {
-  res.classList.add("text-success"); res.classList.remove("text-danger");
-  seat.innerText = dataToSend.seat_num; head.innerText =
-  `(${dataToSend.batch_head})`; const { text } = sel.options[sel.selectedIndex];
-  headName.innerText = text; } else { res.classList.add("text-danger");
-  res.classList.remove("text-success"); } res.innerText = response.message; })
-  .catch((error) => { res.classList.add("text-danger");
-  res.classList.remove("text-success"); res.innerText = "Somthing went wrong";
-  }); } form.addEventListener("submit", formSubmit);
-</script>
