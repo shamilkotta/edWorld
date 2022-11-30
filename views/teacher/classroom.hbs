@@ -1,5 +1,5 @@
 <nav
-  class="container-fluid py-4 px-3 d-flex justify-content-between align-items-center border-bottom sticky"
+  class="container-fluid py-4 px-3 d-flex justify-content-between align-items-center border-bottom bg-white sticky"
   style="max-width: 1500px;"
 >
   <a href="/">
@@ -10,7 +10,7 @@
       <img
         src="/static/icon/logout.svg"
         alt="logout"
-        height="28px"
+        height="25px"
         style="transform: rotate(180deg);"
       />
     </a>
@@ -282,7 +282,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="staticBackdropLabel">Working Days -
-          {{{superfix batch.current_month}}} month</h5>
+          {{{superfix batch.current_month false}}} month</h5>
         <button
           type="button"
           class="btn-close"
@@ -333,8 +333,20 @@
       headers: {
         "Content-Type": "application/json",
       },
-    }).then(() => {
-      location.reload()
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if(res.success) location.reload()
+      else {
+        response.classList.add("text-danger");
+        response.classList.remove("text-success");
+        response.innerText = res.message;
+      }
+    })
+    .catch((err) => {
+      response.classList.add("text-danger");
+      response.classList.remove("text-success");
+      response.innerText = "Somthing went wrong";
     })
   }
 
