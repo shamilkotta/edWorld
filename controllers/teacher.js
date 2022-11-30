@@ -10,6 +10,19 @@ const Batch = require("../models/batch");
 const Student = require("../models/student");
 const Teacher = require("../models/teacher");
 
+const superfix = (index, inc = false) => {
+  if (inc) {
+    if (index === 0 || index === "0") return "1<sup>st</sup>";
+    if (index === 1 || index === "1") return "2<sup>nd</sup>";
+    if (index === 2 || index === "2") return "3<sup>rd</sup>";
+    return `${index + 1}<sup>th</sup>`;
+  }
+  if (index === 1 || index === "1") return "1<sup>st</sup>";
+  if (index === 2 || index === "2") return "2<sup>nd</sup>";
+  if (index === 3 || index === "3") return "3<sup>rd</sup>";
+  return `${index}<sup>th</sup>`;
+};
+
 module.exports = {
   getTeacherView: async (req, res) => {
     try {
@@ -37,18 +50,7 @@ module.exports = {
           batch: allBatches[0],
           ...students,
           helpers: {
-            superfix: (index, inc = false) => {
-              if (inc) {
-                if (index === 0 || index === "0") return "1<sup>st</sup>";
-                if (index === 1 || index === "1") return "2<sup>nd</sup>";
-                if (index === 2 || index === "2") return "3<sup>rd</sup>";
-                return `${index + 1}<sup>th</sup>`;
-              }
-              if (index === 1 || index === "1") return "1<sup>st</sup>";
-              if (index === 2 || index === "2") return "2<sup>nd</sup>";
-              if (index === 3 || index === "3") return "3<sup>rd</sup>";
-              return `${index}<sup>th</sup>`;
-            },
+            superfix,
           },
         });
       }
@@ -164,7 +166,13 @@ module.exports = {
     try {
       const { allStudents } = await getAllStudentsData({ search: registerId });
       if (allStudents[0]) {
-        res.render("teacher/student", { student: allStudents[0] });
+        res.render("teacher/student", {
+          student: allStudents[0],
+          helpers: {
+            superfix,
+            isAttendancePending: (count) => count === -1 || count === "-1",
+          },
+        });
       } else {
         res.redirect("/teacher/classroom");
       }
@@ -175,16 +183,15 @@ module.exports = {
 
   putTotalWrokingDays: async (req, res) => {
     try {
-      // eslint-disable-next-line camelcase
-      const { working_days } = req.body;
-      const { registerId } = req.session.user;
-      const days = parseInt(working_days, 10);
-      if (Number.isNaN(days))
+      if (req.validationErr)
         res.status(400).json({
           success: false,
-          message: "Please enter a valid number",
+          message: req.validationErr,
         });
       else {
+        // eslint-disable-next-line camelcase
+        const { working_days } = req.validData;
+        const { registerId } = req.session.user;
         const batchResult = await Batch.findOneAndUpdate(
           { batch_head: registerId },
           {
@@ -201,7 +208,16 @@ module.exports = {
         else {
           const studentResult = await Student.updateMany(
             { batch: batchResult.code },
-            { $push: { attendence: -1 } }
+            {
+              $push: {
+                monthly_data: {
+                  // eslint-disable-next-line camelcase
+                  total: working_days,
+                  attended: -1,
+                  performance: 0,
+                },
+              },
+            }
           );
           if (studentResult.acknowledged && studentResult.modifiedCount) {
             res.status(200).json({
@@ -221,6 +237,48 @@ module.exports = {
         success: false,
         message: "Something went wrong",
       });
+    }
+  },
+
+  putMonthlyData: async (req, res) => {
+    if (req.validationErr) {
+      res.status(400).json({
+        success: false,
+        message: req.validationErr,
+      });
+    } else {
+      try {
+        const { attendance, performance, registerId, id } = req.validData;
+        const result = await Student.updateOne(
+          {
+            registerId,
+            "monthly_data._id": id,
+          },
+          {
+            $set: {
+              "monthly_data.$.attended": attendance,
+              "monthly_data.$.performance": performance,
+            },
+          }
+        );
+
+        if (result.acknowledged && result.modifiedCount) {
+          res.status(200).json({
+            success: true,
+            message: "Monthly data added",
+          });
+        } else {
+          res.status(400).json({
+            success: false,
+            message: "Can't find student",
+          });
+        }
+      } catch (error) {
+        res.status(500).json({
+          success: false,
+          message: "Something went wrong, try again",
+        });
+      }
     }
   },
 };
