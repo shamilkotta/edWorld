@@ -59,3 +59,31 @@ function validatePassword(input) {
       "Password must contain : \n Atleast One uppper case letter and lower case letter \nAtleast one digit and special charecter \nCan not contain white spaces \nAnd must be 8 to 16 charecters long"
     );
 }
+
+function superfix(index, inc = false) {
+  if (inc) {
+    if (index === 0 || index === "0") return "1<sup>st</sup>";
+    if (index === 1 || index === "1") return "2<sup>nd</sup>";
+    if (index === 2 || index === "2") return "3<sup>rd</sup>";
+    return `${index + 1}<sup>th</sup>`;
+  }
+  if (index === 1 || index === "1") return "1<sup>st</sup>";
+  if (index === 2 || index === "2") return "2<sup>nd</sup>";
+  if (index === 3 || index === "3") return "3<sup>rd</sup>";
+  return `${index}<sup>th</sup>`;
+}
+
+// student monthly data
+function monthlyData(total, attended, id, index) {
+  const head = document.getElementById("staticBackdropLabel");
+  head.innerHTML = `${superfix(index, true)} Month Data`;
+
+  const addon = document.getElementById("basic-addon2");
+  addon.innerText = `/${total}`;
+
+  const attendance = document.getElementById("attendance");
+  attendance.setAttribute("max", total);
+
+  const monthId = document.getElementById("month-id");
+  monthId.value = id;
+}

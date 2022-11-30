@@ -1,5 +1,5 @@
 <nav
-  class="container-fluid py-4 px-3 d-flex justify-content-between align-items-center border-bottom sticky"
+  class="container-fluid py-4 px-3 d-flex justify-content-between align-items-center border-bottom bg-white sticky"
   style="max-width: 1500px;"
 >
   <a href="/">
@@ -10,7 +10,7 @@
       <img
         src="/static/icon/logout.svg"
         alt="logout"
-        height="28px"
+        height="25px"
         style="transform: rotate(180deg);"
       />
     </a>
@@ -261,5 +261,132 @@
         </div>
       </div>
     </div>
+
+    <h6 class="mb-2 mt-5">Monthly Attendence</h6>
+    <div class="px-1 py-3 rounded working-days">
+      <div class="d-flex flex-row-reverse">
+      {{#each student.monthly_data}}
+        {{#if (isAttendancePending this.attended) }}
+          <div class="btn working-days-card-add" data-mdb-toggle="modal" data-mdb-target="#addMonthlyData" onclick="monthlyData(`{{this.total}}`, `{{this.attended}}`, `{{this._id}}`, `{{@index}}`)">
+            <img src="/static/icon/note-add.svg" alt="add">
+            <div>Add new</div>
+          </div>
+        {{else}}
+          <div class="btn working-days-card pt-2 px-2">
+            <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.attended}}</div>
+            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
+          </div>
+        {{/if}}
+      {{/each}}
+      </div>
+    </div>
+
+    <h6 class="mb-2 mt-5">Performance</h6>
+    <div class="px-1 py-3 rounded working-days">
+      <div class="d-flex flex-row-reverse">
+      {{#each student.monthly_data}}
+        <div class="btn working-days-card pt-2 px-2">
+          <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.performance}}</div>
+          <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
+        </div>
+      {{/each}}
+      </div>
+    </div>
   </section>
 </main>
+
+{{! edit data modal }}
+<div
+  class="modal fade"
+  id="addMonthlyData"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel"></h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body pb-0">
+        <form action="" id="monthlyDataForm">
+
+          <div class="form-outline input-group input-group-lg">
+            <input
+              type="number"
+              id="attendance"
+              name="attendance"
+              class="form-control"
+              required
+              min="0"
+            />
+            <label class="form-label" for="attendance">Attendance</label>
+            <span class="input-group-text border-0" id="basic-addon2"></span>
+          </div>
+          <div class="form-outline input-group mt-3 input-group-lg">
+            <input
+              type="number"
+              id="performance"
+              name="performance"
+              class="form-control"
+              required
+              min="0"
+              max="100"
+            />
+            <label class="form-label" for="performance">Performance</label>
+            <span class="input-group-text border-0" id="basic-addon2">%</span>
+          </div>
+          <input type="hidden" name="id" id="month-id" value="">
+          <input type="hidden" name="registerId" id="registerId" value="{{student.registerId}}">
+          <p id="monthlyDataForm-response"></p>
+          <div class="mt-3 d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-outline-success"
+            >Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById("monthlyDataForm")
+  const response = document.getElementById("monthlyDataForm-response")
+  const formSubmit = (e) => {
+    e.preventDefault()
+    const formData = new FormData(form);
+    const dataToSend = Object.fromEntries(formData);
+
+    fetch("/teacher/add-monthly-data", {
+      method: "PUT",
+      body: JSON.stringify(dataToSend),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then((res) => res.json())
+    .then((res) => {
+      if(res.success) location.reload()
+      else {
+        response.classList.add("text-danger");
+        response.classList.remove("text-success");
+        response.innerText = res.message;
+      }
+    })
+    .catch((err) => {
+      response.classList.add("text-danger");
+      response.classList.remove("text-success");
+      response.innerText = "Somthing went wrong";
+    })
+  }
+
+  form.addEventListener("submit", formSubmit)
+</script>
