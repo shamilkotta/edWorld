@@ -116,6 +116,9 @@ const studentSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  attendence: {
+    type: [Number],
+  },
 });
 
 module.exports = mongoose.model("Student", studentSchema);
