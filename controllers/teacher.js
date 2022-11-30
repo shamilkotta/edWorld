@@ -38,7 +38,6 @@ module.exports = {
           ...students,
           helpers: {
             superfix: (index, inc = false) => {
-              console.log(index);
               if (inc) {
                 if (index === 0 || index === "0") return "1<sup>st</sup>";
                 if (index === 1 || index === "1") return "2<sup>nd</sup>";
@@ -153,7 +152,6 @@ module.exports = {
         message: "Enter a strong password",
       });
     } catch (error) {
-      console.log(error);
       return res.status(500).json({
         success: false,
         message: "Something went wrong! try again",
@@ -187,7 +185,7 @@ module.exports = {
           message: "Please enter a valid number",
         });
       else {
-        const result = await Batch.updateOne(
+        const batchResult = await Batch.findOneAndUpdate(
           { batch_head: registerId },
           {
             // eslint-disable-next-line camelcase
@@ -195,17 +193,27 @@ module.exports = {
             $inc: { current_month: 1 },
           }
         );
-
-        if (result.acknowledged && result.modifiedCount) {
-          res.status(200).json({
-            success: true,
-            message: "Working days added successfully",
-          });
-        } else {
+        if (!batchResult)
           res.status(400).json({
             success: false,
             message: "Can't add working days, please login again",
           });
+        else {
+          const studentResult = await Student.updateMany(
+            { batch: batchResult.code },
+            { $push: { attendence: -1 } }
+          );
+          if (studentResult.acknowledged && studentResult.modifiedCount) {
+            res.status(200).json({
+              success: true,
+              message: "Working days added successfully",
+            });
+          } else {
+            res.status(400).json({
+              success: false,
+              message: "Can't add working days, please login again",
+            });
+          }
         }
       }
     } catch (error) {
