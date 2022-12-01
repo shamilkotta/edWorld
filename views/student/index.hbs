@@ -1,5 +1,5 @@
 <nav
-  class="container-fluid py-4 px-3 d-flex justify-content-between align-items-center border-bottom sticky"
+  class="container-fluid py-4 px-3 d-flex justify-content-between align-items-center border-bottom bg-white sticky"
   style="max-width: 1500px;"
 >
   <a href="/">
@@ -7,13 +7,13 @@
   </a>
   <div>
     <a data-mdb-toggle="modal" data-mdb-target="#editDetails">
-      <img src="/static/icon/setting.svg" alt="logout" height="28px" />
+      <img src="/static/icon/setting.svg" alt="logout" height="25px" />
     </a>
     <a href="/logout" class="ms-3">
       <img
         src="/static/icon/logout.svg"
         alt="logout"
-        height="28px"
+        height="25px"
         style="transform: rotate(180deg);"
       />
     </a>
@@ -88,7 +88,7 @@
           </div>
           <div class="">
             <span class="fw-bold fs-6 mb-0">Parent Phone</span><br />
-            <span class="text-muted fs-6 mt-0">{{student.parent_phone}}</span>
+            <span class="text-muted fs-6 mt-0" id="student-parent-phone">{{student.parent_phone}}</span>
           </div>
           <div class="">
             <span class="fw-bold fs-6 mb-0">Education</span><br />
@@ -230,7 +230,7 @@
     <div class="d-flex flex-wrap justify-content-end">
       <div class="tab-bar mb-4 ms-2 mt-4">
         <a
-          href=""
+          data-mdb-toggle="modal" data-mdb-target="#payoutModal"
           class="btn d-flex py-3 px-4 justify-content-center align-items-center rounded-3"
           style="background-color: #D2FFEA; color: #369d6d;"
         >
@@ -244,8 +244,137 @@
         </a>
       </div>
     </div>
+
+    {{#if student.monthly_data}}
+    <h6 class="mb-2 mt-5">Monthly Attendence</h6>
+    <div class="px-1 py-3 rounded working-days">
+      <div class="d-flex flex-row-reverse">
+      {{#each student.monthly_data}}
+        {{#if (isAttendancePending this.attended) }}
+          <div class="btn working-days-card pt-2 px-2">
+            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">Will update soon</div>
+          </div>
+        {{else}}
+          <div class="btn working-days-card pt-2 px-2">
+            <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.attended}}</div>
+            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
+          </div>
+        {{/if}}
+      {{/each}}
+      </div>
+    </div>
+
+    <h6 class="mb-2 mt-5">Performance</h6>
+    <div class="px-1 py-3 rounded working-days">
+      <div class="d-flex flex-row-reverse">
+      {{#each student.monthly_data}}
+        {{#if (isAttendancePending this.attended) }}
+          <div class="btn working-days-card pt-2 px-2">
+            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">Will update soon</div>
+          </div>
+        {{else}}
+          <div class="btn working-days-card pt-2 px-2">
+            <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.performance}}</div>
+            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
+          </div>
+        {{/if}}
+      {{/each}}
+      </div>
+    </div>
+    {{/if}}
+    
   </section>
 </main>
+
+{{! edit data modal }}
+<div
+  class="modal fade"
+  id="payoutModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header pb-0 pt-4">
+        <h5
+          class="fw-normal fs-4 "
+          style="letter-spacing: 1px;"
+        >Fee Payment</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body pb-0">
+        <div>
+          <form action="" class="px-3">
+            <div class="row border rounded align-items-center py-2 px-1">
+              <p class="col-5 my-auto">Payment Options</p>
+              <div class="form-check col">
+                <input
+                  class="form-check-input"
+                  name="fee_type"
+                  type="radio"
+                  value="One time"
+                  id="one-time-read"
+                  checked
+                  required
+                />
+                <label class="form-check-label" for="one-time">One-time</label>
+              </div>
+              <div class="form-check col">
+                <input
+                  class="form-check-input"
+                  name="fee_type"
+                  type="radio"
+                  value="Installment"
+                  id="installment"
+                  disabled
+                />
+                <label
+                  class="form-check-label"
+                  for="installment"
+                >Installment</label>
+              </div>
+            </div>
+            <!-- Billing details -->
+            <div class="mt-4 mb-4">
+              <div class="d-flex justify-content-between">
+                <span class="fs-5">Amount</span>
+                <span class="fs-5">₹40000.00</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="fs-5">Fine</span>
+                <span class="fs-5">₹00.00</span>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="fs-5">Tax (0%)</span>
+                <span class="fs-5">₹00.00</span>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between">
+                <span class="fs-5 fw-bolder">Total</span>
+                <span class="fs-5 fw-bolder">₹40000.00</span>
+              </div>
+            </div>
+
+            <p id="response-payout"></p>
+
+            <div class="mt-3 d-flex justify-content-end">
+              <button
+                type="submit"
+                class="btn btn-outline-success"
+              >Pay Now</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {{! edit data modal }}
 <div
@@ -306,7 +435,7 @@
                   id="phone"
                   name="phone"
                   class="form-control"
-                  value="{{teacher.phone}}"
+                  value="{{student.phone}}"
                   required
                   oninput="validatePhone(this)"
                 />
@@ -318,7 +447,7 @@
                   id="email"
                   name="email"
                   class="form-control"
-                  value="{{teacher.email}}"
+                  value="{{student.email}}"
                   required
                   oninput="validateEmail(this)"
                 />
@@ -327,10 +456,22 @@
               <div class="form-outline mb-3 input-group-lg">
                 <input
                   type="text"
+                  id="parent_phone"
+                  name="parent_phone"
+                  class="form-control"
+                  value="{{student.parent_phone}}"
+                  required
+                  oninput="validatePhone(this)"
+                />
+                <label class="form-label" for="parent_phone">Parent Phone</label>
+              </div>
+              <div class="form-outline mb-3 input-group-lg">
+                <input
+                  type="text"
                   id="house_name"
                   name="house_name"
                   class="form-control"
-                  value="{{teacher.address.house_name}}"
+                  value="{{student.address.house_name}}"
                 />
                 <label class="form-label" for="house_name">House Name</label>
               </div>
@@ -340,7 +481,7 @@
                   id="place"
                   name="place"
                   class="form-control"
-                  value="{{teacher.address.place}}"
+                  value="{{student.address.place}}"
                   required
                 />
                 <label class="form-label" for="place">Place</label>
@@ -351,7 +492,7 @@
                   id="post"
                   name="post"
                   class="form-control"
-                  value="{{teacher.address.post}}"
+                  value="{{student.address.post}}"
                   required
                 />
                 <label class="form-label" for="post">Post</label>
@@ -362,7 +503,7 @@
                   id="pin"
                   name="pin"
                   class="form-control"
-                  value="{{teacher.address.pin}}"
+                  value="{{student.address.pin}}"
                   required
                   oninput="validatePinCode(this)"
                 />
@@ -374,7 +515,7 @@
                   id="district"
                   name="district"
                   class="form-control"
-                  value="{{teacher.address.district}}"
+                  value="{{student.address.district}}"
                   required
                 />
                 <label class="form-label" for="district">District</label>
@@ -385,7 +526,7 @@
                   id="state"
                   name="state"
                   class="form-control"
-                  value="{{teacher.address.state}}"
+                  value="{{student.address.state}}"
                   required
                 />
                 <label class="form-label" for="state">State</label>
@@ -462,45 +603,87 @@
   </div>
 </div>
 
-<script>
-  // Edit details const detailsForm =
-  document.getElementById("eidtDetailsForm"); const passwordForm =
-  document.getElementById("changePassowrdForm"); const detailsRes =
-  document.getElementById("response-details"); const passwordRes =
-  document.getElementById("response-pass"); const phone =
-  document.getElementById("teacher-phone"); const email =
-  document.getElementById("teacher-email"); const address =
-  document.getElementById("teacher-address"); function detailsFormSubmit(e) {
-  e.preventDefault(); const formData = new FormData(detailsForm); const
-  dataToSend = Object.fromEntries(formData);
-  fetch(`http://localhost:5000/teacher/edit-basic-details`, { method: "PUT",
-  body: JSON.stringify(dataToSend), headers: { "Content-Type":
-  "application/json", }, }) .then((response) => response.json())
-  .then((response) => { if (response.success) {
-  detailsRes.classList.add("text-success");
-  detailsRes.classList.remove("text-danger"); phone.innerText = dataToSend.phone
-  email.innerText = dataToSend.email address.innerHTML =
-  `${dataToSend.house_name} <br> ${dataToSend.place},<br> ${dataToSend.post},
-  ${dataToSend.pin},<br> ${dataToSend.district}, ${dataToSend.state}, IN` } else
-  { detailsRes.classList.add("text-danger");
-  detailsRes.classList.remove("text-success"); } detailsRes.innerText =
-  response.message; }) .catch((error) => {
-  detailsRes.classList.add("text-danger");
-  detailsRes.classList.remove("text-success"); detailsRes.innerText = "Somthing
-  went wrong"; }); } function passwordFormSubmit(e) { e.preventDefault(); const
-  formData = new FormData(passwordForm); const dataToSend =
-  Object.fromEntries(formData);
-  fetch(`http://localhost:5000/teacher/change-password`, { method: "PUT", body:
-  JSON.stringify(dataToSend), headers: { "Content-Type": "application/json", },
-  }) .then((response) => response.json()) .then((response) => { if
-  (response.success) { passwordRes.classList.add("text-success");
-  passwordRes.classList.remove("text-danger"); } else {
-  passwordRes.classList.add("text-danger");
-  passwordRes.classList.remove("text-success"); } passwordRes.innerText =
-  response.message; }) .catch((error) => {
-  passwordRes.classList.add("text-danger");
-  passwordRes.classList.remove("text-success"); passwordRes.innerText =
-  "Somthing went wrong"; }); } detailsForm.addEventListener("submit",
-  detailsFormSubmit); passwordForm.addEventListener("submit",
-  passwordFormSubmit);
+<script>  
+// Edit details
+const detailsForm = document.getElementById("eidtDetailsForm");
+const passwordForm = document.getElementById("changePassowrdForm");
+
+const detailsRes = document.getElementById("response-details");
+const passwordRes = document.getElementById("response-pass");
+
+const phone = document.getElementById("student-phone");
+const email = document.getElementById("student-email");
+const parentPhone = document.getElementById("student-parent-phone");
+const address = document.getElementById("student-address");
+
+function detailsFormSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(detailsForm);
+  const dataToSend = Object.fromEntries(formData);
+
+  fetch(`/student/edit-basic-details`, {
+    method: "PUT",
+    body: JSON.stringify(dataToSend),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        detailsRes.classList.add("text-success");
+        detailsRes.classList.remove("text-danger");
+        phone.innerText = dataToSend.phone
+        email.innerText = dataToSend.email
+        parentPhone.innerText = dataToSend.parent_phone
+        address.innerHTML = `${dataToSend.house_name} <br> ${dataToSend.place},<br>
+                ${dataToSend.post}, ${dataToSend.pin},<br>
+                ${dataToSend.district}, ${dataToSend.state}, IN`
+        
+      } else {
+        detailsRes.classList.add("text-danger");
+        detailsRes.classList.remove("text-success");
+      }
+      detailsRes.innerText = response.message;
+    })
+    .catch((error) => {
+      detailsRes.classList.add("text-danger");
+      detailsRes.classList.remove("text-success");
+      detailsRes.innerText = "Somthing went wrong";
+    });
+}
+
+function passwordFormSubmit(e) {
+  e.preventDefault();
+  const formData = new FormData(passwordForm);
+  const dataToSend = Object.fromEntries(formData);
+
+  fetch(`/student/change-password`, {
+    method: "PUT",
+    body: JSON.stringify(dataToSend),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        passwordRes.classList.add("text-success");
+        passwordRes.classList.remove("text-danger");
+        
+      } else {
+        passwordRes.classList.add("text-danger");
+        passwordRes.classList.remove("text-success");
+      }
+      passwordRes.innerText = response.message;
+    })
+    .catch((error) => {
+      passwordRes.classList.add("text-danger");
+      passwordRes.classList.remove("text-success");
+      passwordRes.innerText = "Somthing went wrong";
+    });
+}
+
+detailsForm.addEventListener("submit", detailsFormSubmit);
+passwordForm.addEventListener("submit", passwordFormSubmit);
 </script>
