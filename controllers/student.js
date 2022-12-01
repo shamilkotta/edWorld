@@ -177,4 +177,25 @@ module.exports = {
       res.redirect("/login");
     }
   },
+
+  getFeeInvoice: async (req, res) => {
+    const { registerId } = req.session.user;
+    const { option } = req.params;
+
+    try {
+      const result = await getInvoiceData(registerId, option);
+      if (result.success) res.status(200).json(result);
+      else if (result.statusCode) res.status(result.statusCode).json(result);
+      else
+        res.status(404).json({
+          success: false,
+          message: "Can't fetch your invoice, please try again later",
+        });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Can't fetch your invoice, please try again later",
+      });
+    }
+  },
 };

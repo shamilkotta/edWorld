@@ -1,6 +1,6 @@
 const express = require("express");
 const { getChangePassword, putEditDetails } = require("../controllers");
-const { getStudentView } = require("../controllers/student");
+const { getStudentView, getFeeInvoice } = require("../controllers/student");
 const {
   editStudentValidation,
 } = require("../middlewares/validations/studentValidations");
@@ -18,5 +18,7 @@ router.get("/", getStudentView);
 router.put("/edit-basic-details", editStudentValidation, putEditDetails);
 
 router.put("/change-password", getChangePassword);
+
+router.get("/get-invoice/:option", getFeeInvoice);
 
 module.exports = router;
