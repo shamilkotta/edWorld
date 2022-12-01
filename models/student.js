@@ -129,6 +129,14 @@ const studentSchema = new mongoose.Schema({
       },
     },
   ],
+  payment_done: {
+    type: Boolean,
+    default: false,
+  },
+  installment: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model("Student", studentSchema);
