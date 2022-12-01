@@ -81,6 +81,9 @@ function monthlyData(total, attended, id, index) {
   const addon = document.getElementById("basic-addon2");
   addon.innerText = `/${total}`;
 
+  const totalInput = document.getElementById("total-days");
+  totalInput.value = total;
+
   const attendance = document.getElementById("attendance");
   attendance.setAttribute("max", total);
 
