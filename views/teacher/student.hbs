@@ -262,6 +262,7 @@
       </div>
     </div>
 
+    {{#if student.monthly_data}}
     <h6 class="mb-2 mt-5">Monthly Attendence</h6>
     <div class="px-1 py-3 rounded working-days">
       <div class="d-flex flex-row-reverse">
@@ -292,6 +293,7 @@
       {{/each}}
       </div>
     </div>
+    {{/if}}
   </section>
 </main>
 
@@ -344,6 +346,7 @@
           </div>
           <input type="hidden" name="id" id="month-id" value="">
           <input type="hidden" name="registerId" id="registerId" value="{{student.registerId}}">
+          <input type="hidden" name="total" id="total-days" value="">
           <p id="monthlyDataForm-response"></p>
           <div class="mt-3 d-flex justify-content-end">
             <button
