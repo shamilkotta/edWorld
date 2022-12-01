@@ -1,20 +1,17 @@
 const express = require("express");
+const { getChangePassword, putEditDetails } = require("../controllers");
 const {
   getTeacherView,
   getClassRoom,
-  editDetails,
-  changePassword,
   getStudent,
   putTotalWrokingDays,
   putMonthlyData,
 } = require("../controllers/teacher");
 const {
-  editTeacherValidationUser,
-} = require("../middlewares/validations/office/teacherValidations");
-const {
+  editTeacherValidation,
   totalWorkingDaysValidation,
   monthlyDataValidation,
-} = require("../middlewares/validations/teacher/validations");
+} = require("../middlewares/validations/teacherValidations");
 
 const router = express.Router();
 
@@ -28,9 +25,9 @@ router.get("/", getTeacherView);
 
 router.get("/classroom", getClassRoom);
 
-router.put("/edit-basic-details", editTeacherValidationUser, editDetails);
+router.put("/edit-basic-details", editTeacherValidation, putEditDetails);
 
-router.put("/change-password", changePassword);
+router.put("/change-password", getChangePassword);
 
 router.get("/classroom/:registerId", getStudent);
 
