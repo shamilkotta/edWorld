@@ -90,3 +90,90 @@ function monthlyData(total, attended, id, index) {
   const monthId = document.getElementById("month-id");
   monthId.value = id;
 }
+
+// fetch fee info of student
+function fetchInvoice(option = 0) {
+  const payoutModal = document.getElementById("payout-body");
+
+  fetch(`/student/get-invoice/${option}`)
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.success) {
+        const { feeOptions, amount, tax, taxAmount, total, balance } =
+          response.data;
+        payoutModal.innerHTML = `
+          <div>
+            <form action="" class="px-3">
+            ${feeOptions &&
+          `
+              <div class="row border rounded align-items-center py-2 px-1">
+                <p class="col-5 my-auto">Payment Options</p>
+                <div class="form-check col">
+                  <input
+                    class="form-check-input"
+                    name="fee_type"
+                    type="radio"
+                    value="One time"
+                    id="one-time"
+                    onChange= "fetchInvoice(0)"
+                    ${option === 0 && `checked`}
+                    required
+                  />
+                  <label class="form-check-label" for="one-time">One-time</label>
+                </div>
+                <div class="form-check col">
+                  <input
+                    class="form-check-input"
+                    name="fee_type"
+                    type="radio"
+                    value="Installment"
+                    id="installment"
+                    ${option === 1 && `checked`}
+                    onChange= "fetchInvoice(1)"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="installment"
+                  >Installment</label>
+                </div>
+              </div>
+            `
+          }
+              
+              <!-- Billing details -->
+              <div class="mt-4 mb-4">
+                <div class="d-flex justify-content-between">
+                  <span class="fs-5">Amount</span>
+                  <span class="fs-5" id="fee-amount">₹${amount}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="fs-5">Tax (${tax}%)</span>
+                  <span class="fs-5">₹${taxAmount}</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                  <span class="fs-5 fw-bolder">Total</span>
+                  <span class="fs-5 fw-bolder" id="fee-total">₹${total}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <span class="fs-6">Balance</span>
+                  <span class="fs-6" id="fee-balance">- ₹${balance}</span>
+                </div>
+              </div>
+              <div class="mt-3 d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="btn btn-outline-success"
+                >Pay Now</button>
+              </div>
+            </form>
+          </div>
+        `;
+      } else {
+        payoutModal.innerHTML = `<p class="mt-5">${response.message}</p>`;
+      }
+    })
+    .catch((err) => {
+      payoutModal.innerHTML = `<p class="mt-5">Can't fetch your invoice, please try again later</p>`;
+    });
+}
