@@ -11,6 +11,7 @@ const {
   logout,
   getForgotPass,
   getUpdatePass,
+  postFeePayment,
 } = require("../controllers");
 const { loginRedirection } = require("../middlewares/authorization");
 
@@ -55,6 +56,8 @@ router.post(
   },
   postUpdatePassword
 );
+
+router.post("/save-fee-payment-data", postFeePayment);
 
 router.get("/404", (req, res) => {
   res.render("404");
