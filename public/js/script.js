@@ -100,16 +100,8 @@ function fetchInvoice(option = 0) {
     .then((response) => response.json())
     .then((response) => {
       if (response.success) {
-        const {
-          feeOptions,
-          amount,
-          tax,
-          taxAmount,
-          total,
-          balance,
-          orderId,
-          registerId,
-        } = response.data;
+        const { feeOptions, amount, tax, taxAmount, total, balance, invoice } =
+          response.data;
         payoutModal.innerHTML = `
           <div>
             <div class="px-3" >
@@ -170,10 +162,11 @@ function fetchInvoice(option = 0) {
                   <span class="fs-6" id="fee-balance">- ₹${balance}</span>
                 </div>
               </div>
+              <p id="response-payment" class="text-danger"></p>
               <div class="mt-3 d-flex justify-content-end">
                 <button
                   type="button"
-                  onClick="checkout(${total}, '${orderId}', ${option}, '${registerId}')"
+                  onClick="checkout(${option}, '${invoice}')"
                   class="btn"
                   style="background-color: #3BB77E; color: #FFF;"
                 >Pay Now</button>
@@ -190,64 +183,81 @@ function fetchInvoice(option = 0) {
     });
 }
 
-function checkout(amount, id, option, registerId) {
+function checkout(option, invoice) {
   const name = document.getElementById("student-name").innerText;
   const email = document.getElementById("student-email").innerText;
   const payoutModal = document.getElementById("payout-body");
+  const paymentRes = document.getElementById("response-payment");
 
-  const options = {
-    key: "rzp_test_yrNP9XZJenorHu",
-    amount: amount * 100,
-    currency: "INR",
-    name: "edWorld",
-    description: "Fee payment",
-    image: "/static/svg/icon.svg",
-    order_id: id,
-    handler(response) {
-      payoutModal.innerHTML = `<p class="mt-5 fw-bold fs-6">Your payment is processing...</p>`;
-      fetch("/save-fee-payment-data", {
-        method: "POST",
-        body: JSON.stringify({
-          ...response,
-          amount,
-          option,
-          registerId,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.success)
-            payoutModal.innerHTML = `
-              <p class="mt-4 fw-semibold fs-6">${res.message}</p>
-              <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${response.razorpay_order_id}</p>
-              <div class="btn " style="color: white; background-color: #3BB77e;">
-                Download Receipt
-              </div>
-              `;
-          else
-            payoutModal.innerHTML = `
-              <p class="mt-4 fw-semibold fs-6">${res.message}</p>
-              <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${response.razorpay_order_id}</p>
-              `;
-        })
-        .catch((err) => {
-          payoutModal.innerHTML = `<p class="mt-4 fw-semibold fs-6">Payment is successfull, but something went wrong in our side. Please contact office with the reference id</p>
-            <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${response.razorpay_order_id}</p>`;
-        });
-    },
-    prefill: {
-      name,
-      email,
-    },
-    theme: {
-      color: "#3bb77e",
-    },
-  };
-
-  // eslint-disable-next-line no-undef
-  const rzp1 = new Razorpay(options);
-  rzp1.open();
+  // creating order
+  fetch(`/student/generate-order/${option}/${invoice}`)
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.success) {
+        const { id, amount, registerId } = res.data;
+        // razorpay api options
+        const options = {
+          key: "rzp_test_yrNP9XZJenorHu",
+          amount: amount * 100,
+          currency: "INR",
+          name: "edWorld",
+          description: "Fee payment",
+          image: "/static/svg/icon.svg",
+          order_id: id,
+          handler(data) {
+            payoutModal.innerHTML = `<p class="mt-5 fw-bold fs-6">Your payment is processing...</p>`;
+            // on successfull saving every data
+            fetch("/save-fee-payment-data", {
+              method: "POST",
+              body: JSON.stringify({
+                ...data,
+                registerId,
+                invoice,
+                option,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.json())
+              .then((response) => {
+                if (response.success)
+                  payoutModal.innerHTML = `
+                    <p class="mt-4 fw-semibold fs-6">${response.message}</p>
+                    <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Receipt Id :</span> ${response.receipt}</p>
+                    <div class="btn " style="color: white; background-color: #3BB77e;">
+                      Download Receipt
+                    </div>
+                    `;
+                else
+                  payoutModal.innerHTML = `
+                    <p class="mt-4 fw-semibold fs-6">${response.message}</p>
+                    <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${data.razorpay_order_id}</p>
+                    `;
+              })
+              .catch(() => {
+                payoutModal.innerHTML = `<p class="mt-4 fw-semibold fs-6">Payment is successfull, but something went wrong in our side. Please contact office with the reference id</p>
+            <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${data.razorpay_order_id}</p>`;
+              });
+          },
+          prefill: {
+            name,
+            email,
+          },
+          theme: {
+            color: "#3bb77e",
+          },
+        };
+        // eslint-disable-next-line no-undef
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+      }
+      // can't generate order
+      else {
+        paymentRes.innerText = res.message;
+      }
+    })
+    .catch((err) => {
+      paymentRes.innerText = "Something went wrong, try again later";
+    });
 }
