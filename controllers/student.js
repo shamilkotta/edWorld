@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+const generateRazorpayOrder = require("../config/razorpay");
 const { getFeeData } = require("../helpers");
 const { getAllStudentsData } = require("../helpers/office");
 
@@ -183,9 +184,22 @@ module.exports = {
     const { option } = req.params;
 
     try {
+      // getting invoice data
       const result = await getInvoiceData(registerId, option);
-      if (result.success) res.status(200).json(result);
-      else if (result.statusCode) res.status(result.statusCode).json(result);
+      if (result.success) {
+        // generating new order and id
+        const orderRes = await generateRazorpayOrder(result.data.total);
+        if (orderRes.success) {
+          result.data.orderId = orderRes.order.id;
+          result.data.registerId = registerId;
+          res.status(200).json(result);
+        } else {
+          res.status(500).json({
+            success: false,
+            message: "Something went wrong, try again",
+          });
+        }
+      } else if (result.statusCode) res.status(result.statusCode).json(result);
       else
         res.status(404).json({
           success: false,
