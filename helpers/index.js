@@ -63,4 +63,49 @@ module.exports = {
           reject(err);
         });
     }),
+
+  savePaymentStatus: ({ registerId, option }) =>
+    new Promise((resolve, reject) => {
+      let edit = [];
+      if (option) {
+        edit = [
+          {
+            $set: {
+              installment: {
+                $add: ["$installment", 1],
+              },
+            },
+          },
+          {
+            $set: {
+              payment_done: {
+                $cond: {
+                  if: {
+                    $gte: ["$installment", 3],
+                  },
+                  then: true,
+                  else: false,
+                },
+              },
+            },
+          },
+        ];
+      } else {
+        edit = [
+          {
+            $set: {
+              payment_done: true,
+              installment: 3,
+            },
+          },
+        ];
+      }
+      Student.updateOne({ registerId }, edit)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
