@@ -5,7 +5,11 @@ const Teacher = require("../models/teacher");
 const Student = require("../models/student");
 const Payment = require("../models/payment");
 const { createPassword } = require("../helpers/office");
-const { compileHTMLEmailTemplate, savePaymentStatus } = require("../helpers");
+const {
+  compileHTMLEmailTemplate,
+  savePaymentStatus,
+  verifyRazorpaySignature,
+} = require("../helpers");
 const sendMail = require("../config/nodemailer");
 
 module.exports = {
@@ -156,11 +160,13 @@ module.exports = {
             resetUrl,
           });
           // send mail
-          sendMail(email, "Password reset link", emailContent).then(() => {
-            req.session.forgotPassSucc =
-              "We've sent a password reset link to your email (only valid for 10 min)";
-            res.redirect(303, "/forgot-password");
-          });
+          sendMail(email, "edWorld password reset link", emailContent).then(
+            () => {
+              req.session.forgotPassSucc =
+                "We've sent a password reset link to your email (only valid for 10 min)";
+              res.redirect(303, "/forgot-password");
+            }
+          );
         } else {
           req.session.forgotPassErr = "Can't send send reset password link";
           res.redirect(303, "/forgot-password");
@@ -377,27 +383,57 @@ module.exports = {
 
   postFeePayment: async (req, res) => {
     if (req.session.user) req.body.registerId = req.session.user.registerId;
-    const { registerId } = req.body;
+    const {
+      registerId,
+      invoice,
+      razorpay_payment_id: paymentId,
+      razorpay_order_id: orderId,
+      razorpay_signature: signature,
+      option,
+    } = req.body;
+    // failure message
     const failure =
       "Payment is successfull, but something went wrong in our side. Please contact office with the reference id";
+
     try {
-      // changing payment status in student profile
-      const response = await savePaymentStatus(req.body);
-      if (response.acknowledged && response.modifiedCount) {
-        // saving payments details
-        req.body.receipt = registerId + Date.now();
-        const payment = new Payment(req.body);
-        const result = await payment.save();
-        if (result)
+      // verifying payment details
+      const verification = await verifyRazorpaySignature(
+        paymentId,
+        orderId,
+        signature
+      );
+      // if Fails
+      if (!verification)
+        return res.status(400).json({
+          success: false,
+          message: "Payment verification failed",
+        });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Payment verification failed",
+      });
+    }
+
+    try {
+      // saving/updating payment data
+      const receipt = registerId + Date.now();
+      const updateRes = await Payment.updateOne(
+        { registerId, invoice },
+        { payment_id: paymentId, signature, receipt, status: true }
+      );
+      if (updateRes.acknowledged && updateRes.modifiedCount) {
+        // changing payment status in student profile
+        const response = await savePaymentStatus({ registerId, option });
+        if (response.acknowledged && response.modifiedCount) {
           return res.status(200).json({
             success: true,
             message: "Payment successfull",
+            receipt,
           });
-        return res.status(500).json({
-          success: false,
-          message: failure,
-        });
+        }
       }
+
       return res.status(500).json({
         success: false,
         message: failure,
