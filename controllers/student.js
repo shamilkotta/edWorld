@@ -2,6 +2,7 @@
 const generateRazorpayOrder = require("../config/razorpay");
 const { getFeeData } = require("../helpers");
 const { getAllStudentsData } = require("../helpers/office");
+const Payment = require("../models/payment");
 
 const superfix = (index, inc = false) => {
   if (inc) {
@@ -187,18 +188,8 @@ module.exports = {
       // getting invoice data
       const result = await getInvoiceData(registerId, option);
       if (result.success) {
-        // generating new order and id
-        const orderRes = await generateRazorpayOrder(result.data.total);
-        if (orderRes.success) {
-          result.data.orderId = orderRes.order.id;
-          result.data.registerId = registerId;
-          res.status(200).json(result);
-        } else {
-          res.status(500).json({
-            success: false,
-            message: "Something went wrong, try again",
-          });
-        }
+        result.data.invoice = registerId + Date.now();
+        res.status(200).json(result);
       } else if (result.statusCode) res.status(result.statusCode).json(result);
       else
         res.status(404).json({
@@ -209,6 +200,64 @@ module.exports = {
       res.status(500).json({
         success: false,
         message: "Can't fetch your invoice, please try again later",
+      });
+    }
+  },
+
+  getGenerateOrder: async (req, res) => {
+    const { registerId } = req.session.user;
+    const { option, invoice } = req.params;
+
+    try {
+      // getting invoice data
+      const result = await getInvoiceData(registerId, option);
+      if (result.success) {
+        // generating new order and id
+        const orderRes = await generateRazorpayOrder(result.data.total);
+        if (orderRes.success) {
+          const amount = result.data.total;
+          // saving generated order
+          const payment = new Payment({
+            registerId,
+            amount,
+            option,
+            order_id: orderRes.order.id,
+            invoice,
+          });
+          const saveRes = await payment.save();
+          if (saveRes)
+            // send res to client
+            return res.status(200).json({
+              success: true,
+              data: {
+                id: orderRes.order.id,
+                registerId,
+                amount,
+              },
+            });
+          // on failure of save of order
+          return res.status(500).json({
+            success: false,
+            message: "Something went wrong, try again",
+          });
+        }
+        // on failure of ordergeneration
+        return res.status(500).json({
+          success: false,
+          message: "Something went wrong, try again",
+        });
+      }
+      // if can't get invoice
+      if (result.statusCode) return res.status(result.statusCode).json(result);
+      // else
+      return res.status(404).json({
+        success: false,
+        message: "Can't generate your order, please try again later",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Can't generate your order, please try again later",
       });
     }
   },
