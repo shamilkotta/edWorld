@@ -94,18 +94,28 @@ function monthlyData(total, attended, id, index) {
 // fetch fee info of student
 function fetchInvoice(option = 0) {
   const payoutModal = document.getElementById("payout-body");
+  payoutModal.innerHTML = `<p class="mt-5 fw-bold fs-6">Your invoice is loading...</p>`;
 
   fetch(`/student/get-invoice/${option}`)
     .then((response) => response.json())
     .then((response) => {
       if (response.success) {
-        const { feeOptions, amount, tax, taxAmount, total, balance } =
-          response.data;
+        const {
+          feeOptions,
+          amount,
+          tax,
+          taxAmount,
+          total,
+          balance,
+          orderId,
+          registerId,
+        } = response.data;
         payoutModal.innerHTML = `
           <div>
-            <form action="" class="px-3">
-            ${feeOptions &&
-          `
+            <div class="px-3" >
+            ${
+              feeOptions &&
+              `
               <div class="row border rounded align-items-center py-2 px-1">
                 <p class="col-5 my-auto">Payment Options</p>
                 <div class="form-check col">
@@ -138,7 +148,7 @@ function fetchInvoice(option = 0) {
                 </div>
               </div>
             `
-          }
+            }
               
               <!-- Billing details -->
               <div class="mt-4 mb-4">
@@ -162,18 +172,82 @@ function fetchInvoice(option = 0) {
               </div>
               <div class="mt-3 d-flex justify-content-end">
                 <button
-                  type="submit"
-                  class="btn btn-outline-success"
+                  type="button"
+                  onClick="checkout(${total}, '${orderId}', ${option}, '${registerId}')"
+                  class="btn"
+                  style="background-color: #3BB77E; color: #FFF;"
                 >Pay Now</button>
               </div>
-            </form>
+            </div>
           </div>
         `;
       } else {
-        payoutModal.innerHTML = `<p class="mt-5">${response.message}</p>`;
+        payoutModal.innerHTML = `<p class="mt-5 fw-bold fs-6">${response.message}</p>`;
       }
     })
     .catch((err) => {
-      payoutModal.innerHTML = `<p class="mt-5">Can't fetch your invoice, please try again later</p>`;
+      payoutModal.innerHTML = `<p class="mt-5 fw-bold fs-6">Can't fetch your invoice, please try again later</p>`;
     });
+}
+
+function checkout(amount, id, option, registerId) {
+  const name = document.getElementById("student-name").innerText;
+  const email = document.getElementById("student-email").innerText;
+  const payoutModal = document.getElementById("payout-body");
+
+  const options = {
+    key: "rzp_test_yrNP9XZJenorHu",
+    amount: amount * 100,
+    currency: "INR",
+    name: "edWorld",
+    description: "Fee payment",
+    image: "/static/svg/icon.svg",
+    order_id: id,
+    handler(response) {
+      payoutModal.innerHTML = `<p class="mt-5 fw-bold fs-6">Your payment is processing...</p>`;
+      fetch("/save-fee-payment-data", {
+        method: "POST",
+        body: JSON.stringify({
+          ...response,
+          amount,
+          option,
+          registerId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success)
+            payoutModal.innerHTML = `
+              <p class="mt-4 fw-semibold fs-6">${res.message}</p>
+              <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${response.razorpay_order_id}</p>
+              <div class="btn " style="color: white; background-color: #3BB77e;">
+                Download Receipt
+              </div>
+              `;
+          else
+            payoutModal.innerHTML = `
+              <p class="mt-4 fw-semibold fs-6">${res.message}</p>
+              <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${response.razorpay_order_id}</p>
+              `;
+        })
+        .catch((err) => {
+          payoutModal.innerHTML = `<p class="mt-4 fw-semibold fs-6">Payment is successfull, but something went wrong in our side. Please contact office with the reference id</p>
+            <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Ref Id :</span> ${response.razorpay_order_id}</p>`;
+        });
+    },
+    prefill: {
+      name,
+      email,
+    },
+    theme: {
+      color: "#3bb77e",
+    },
+  };
+
+  // eslint-disable-next-line no-undef
+  const rzp1 = new Razorpay(options);
+  rzp1.open();
 }
