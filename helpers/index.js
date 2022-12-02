@@ -108,4 +108,15 @@ module.exports = {
           reject(err);
         });
     }),
+
+  verifyRazorpaySignature: (paymentId, orderId, paymentSignature) =>
+    new Promise((resolve) => {
+      const generatedSignature = crypto
+        .createHmac("SHA256", process.env.RAZORPAY_KEY_SECRET)
+        .update(`${orderId}|${paymentId}`)
+        .digest("hex");
+
+      const isValid = generatedSignature === paymentSignature;
+      resolve(isValid);
+    }),
 };
