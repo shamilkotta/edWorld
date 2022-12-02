@@ -39,7 +39,7 @@
           class="me-2"
           alt="{{student.name}}"
         />
-        <span class="fw-bold mt-2 fs-4">{{student.name}}</span>
+        <span class="fw-bold mt-2 fs-4" id="student-name">{{student.name}}</span>
         <span
           class="text-muted fs-6"
           style="margin-top: -8px;"
@@ -309,8 +309,8 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body pb-0" id="payout-body" style="min-height: 200px;">
-        <p class="mt-5">Your invoice is loading...</p>
+      <div class="modal-body pb-4" id="payout-body" style="min-height: 200px;">
+        
       </div>
     </div>
   </div>
@@ -542,6 +542,9 @@
     </div>
   </div>
 </div>
+
+{{!-- razorpay api --}}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>  
 // Edit details
