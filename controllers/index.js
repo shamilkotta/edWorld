@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 
 const Teacher = require("../models/teacher");
 const Student = require("../models/student");
+const Payment = require("../models/payment");
 const { createPassword } = require("../helpers/office");
-const { compileHTMLEmailTemplate } = require("../helpers");
+const { compileHTMLEmailTemplate, savePaymentStatus } = require("../helpers");
 const sendMail = require("../config/nodemailer");
 
 module.exports = {
@@ -371,6 +372,39 @@ module.exports = {
           success: false,
           message: "Something went wrong! try again",
         });
+    }
+  },
+
+  postFeePayment: async (req, res) => {
+    if (req.session.user) req.body.registerId = req.session.user.registerId;
+    const failure =
+      "Payment is successfull, but something went wrong in our side. Please contact office with the reference id";
+    try {
+      // changing payment status in student profile
+      const response = await savePaymentStatus(req.body);
+      if (response.acknowledged && response.modifiedCount) {
+        // saving payments details
+        const payment = new Payment(req.body);
+        const result = await payment.save();
+        if (result)
+          return res.status(200).json({
+            success: true,
+            message: "Payment successfull",
+          });
+        return res.status(500).json({
+          success: false,
+          message: failure,
+        });
+      }
+      return res.status(500).json({
+        success: false,
+        message: failure,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: failure,
+      });
     }
   },
 };
