@@ -27,6 +27,10 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    receipt: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
