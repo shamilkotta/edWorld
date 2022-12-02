@@ -377,6 +377,7 @@ module.exports = {
 
   postFeePayment: async (req, res) => {
     if (req.session.user) req.body.registerId = req.session.user.registerId;
+    const { registerId } = req.body;
     const failure =
       "Payment is successfull, but something went wrong in our side. Please contact office with the reference id";
     try {
@@ -384,6 +385,7 @@ module.exports = {
       const response = await savePaymentStatus(req.body);
       if (response.acknowledged && response.modifiedCount) {
         // saving payments details
+        req.body.receipt = registerId + Date.now();
         const payment = new Payment(req.body);
         const result = await payment.save();
         if (result)
