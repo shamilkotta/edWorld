@@ -42,20 +42,31 @@ a {
 }
 
 .working-days-card {
-  height: 100px;
+  font-size: larger;
+  height: 55px;
   width: 200px !important;
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
-  flex-grow: 0;
-  flex-shrink: 0;
+  align-items: center;
   font-weight: bolder;
   margin: 0 5px;
   cursor: auto;
   background-color: #ffffff;
   color: #3bb77e;
+  border-radius: 6px;
 }
 
 .working-days-card-text {
-  color: #91919143;
+  color: #5b5b5b43;
+}
+
+.working-days-card-count {
+  font-size: larger;
+}
+
+.working-days-head {
+  display: flex;
+  justify-content: start;
+  min-width: 150px;
+  height: 55px;
 }
