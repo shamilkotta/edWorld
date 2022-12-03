@@ -4,26 +4,55 @@
 
 <section class="mt-3">
   <h4 class="mb-4">All Batches</h4>
-  <div class="form-outline mb-4">
-    <input type="text" class="form-control" id="datatable-search-input" />
-    <label class="form-label" for="datatable-search-input">Search</label>
+  <div class="d-flex flex-wrap justify-content-end mb-2">
+    <div class="my-auto" style="max-width: 900px; min-width: 400px;">
+      <div class="form-outline input-group-lg">
+        <input
+          type="text"
+          id="search"
+          name="search"
+          class="form-control"
+          oninput="setSearch(this)"
+        />
+        <label class="form-label" for="search">Search</label>
+      </div>
+    </div>   
   </div>
   <div class="table-responsive">
     <table class="table table-striped" id="batches-table">
       <thead class="bg-dark text-white">
         <tr class="bg-dark">
-          <th class="th-sm">Batch</th>
-          <th class="th-sm">Batch Head</th>
-          <th class="th-sm">Seats</th>
-          <th class="th-sm">Students</th>
-          <th class="th-sm">Start Date</th>
-          <th class="th-sm">End Date</th>
-          <th class="th-sm">Duration</th>
-          <th class="th-sm">Fee</th>
+          <th scope="col" onclick="setSort('code')" style="cursor: pointer;">
+            <span>Batch</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
+          <th scope="col" onclick="setSort('head')" style="cursor: pointer;">
+            <span>Batch Head</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
+          <th scope="col" onclick="setSort('seat_num')" style="cursor: pointer;">
+            <span>Seats</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
+          <th scope="col" onclick="setSort('students')" style="cursor: pointer;">
+            <span>Students</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
+          <th scope="col">
+            <span>Start Date</span>
+          </th>
+          <th scope="col">
+            <span>End Date</span>
+          </th>
+          <th scope="col" onclick="setSort('duration')" style="cursor: pointer;">
+            <span>Duration</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
+          <th scope="col" onclick="setSort('fee')" style="cursor: pointer;">
+            <span>Fee</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
+          <th scope="col" onclick="setSort('batch_status')" style="cursor: pointer;">
+            <span>Status</span><img src="/static/icon/arrow-3.svg" alt="sort">
+          </th>
           <th class="th-sm">View</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="table-body">
         {{#each allBatches}}
           <tr>
             <td>{{this.code}}</td>
@@ -35,6 +64,11 @@
             <td>{{this.duration}}</td>
             <td>{{this.fee}}</td>
             <td>
+              <span
+                class="badge badge-{{batchStatus this.batch_status}} rounded-pill d-inline"
+              >{{this.batch_status}}</span>
+            </td>
+            <td>
               <a href="/office/batch/{{this.code}}">
                 <img src="/static/icon/export.svg" width="20px" alt="" />
               </a>
@@ -44,4 +78,87 @@
       </tbody>
     </table>
   </div>
+  <div class="d-flex justify-content-between align-items-center me-1 mb-2">
+    <div>
+      <select class="select" onchange="setLimit(this)">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50" selected>50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <p class="my-auto">Total <span id="total-documents">{{total}}</span> data</p>
+    <div class="d-flex align-items-center" style="column-gap: 5px;">
+      <div class="btn rounded px-1" onclick="setPage('-1')">
+        <img src="/static/icon/arrow-left.svg" alt="prevous" height="18px">
+      </div>
+      <div class="border border-2 rounded py-1 px-3" id="page-number">
+        {{page}}
+      </div>
+      <div class="btn rounded px-1" onclick="setPage('1')">
+        <img src="/static/icon/arrow-right.svg" alt="next" height="18px">
+      </div>
+    </div>
+  </div>
 </section>
+
+<script> 
+
+function getUrl({ search = "", sort = "code", limit = 50, page = 1 }) {
+  return `/office/batches-data?search=${search}&sort=${sort}&limit=${limit}&page=${page}`;
+}
+
+let sortValue = "code,0"
+let limitValue = 50;
+let searchValue = ""
+let pageValue = 1;
+const total = parseInt(document.getElementById("total-documents").innerText)
+let numberOfPages = Math.ceil(total / limitValue)
+
+const searchField = document.getElementById("search");
+
+function batchStatus(status) {
+  if (status === "Active") return "success";
+  if (status === "Completed") return "dark";
+  return "danger";
+}
+
+function getData(url) {
+  const tbody = document.getElementById("table-body");
+  fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      tbody.innerHTML = "";
+      res.data.allBatches.forEach((ele) => {
+
+        const row = document.createElement("tr");
+        row.innerHTML =
+          `
+          <td>${ele.code}</td>
+          <td>${ele.head}</td>
+          <td>${ele.seat_num}</td>
+          <td>${ele.students}</td>
+          <td>${ele.start_date}</td>
+          <td>${ele.end_date}</td>
+          <td>${ele.duration}</td>
+          <td>${ele.fee}</td>
+          <td>
+            <span
+              class="badge badge-${batchStatus(ele.batch_status)} rounded-pill d-inline"
+            >${ele.batch_status}</span>
+          </td>
+          <td>
+            <a href="/office/batch/${ele.code}">
+              <img src="/static/icon/export.svg" width="20px" alt="" />
+            </a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      document.getElementById("total-documents").innerText = res.data.total
+      numberOfPages = Math.ceil(res.data.total / res.data.limit)
+    });
+}
+
+
+</script>
