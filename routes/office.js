@@ -15,6 +15,7 @@ const {
   getAllTeachers,
   getAllStudents,
   putEditTeacher,
+  getTeachersData,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -58,6 +59,7 @@ router.get("/batch/:code", getSingleBatch);
 
 // view all teachers
 router.get("/teachers", getAllTeachers);
+router.get("/teachers-data", getTeachersData);
 
 // get add teacher view
 router.get("/teachers/add-teacher", getAddTeacher);
