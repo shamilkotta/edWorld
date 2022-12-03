@@ -129,7 +129,7 @@
   </section>
 
   <div
-    class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 shadow py-2"
+    class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 mb-4 shadow py-2"
     style="font-size: 18px; row-gap: 10px;"
   >
     <div class="mx-2">
@@ -179,6 +179,28 @@
       {{/if}}
     </div>
   </div>
+
+  <section class="d-block d-sm-flex align-items-center">
+    <div class="working-days-head">
+      <h6 class="my-auto" style="font-size: larger;">
+        Working days
+      </h6>
+    </div>
+    <div class="px-1 py-3 rounded working-days">
+      <div class="d-flex flex-row-reverse">
+      {{#each batch.working_days}}
+        <div class="btn working-days-card">
+          <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
+          <div class="working-days-card-count">{{this}}</div>
+        </div>
+        <div class="btn working-days-card">
+          <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
+          <div class="working-days-card-count">{{this}}</div>
+        </div>
+      {{/each}}
+      </div>
+    </div>
+  </section>
 
   <section class="mt-5">
     <h4 class="mb-4">All Students</h4>
