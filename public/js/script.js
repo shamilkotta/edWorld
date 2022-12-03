@@ -61,6 +61,7 @@ function validatePassword(input) {
     );
 }
 
+// adding sup to a number eg: 2^nd
 function superfix(index, inc = false) {
   if (inc) {
     if (index === 0 || index === "0") return "1<sup>st</sup>";
@@ -184,6 +185,7 @@ function fetchInvoice(option = 0) {
     });
 }
 
+// checkout student fee
 function checkout(option, invoice) {
   const name = document.getElementById("student-name").innerText;
   const email = document.getElementById("student-email").innerText;
@@ -323,7 +325,7 @@ function setSearch(e) {
     getData(url);
   } else {
     searchValue = "";
-    const url = getUrl({ search: searchValue });
+    const url = getUrl({ search: searchValue, limit: limitValue });
     getData(url);
   }
   document.getElementById("page-number").innerText = 1;
