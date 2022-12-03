@@ -17,6 +17,7 @@ const {
   putEditTeacher,
   getTeachersData,
   getStudentsData,
+  getBatchesData,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -62,6 +63,7 @@ router.get("/batch/:code", getSingleBatch);
 router.get("/teachers", getAllTeachers);
 
 // pagination, sorting, search
+router.get("/batches-data", getBatchesData);
 router.get("/students-data", getStudentsData);
 router.get("/teachers-data", getTeachersData);
 
