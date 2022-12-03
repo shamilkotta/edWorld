@@ -180,65 +180,97 @@
     </div>
   </div>
 
-  <h6 class="mb-4 mt-5">All Students</h6>
-  <div class="table-responsive">
-    <table class="table table-striped align-middle" id="batches-table">
-      <thead class="bg-dark text-white">
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Name</th>
-          <th scope="col">Contact</th>
-          <th scope="col">Batch</th>
-          <th scope="col">Parent</th>
-          <th scope="col">Education</th>
-          <th scope="col">University</th>
-          <th scope="col">View</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each allStudents}}
+  <section class="mt-5">
+    <h4 class="mb-4">All Students</h4>
+    <div class="table-responsive">
+      <table class="table table-striped align-middle" id="batches-table">
+        <thead class="bg-dark text-white">
           <tr>
-            <td scope="row">{{this.registerId}}</td>
-            <td class="d-flex align-items-center">
-              <img
-                src="{{this.profile}}"
-                style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
-                width="40px"
-                height="40px"
-                class="me-2"
-                alt="{{this.name}}"
-              />
-              <div>
-                <span class="fs-6 text-black fw-normal">{{this.name}}</span><br
-                />
-                <span
-                  class="text-muted"
-                  style="font-size: 13px;"
-                >{{this.birth_date}}</span>
-              </div>
-            </td>
-            <td>
-              <a href="tel:{{this.phone}}" class="me-1">
-                <img src="/static/icon/phone.svg" width="34px" alt="call" />
-              </a>
-              <a href="mailto:{{this.email}}">
-                <img src="/static/icon/mail.svg" width="34px" alt="mail" />
-              </a>
-            </td>
-            <td>{{this.batch}}</td>
-            <td>{{this.parent_name}}</td>
-            <td>{{this.education}}</td>
-            <td>{{this.university}}</td>
-            <td>
-              <a href="/office/student/{{this.registerId}}">
-                <img src="/static/icon/export.svg" width="20px" alt="" />
-              </a>
-            </td>
+            <th scope="col" onclick="setSort('registerId')" style="cursor: pointer;">
+              <span>Id</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th scope="col" onclick="setSort('name')" style="cursor: pointer;">
+              <span>Name</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th scope="col">Contact</th>
+            <th scope="col" onclick="setSort('parent_name')" style="cursor: pointer;">
+              <span>Parent</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th scope="col">Education</th>
+            <th scope="col">University</th>
+            <th scope="col">View</th>
           </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody id="table-body">
+          {{#each allStudents}}
+            <tr>
+              <td scope="row">{{this.registerId}}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img
+                    src="{{this.profile}}"
+                    style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
+                    width="40px"
+                    height="40px"
+                    class="me-2"
+                    alt="{{this.name}}"
+                  />
+                  <div>
+                    <span class="fs-6 text-black fw-normal">{{this.name}}</span><br
+                    />
+                    <span
+                      class="text-muted"
+                      style="font-size: 13px;"
+                    >{{this.birth_date}}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex">
+                  <a href="tel:{{this.phone}}" class="me-1">
+                    <img src="/static/icon/phone.svg" width="34px" alt="call" />
+                  </a>
+                  <a href="mailto:{{this.email}}">
+                    <img src="/static/icon/mail.svg" width="34px" alt="mail" />
+                  </a>
+                </div>
+              </td>
+              <td>{{this.parent_name}}</td>
+              <td>{{this.education}}</td>
+              <td>{{this.university}}</td>
+              <td>
+                <a href="/office/student/{{this.registerId}}">
+                  <img src="/static/icon/export.svg" width="20px" alt="" />
+                </a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center me-1 mb-2">
+      <div>
+        <select class="select" onchange="setLimit(this)">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <p class="my-auto">Total <span id="total-documents">{{total}}</span> data</p>
+      <div class="d-flex align-items-center" style="column-gap: 5px;">
+        <div class="btn rounded px-1" onclick="setPage('-1')">
+          <img src="/static/icon/arrow-left.svg" alt="prevous" height="18px">
+        </div>
+        <div class="border border-2 rounded py-1 px-3" id="page-number">
+          {{page}}
+        </div>
+        <div class="btn rounded px-1" onclick="setPage('1')">
+          <img src="/static/icon/arrow-right.svg" alt="next" height="18px">
+        </div>
+      </div>
+    </div>
+  </section>
 </section>
 
 {{! edit data modal }}
@@ -351,4 +383,81 @@ function formSubmit(e) {
 }
 
 form.addEventListener("submit", formSubmit);
+</script>
+
+<script> 
+
+function getUrl({ search = "", sort = "registerId", limit = 50, page = 1 }) {
+  return `/office/students-data?search=${search}&sort=${sort}&limit=${limit}&page=${page}`;
+}
+
+const batchCode = document.getElementById("batch-code").innerText
+
+let sortValue = "registerId,0"
+let limitValue = 50;
+let searchValue = batchCode
+let pageValue = 1;
+const total = parseInt(document.getElementById("total-documents").innerText)
+let numberOfPages = Math.ceil(total / limitValue)
+
+const searchField = document.getElementById("search");
+
+function getData(url) {
+  const tbody = document.getElementById("table-body");
+  fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      tbody.innerHTML = "";
+      res.data.allStudents.forEach((ele) => {
+
+        const row = document.createElement("tr");
+        row.innerHTML =
+          `
+          <td scope="row">${ele.registerId}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+                src="${ele.profile}"
+                style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
+                width="40px"
+                height="40px"
+                class="me-2"
+                alt="${ele.name}"
+              />
+              <div>
+                <span class="fs-6 text-black fw-normal">${ele.name}</span><br
+                />
+                <span
+                  class="text-muted"
+                  style="font-size: 13px;"
+                >${ele.birth_date}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex">
+              <a href="tel:${ele.phone}" class="me-1">
+                <img src="/static/icon/phone.svg" width="34px" alt="call" />
+              </a>
+              <a href="mailto:${ele.email}">
+                <img src="/static/icon/mail.svg" width="34px" alt="mail" />
+              </a>
+            </div>
+          </td>
+          <td>${ele.parent_name}</td>
+          <td>${ele.education}</td>
+          <td>${ele.university}</td>
+          <td>
+            <a href="/office/student/${ele.registerId}">
+              <img src="/static/icon/export.svg" width="20px" alt="" />
+            </a>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      document.getElementById("total-documents").innerText = res.data.total
+      numberOfPages = Math.ceil(res.data.total / res.data.limit)
+    });
+}
+
 </script>
