@@ -329,7 +329,7 @@ module.exports = {
 
   getAllTeachersData: ({
     page = 1,
-    limit = 10,
+    limit = 50,
     search = "",
     sort = "registerId",
   }) =>
@@ -513,7 +513,6 @@ module.exports = {
               { name: { $regex: search, $options: "i" } },
               { batch: { $regex: search, $options: "i" } },
               { education: { $regex: search, $options: "i" } },
-              { phone: { $regex: search, $options: "i" } },
             ],
           },
         },
