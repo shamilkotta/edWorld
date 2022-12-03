@@ -25,8 +25,60 @@
       class="badge badge-{{batchStatus batch.batch_status}} rounded-pill d-inline"
     >{{batch.batch_status}}</span>
   </div>
+
+  <div
+    class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 mb-4 border-bottom py-2"
+    style="font-size: 18px; row-gap: 10px;"
+  >
+    <div class="mx-2">
+      <span class="text-muted">Batch:</span>
+      <span class="fw-bold" id="batch-code">{{batch.code}}</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
+      <span class="text-muted">Start Date:</span>
+      <span class="fw-bold">{{batch.start_date}}</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
+      <span class="text-muted">Duration:</span>
+      <span class="fw-bold">{{batch.duration}} months</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
+      <span class="text-muted">End Date:</span>
+      <span class="fw-bold">{{batch.end_date}}</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
+      <span class="text-muted">Students:</span>
+      <span class="fw-bold">{{batch.students}}</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
+      <span class="text-muted">Seats:</span>
+      <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
+    </div>
+    <div style="color: #bbbbbb;">|</div>
+    <div class="mx-2">
+      <span class="text-muted">Batch Head: </span>
+      {{#if batch.batch_head}}
+        <span class="fw-bold" id="batch-head-name">{{batch.head}}</span>
+        <span
+          class="text-muted"
+          style="font-size: 15px;"
+          id="batch-head"
+        >({{batch.batch_head}})</span>
+        <a href="/office/teacher/{{batch.batch_head}}" class="mt-0">
+          <img src="/static/icon/export.svg" width="15px" alt="{{batch.batch_head}}" />
+        </a>
+      {{else}}
+        <span class="fw-bold" id="batch-head-name">-</span>
+      {{/if}}
+    </div>
+  </div>
   
-  <section>
+  <section class="mb-3">
     <div class="">
       <div class="row gy-4">
         <div class="col-md-3 col-sm-6">
@@ -128,61 +180,9 @@
     </div>
   </section>
 
-  <div
-    class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 mb-4 shadow py-2"
-    style="font-size: 18px; row-gap: 10px;"
-  >
-    <div class="mx-2">
-      <span class="text-muted">Batch:</span>
-      <span class="fw-bold" id="batch-code">{{batch.code}}</span>
-    </div>
-    <div style="color: #bbbbbb;">|</div>
-    <div class="mx-2">
-      <span class="text-muted">Start Date:</span>
-      <span class="fw-bold">{{batch.start_date}}</span>
-    </div>
-    <div style="color: #bbbbbb;">|</div>
-    <div class="mx-2">
-      <span class="text-muted">Duration:</span>
-      <span class="fw-bold">{{batch.duration}} months</span>
-    </div>
-    <div style="color: #bbbbbb;">|</div>
-    <div class="mx-2">
-      <span class="text-muted">End Date:</span>
-      <span class="fw-bold">{{batch.end_date}}</span>
-    </div>
-    <div style="color: #bbbbbb;">|</div>
-    <div class="mx-2">
-      <span class="text-muted">Students:</span>
-      <span class="fw-bold">{{batch.students}}</span>
-    </div>
-    <div style="color: #bbbbbb;">|</div>
-    <div class="mx-2">
-      <span class="text-muted">Seats:</span>
-      <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
-    </div>
-    <div style="color: #bbbbbb;">|</div>
-    <div class="mx-2">
-      <span class="text-muted">Batch Head: </span>
-      {{#if batch.batch_head}}
-        <span class="fw-bold" id="batch-head-name">{{batch.head}}</span>
-        <span
-          class="text-muted"
-          style="font-size: 15px;"
-          id="batch-head"
-        >({{batch.batch_head}})</span>
-        <a href="/office/teacher/{{batch.batch_head}}" class="mt-0">
-          <img src="/static/icon/export.svg" width="15px" alt="{{batch.batch_head}}" />
-        </a>
-      {{else}}
-        <span class="fw-bold" id="batch-head-name">-</span>
-      {{/if}}
-    </div>
-  </div>
-
   <section class="d-block d-sm-flex align-items-center">
     <div class="working-days-head">
-      <h6 class="my-auto" style="font-size: larger;">
+      <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
         Working days
       </h6>
     </div>
@@ -193,17 +193,12 @@
           <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
           <div class="working-days-card-count">{{this}}</div>
         </div>
-        <div class="btn working-days-card">
-          <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
-          <div class="working-days-card-count">{{this}}</div>
-        </div>
       {{/each}}
       </div>
     </div>
   </section>
 
   <section class="mt-5">
-    <h4 class="mb-4">All Students</h4>
     <div class="table-responsive">
       <table class="table table-striped align-middle" id="batches-table">
         <thead class="bg-dark text-white">
