@@ -181,8 +181,8 @@ module.exports = {
 
   getAllTeachers: async (req, res) => {
     try {
-      let { page = 1, limit = 10 } = req.query;
-      const { search = "", sort = "code" } = req.query;
+      let { page = 1, limit = 50 } = req.query;
+      const { search = "", sort = "registerId" } = req.query;
       page = parseInt(page, 10);
       limit = parseInt(limit, 10);
       // get all teachers data to display in table
@@ -190,6 +190,30 @@ module.exports = {
       res.render("office/teachers/index", { ...data });
     } catch (err) {
       res.render("office/teachers/index", { allTeachers: [] });
+    }
+  },
+
+  getTeachersData: async (req, res) => {
+    let { page = 1, limit = 50 } = req.query;
+    const { search = "", sort = "registerId" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+
+    try {
+      const data = await getAllTeachersData({ search, sort, limit, page });
+      res.status(200).json({
+        data,
+      });
+    } catch (error) {
+      res.status(200).json({
+        success: false,
+        data: {
+          allTeachers: [],
+          total: 0,
+          page: 1,
+          limit: 50,
+        },
+      });
     }
   },
 
