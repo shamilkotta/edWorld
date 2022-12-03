@@ -81,7 +81,16 @@ module.exports = {
       limit = parseInt(limit, 10);
       // get all batches data to display in table
       const data = await getAllBatchesData({ page, limit, search, sort });
-      res.render("office/batches/index", { ...data, search });
+      res.render("office/batches/index", {
+        ...data,
+        helpers: {
+          batchStatus: (status) => {
+            if (status === "Active") return "success";
+            if (status === "Completed") return "dark";
+            return "danger";
+          },
+        },
+      });
     } catch (err) {
       res.render("office/batches/index", { allBatches: [] });
     }
@@ -194,6 +203,30 @@ module.exports = {
   },
 
   // pagination, sorting, search
+  getBatchesData: async (req, res) => {
+    let { page = 1, limit = 50 } = req.query;
+    const { search = "", sort = "code" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+
+    try {
+      const data = await getAllBatchesData({ search, sort, limit, page });
+      res.status(200).json({
+        data,
+      });
+    } catch (error) {
+      res.status(200).json({
+        success: false,
+        data: {
+          allTeachers: [],
+          total: 0,
+          page: 1,
+          limit: 50,
+        },
+      });
+    }
+  },
+
   getStudentsData: async (req, res) => {
     let { page = 1, limit = 50 } = req.query;
     const { search = "", sort = "registerId" } = req.query;
