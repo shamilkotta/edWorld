@@ -193,6 +193,31 @@ module.exports = {
     }
   },
 
+  // pagination, sorting, search
+  getStudentsData: async (req, res) => {
+    let { page = 1, limit = 50 } = req.query;
+    const { search = "", sort = "registerId" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+
+    try {
+      const data = await getAllStudentsData({ search, sort, limit, page });
+      res.status(200).json({
+        data,
+      });
+    } catch (error) {
+      res.status(200).json({
+        success: false,
+        data: {
+          allTeachers: [],
+          total: 0,
+          page: 1,
+          limit: 50,
+        },
+      });
+    }
+  },
+
   getTeachersData: async (req, res) => {
     let { page = 1, limit = 50 } = req.query;
     const { search = "", sort = "registerId" } = req.query;
@@ -216,6 +241,7 @@ module.exports = {
       });
     }
   },
+  // pagination, sorting, search -- end
 
   putEditTeacher: (req, res) => {
     if (req.validationErr) {

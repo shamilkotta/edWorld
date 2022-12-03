@@ -513,6 +513,7 @@ module.exports = {
               { name: { $regex: search, $options: "i" } },
               { batch: { $regex: search, $options: "i" } },
               { education: { $regex: search, $options: "i" } },
+              { parent_name: { $regex: search, $options: "i" } },
             ],
           },
         },
