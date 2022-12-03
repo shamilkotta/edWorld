@@ -46,31 +46,35 @@
         {{#each allTeachers}}
           <tr>
             <td scope="row">{{this.registerId}}</td>
-            <td class="d-flex align-items-center">
-              <img
-                src="{{this.profile}}"
-                style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
-                width="40px"
-                height="40px"
-                class="me-2"
-                alt="{{this.name}}"
-              />
-              <div>
-                <span class="fs-6 text-black fw-normal">{{this.name}}</span><br
+            <td >
+              <div class="d-flex align-items-center">
+                <img
+                  src="{{this.profile}}"
+                  style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
+                  width="40px"
+                  height="40px"
+                  class="me-2"
+                  alt="{{this.name}}"
                 />
-                <span
-                  class="text-muted"
-                  style="font-size: 13px;"
-                >{{this.birth_date}}</span>
+                <div>
+                  <span class="fs-6 text-black fw-normal">{{this.name}}</span><br
+                  />
+                  <span
+                    class="text-muted"
+                    style="font-size: 13px;"
+                  >{{this.birth_date}}</span>
+                </div>
               </div>
             </td>
             <td>
-              <a href="tel:{{this.phone}}" class="me-1">
-                <img src="/static/icon/phone.svg" width="34px" alt="call" />
-              </a>
-              <a href="mailto:{{this.email}}">
-                <img src="/static/icon/mail.svg" width="34px" alt="mail" />
-              </a>
+              <div class="d-flex">
+                <a href="tel:{{this.phone}}" class="me-1">
+                  <img src="/static/icon/phone.svg" width="34px" alt="call" />
+                </a>
+                <a href="mailto:{{this.email}}">
+                  <img src="/static/icon/mail.svg" width="34px" alt="mail" />
+                </a>
+              </div>
             </td>
             {{#if this.batch}}
               <td>{{this.batch}}</td>
@@ -142,31 +146,35 @@ function getData(url) {
         row.innerHTML =
           `
           <td scope="row">${ele.registerId}</td>
-          <td class="d-flex align-items-center">
-            <img
-              src="${ele.profile}"
-              style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
-              width="40px"
-              height="40px"
-              class="me-2"
-              alt="${ele.name}"
-            />
-            <div>
-              <span class="fs-6 text-black fw-normal">${ele.name}</span><br
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+                src="${ele.profile}"
+                style="border-radius: 50%; border: 1px solid #3BB77E; padding: 1px"
+                width="40px"
+                height="40px"
+                class="me-2"
+                alt="${ele.name}"
               />
-              <span
-                class="text-muted"
-                style="font-size: 13px;"
-              >${ele.birth_date}</span>
+              <div>
+                <span class="fs-6 text-black fw-normal">${ele.name}</span><br
+                />
+                <span
+                  class="text-muted"
+                  style="font-size: 13px;"
+                >${ele.birth_date}</span>
+              </div>
             </div>
           </td>
           <td>
-            <a href="tel:${ele.phone}" class="me-1">
-              <img src="/static/icon/phone.svg" width="34px" alt="call" />
-            </a>
-            <a href="mailto:${ele.email}">
-              <img src="/static/icon/mail.svg" width="34px" alt="mail" />
-            </a>
+            <div class="d-flex">
+              <a href="tel:${ele.phone}" class="me-1">
+                <img src="/static/icon/phone.svg" width="34px" alt="call" />
+              </a>
+              <a href="mailto:${ele.email}">
+                <img src="/static/icon/mail.svg" width="34px" alt="mail" />
+              </a>
+            </div>
           </td>
           <td>${ele.batch ? ele.batch : `-`}</td>
           <td>${ele.salary}</td>
