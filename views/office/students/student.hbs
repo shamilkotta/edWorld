@@ -206,4 +206,54 @@
       </div>
     </div>
   </div>
+
+  {{#if student.monthly_data}}
+    <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+      <div class="working-days-head">
+        <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+          Attendance
+        </h6>
+      </div>
+      <div class="px-1 py-3 rounded working-days">
+        <div class="d-flex flex-row-reverse">
+        {{#each student.monthly_data}}
+          {{#if (isAttendancePending this.attended) }}
+            <div class="btn working-days-card">
+              <div class="working-days-card-text">Not updated yet</div>
+            </div>
+          {{else}}
+            <div class="btn working-days-card">
+              <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
+              <div class="working-days-card-count">{{this.attended}}</div>
+            </div>
+          {{/if}}
+        {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+      <div class="working-days-head">
+        <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+          Performance
+        </h6>
+      </div>
+      <div class="px-1 py-3 rounded working-days">
+        <div class="d-flex flex-row-reverse">
+        {{#each student.monthly_data}}
+          {{#if (isAttendancePending this.attended) }}
+            <div class="btn working-days-card">
+              <div class="working-days-card-text">Not updated yet</div>
+            </div>
+          {{else}}
+            <div class="btn working-days-card">
+              <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
+              <div class="working-days-card-count">{{this.performance}}</div>
+            </div>
+          {{/if}}
+        {{/each}}
+        </div>
+      </div>
+    </section>
+  {{/if}}
 </section>
