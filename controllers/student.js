@@ -4,19 +4,6 @@ const { getFeeData } = require("../helpers");
 const { getAllStudentsData } = require("../helpers/office");
 const Payment = require("../models/payment");
 
-const superfix = (index, inc = false) => {
-  if (inc) {
-    if (index === 0 || index === "0") return "1<sup>st</sup>";
-    if (index === 1 || index === "1") return "2<sup>nd</sup>";
-    if (index === 2 || index === "2") return "3<sup>rd</sup>";
-    return `${index + 1}<sup>th</sup>`;
-  }
-  if (index === 1 || index === "1") return "1<sup>st</sup>";
-  if (index === 2 || index === "2") return "2<sup>nd</sup>";
-  if (index === 3 || index === "3") return "3<sup>rd</sup>";
-  return `${index}<sup>th</sup>`;
-};
-
 const getInvoiceData = async (registerId, option) => {
   try {
     const feeData = await getFeeData(registerId);
@@ -167,10 +154,6 @@ module.exports = {
       if (allStudents[0]) {
         res.render("student/index", {
           student: allStudents[0],
-          helpers: {
-            superfix,
-            isAttendancePending: (count) => count === -1 || count === "-1",
-          },
         });
       } else {
         res.redirect("/login");

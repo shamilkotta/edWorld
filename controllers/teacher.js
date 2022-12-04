@@ -6,19 +6,6 @@ const {
 const Batch = require("../models/batch");
 const Student = require("../models/student");
 
-const superfix = (index, inc = false) => {
-  if (inc) {
-    if (index === 0 || index === "0") return "1<sup>st</sup>";
-    if (index === 1 || index === "1") return "2<sup>nd</sup>";
-    if (index === 2 || index === "2") return "3<sup>rd</sup>";
-    return `${index + 1}<sup>th</sup>`;
-  }
-  if (index === 1 || index === "1") return "1<sup>st</sup>";
-  if (index === 2 || index === "2") return "2<sup>nd</sup>";
-  if (index === 3 || index === "3") return "3<sup>rd</sup>";
-  return `${index}<sup>th</sup>`;
-};
-
 module.exports = {
   getTeacherView: async (req, res) => {
     try {
@@ -34,6 +21,19 @@ module.exports = {
     }
   },
 
+  superfix: (index, inc = false) => {
+    if (inc) {
+      if (index === 0 || index === "0") return "1<sup>st</sup>";
+      if (index === 1 || index === "1") return "2<sup>nd</sup>";
+      if (index === 2 || index === "2") return "3<sup>rd</sup>";
+      return `${index + 1}<sup>th</sup>`;
+    }
+    if (index === 1 || index === "1") return "1<sup>st</sup>";
+    if (index === 2 || index === "2") return "2<sup>nd</sup>";
+    if (index === 3 || index === "3") return "3<sup>rd</sup>";
+    return `${index}<sup>th</sup>`;
+  },
+
   getClassRoom: async (req, res) => {
     try {
       const { registerId } = req.session.user;
@@ -45,9 +45,6 @@ module.exports = {
         res.render("teacher/classroom", {
           batch: allBatches[0],
           ...students,
-          helpers: {
-            superfix,
-          },
         });
       }
     } catch (error) {
@@ -62,10 +59,6 @@ module.exports = {
       if (allStudents[0]) {
         res.render("teacher/student", {
           student: allStudents[0],
-          helpers: {
-            superfix,
-            isAttendancePending: (count) => count === -1 || count === "-1",
-          },
         });
       } else {
         res.redirect("/teacher/classroom");
