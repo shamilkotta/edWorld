@@ -17,6 +17,7 @@ const {
   teacherAuthorization,
   studentAuthorization,
 } = require("./middlewares/authorization");
+const { superfix } = require("./controllers/teacher");
 
 const app = express();
 
@@ -36,6 +37,10 @@ app.engine(
   engine({
     extname: "hbs",
     defaultLayout: "index",
+    helpers: {
+      superfix,
+      isAttendancePending: (count) => count === -1 || count === "-1",
+    },
   })
 );
 
