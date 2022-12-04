@@ -44,7 +44,6 @@ a {
 .working-days-card {
   font-size: larger;
   height: 55px;
-  width: 200px !important;
   display: flex;
   justify-content: space-between;
   align-items: center;

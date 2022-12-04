@@ -189,12 +189,11 @@
     <div class="px-1 py-3 rounded working-days">
       <div class="d-flex flex-row-reverse">
       {{#each batch.working_days}}
-        <div class="btn working-days-card">
-          <div class="working-days-card-text" >{{{ superfix @index true }}} Month :</div>
-          <div class="working-days-card-count">{{this}}</div>
+        <div class="btn working-days-card" style="white-space: nowrap;">
+          <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month: </div>
+          <div class="working-days-card-count">&nbsp;{{this}}</div>
         </div>
       {{/each}}
-      </div>
     </div>
   </section>
 
