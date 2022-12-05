@@ -313,45 +313,54 @@ module.exports = {
         {
           $addFields: {
             avg_attendance: {
-              $round: {
-                $divide: [
-                  {
-                    $sum: "$data.avg_attendance",
-                  },
-                  "$total",
-                ],
-              },
+              $round: [
+                {
+                  $divide: [
+                    {
+                      $sum: "$data.avg_attendance",
+                    },
+                    "$total",
+                  ],
+                },
+                1,
+              ],
             },
             avg_performance: {
-              $round: {
-                $divide: [
-                  {
-                    $sum: "$data.avg_performance",
-                  },
-                  "$total",
-                ],
-              },
+              $round: [
+                {
+                  $divide: [
+                    {
+                      $sum: "$data.avg_performance",
+                    },
+                    "$total",
+                  ],
+                },
+                1,
+              ],
             },
             paymentComplete: {
-              $round: {
-                $multiply: [
-                  {
-                    $divide: [
-                      {
-                        $size: {
-                          $filter: {
-                            input: "$data",
-                            as: "ele",
-                            cond: "$ele.payment_done",
+              $round: [
+                {
+                  $multiply: [
+                    {
+                      $divide: [
+                        {
+                          $size: {
+                            $filter: {
+                              input: "$data",
+                              as: "ele",
+                              cond: "$ele.payment_done",
+                            },
                           },
                         },
-                      },
-                      "$total",
-                    ],
-                  },
-                  100,
-                ],
-              },
+                        "$total",
+                      ],
+                    },
+                    100,
+                  ],
+                },
+                1,
+              ],
             },
           },
         },
