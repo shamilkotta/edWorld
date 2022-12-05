@@ -377,4 +377,62 @@ module.exports = {
           reject(err);
         });
     }),
+
+  studentStat: (registerId) =>
+    new Promise((resolve, reject) => {
+      Student.aggregate([
+        {
+          $match: { registerId },
+        },
+        {
+          $project: {
+            registerId: 1,
+            batch: 1,
+            _id: 0,
+            payment_done: 1,
+            installment: 1,
+            monthly_data: 1,
+            total_month: {
+              $size: "$monthly_data",
+            },
+          },
+        },
+        {
+          $addFields: {
+            avg_attendance: {
+              $round: [
+                {
+                  $divide: [
+                    {
+                      $sum: "$monthly_data.attended",
+                    },
+                    "$total_month",
+                  ],
+                },
+                1,
+              ],
+            },
+            avg_performance: {
+              $round: [
+                {
+                  $divide: [
+                    {
+                      $sum: "$monthly_data.performance",
+                    },
+                    "$total_month",
+                  ],
+                },
+                1,
+              ],
+            },
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data[0]);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
