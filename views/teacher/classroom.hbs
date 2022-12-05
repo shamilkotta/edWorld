@@ -37,6 +37,41 @@
   </div>
 
   <section class="mt-1">
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-evenly mt-3 mb-4 border-bottom py-2"
+      style="font-size: 18px; row-gap: 10px;"
+    >
+      <div class="mx-2">
+        <span class="text-muted">Batch:</span>
+        <span class="fw-bold" id="batch-code">{{batch.code}}</span>
+      </div>
+      <div style="color: #bbbbbb;">|</div>
+      <div class="mx-2">
+        <span class="text-muted">Start Date:</span>
+        <span class="fw-bold">{{batch.start_date}}</span>
+      </div>
+      <div style="color: #bbbbbb;">|</div>
+      <div class="mx-2">
+        <span class="text-muted">Duration:</span>
+        <span class="fw-bold">{{batch.duration}} months</span>
+      </div>
+      <div style="color: #bbbbbb;">|</div>
+      <div class="mx-2">
+        <span class="text-muted">End Date:</span>
+        <span class="fw-bold">{{batch.end_date}}</span>
+      </div>
+      <div style="color: #bbbbbb;">|</div>
+      <div class="mx-2">
+        <span class="text-muted">Students:</span>
+        <span class="fw-bold">{{batch.students}}</span>
+      </div>
+      <div style="color: #bbbbbb;">|</div>
+      <div class="mx-2">
+        <span class="text-muted">Seats:</span>
+        <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
+      </div>
+    </div>
+
     <section>
       <div class="">
         <div class="row gy-4">
@@ -151,41 +186,6 @@
         </div>
       </div>
     </section>
-
-    <div
-      class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 shadow py-2"
-      style="font-size: 18px; row-gap: 10px;"
-    >
-      <div class="mx-2">
-        <span class="text-muted">Batch:</span>
-        <span class="fw-bold" id="batch-code">{{batch.code}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Start Date:</span>
-        <span class="fw-bold">{{batch.start_date}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Duration:</span>
-        <span class="fw-bold">{{batch.duration}} months</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">End Date:</span>
-        <span class="fw-bold">{{batch.end_date}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Students:</span>
-        <span class="fw-bold">{{batch.students}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Seats:</span>
-        <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
-      </div>
-    </div>
 
     <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
       <div class="working-days-head">
