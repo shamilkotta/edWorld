@@ -10,6 +10,7 @@ const {
   getAllStudentsData,
   getAllBatchesData,
   getAllTeachersData,
+  getActiveBatches,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -454,6 +455,27 @@ module.exports = {
     } catch (error) {
       console.log(error);
       res.redirect("/office/students");
+    }
+  },
+
+  getDashboard: async (req, res) => {
+    try {
+      // get batches count
+      const batchCount = await Batch.countDocuments();
+      // get teachers count
+      const teacherCount = await Teacher.countDocuments();
+      // get student count
+      const studentCount = await Student.countDocuments();
+      // get active batches
+      const activeBatchCount = await getActiveBatches();
+      res.render("office/index", {
+        batchCount,
+        teacherCount,
+        studentCount,
+        activeBatchCount: activeBatchCount.length,
+      });
+    } catch (error) {
+      res.render("office/index");
     }
   },
 };
