@@ -180,22 +180,24 @@
     </div>
   </section>
 
-  <section class="d-block d-sm-flex align-items-center">
-    <div class="working-days-head">
-      <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
-        Working days
-      </h6>
-    </div>
-    <div class="px-1 py-3 rounded working-days">
-      <div class="d-flex flex-row-reverse">
-      {{#each batch.working_days}}
-        <div class="btn working-days-card" style="white-space: nowrap;">
-          <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month: </div>
-          <div class="working-days-card-count">&nbsp;{{this}}</div>
-        </div>
-      {{/each}}
-    </div>
-  </section>
+  {{#if batch.working_days}}
+    <section class="d-block d-sm-flex align-items-center">
+      <div class="working-days-head">
+        <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+          Working days
+        </h6>
+      </div>
+      <div class="px-1 py-3 rounded working-days">
+        <div class="d-flex flex-row-reverse">
+        {{#each batch.working_days}}
+          <div class="btn working-days-card" style="white-space: nowrap;">
+            <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month: </div>
+            <div class="working-days-card-count">&nbsp;{{this}}</div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+  {{/if}}
 
   <section class="mt-5">
     <div class="table-responsive">
