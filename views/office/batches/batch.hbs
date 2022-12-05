@@ -87,17 +87,16 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
-                    Clients</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Performance</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">27</p>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.avg_performance}}<span class="fs-6">%</span></p>
               </div>
               <div class="progress" style="height: 3px">
                 <div
                   class="progress-bar bg-success"
                   role="progressbar"
-                  style="width: 30%"
-                  aria-valuenow="30"
+                  style="width: {{stats.avg_performance}}%"
+                  aria-valuenow="{{stats.avg_performance}}"
                   aria-valuemin="0"
                   aria-valuemax="100"
                 ></div>
@@ -111,17 +110,16 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
-                    Projects</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Attendance</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">375</p>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.avg_attendance}}<span class="fs-6">%</span></p>
               </div>
               <div class="progress" style="height: 3px">
                 <div
                   class="progress-bar bg-success"
                   role="progressbar"
-                  style="width: 70%"
-                  aria-valuenow="70"
+                  style="width: {{stats.avg_attendance}}%"
+                  aria-valuenow="{{stats.avg_attendance}}"
                   aria-valuemin="0"
                   aria-valuemax="100"
                 ></div>
@@ -135,17 +133,16 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">New
-                    Invoices</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Fee completion</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">140</p>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.paymentComplete}}<span class="fs-6">%</span></p>
               </div>
               <div class="progress" style="height: 3px">
                 <div
                   class="progress-bar bg-success"
                   role="progressbar"
-                  style="width: 55%"
-                  aria-valuenow="55"
+                  style="width: {{stats.paymentComplete}}%"
+                  aria-valuenow="{{stats.paymentComplete}}"
                   aria-valuemin="0"
                   aria-valuemax="100"
                 ></div>
