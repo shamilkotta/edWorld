@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 const fs = require("fs");
+const { batchStat } = require("../helpers");
 
 const {
   generateUniqueCode,
@@ -387,8 +388,11 @@ module.exports = {
   getSingleBatch: async (req, res) => {
     const { code } = req.params;
     try {
-      // const batch = await getBatch(code);
+      // get batch data
       const { allBatches: batch } = await getAllBatchesData({ search: code });
+      // get batch stats
+      const stats = await batchStat(code);
+      // students data for table
       const students = await getAllStudentsData({ search: code });
       const openTeachers = await getOpenTeachers();
       if (batch[0]) {
@@ -396,6 +400,7 @@ module.exports = {
           batch: batch[0],
           ...students,
           openTeachers,
+          stats,
           helpers: {
             batchStatus: (status) => {
               if (status === "Active") return "success";
