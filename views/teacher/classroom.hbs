@@ -72,29 +72,25 @@
       </div>
     </div>
 
-    <section>
+    <section class="mb-4">
       <div class="">
         <div class="row gy-4">
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >New Clients</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Performance</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">27</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{batchStats.avg_performance}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 30%"
-                    aria-valuenow="30"
+                    style="width: {{batchStats.avg_performance}}%"
+                    aria-valuenow="{{batchStats.avg_performance}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -105,23 +101,19 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >New Projects</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Attendance</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">375</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{batchStats.avg_attendance}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 70%"
-                    aria-valuenow="70"
+                    style="width: {{batchStats.avg_attendance}}%"
+                    aria-valuenow="{{batchStats.avg_attendance}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -132,23 +124,19 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >New Invoices</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Fee completion</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">140</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{batchStats.paymentComplete}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 55%"
-                    aria-valuenow="55"
+                    style="width: {{batchStats.paymentComplete}}%"
+                    aria-valuenow="{{batchStats.paymentComplete}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -159,14 +147,10 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >All Projects</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">All Projects</p>
                   </div>
                   <p class="fs-2 lh-1 mb-0 text-success">140</p>
                 </div>
@@ -187,7 +171,7 @@
       </div>
     </section>
 
-    <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+    <section class="d-block d-sm-flex align-items-center mt-5 mb-5">
       <div class="working-days-head">
         <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
           Working Days
@@ -211,7 +195,6 @@
       </div>
     </section>
 
-    <h6 class="mb-4 mt-5">All Students</h6>
     <div class="table-responsive">
       <table class="table table-striped align-middle" id="batches-table">
         <thead class="bg-dark text-white">

@@ -58,22 +58,18 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >New Clients</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Attendance</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">27</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{studentStats.avg_attendance}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 30%"
-                    aria-valuenow="30"
+                    style="width: {{studentStats.avg_attendance}}%"
+                    aria-valuenow="{{studentStats.avg_attendance}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -84,23 +80,19 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >New Projects</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Performance</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">375</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{studentStats.avg_performance}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 70%"
-                    aria-valuenow="70"
+                    style="width: {{studentStats.avg_performance}}%"
+                    aria-valuenow="{{studentStats.avg_performance}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -111,23 +103,18 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
-
-                    <p
-                      class="text-sm text-uppercase text-gray-600 lh-1 mb-0"
-                    >New Invoices</p>
+                    <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">class performance</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">140</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{studentStats.currentStand}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 55%"
-                    aria-valuenow="55"
+                    style="width: {{studentStats.currentStand}}%"
+                    aria-valuenow="{{studentStats.currentStand}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -138,9 +125,7 @@
           <div class="col-md-3 col-sm-6">
             <div class="card shadow mb-0">
               <div class="card-body">
-                <div
-                  class="d-flex align-items-end justify-content-between mb-2"
-                >
+                <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
                     <p class="text-sm text-uppercase text-muted lh-1 mb-0">All
