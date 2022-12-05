@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const generateRazorpayOrder = require("../config/razorpay");
-const { getFeeData } = require("../helpers");
+const { getFeeData, studentStat, batchStat } = require("../helpers");
 const { getAllStudentsData } = require("../helpers/office");
 const Payment = require("../models/payment");
 
@@ -151,9 +151,17 @@ module.exports = {
     try {
       const { registerId } = req.session.user;
       const { allStudents } = await getAllStudentsData({ search: registerId });
+      const studentStats = await studentStat(registerId);
+      const batchStats = await batchStat(studentStats.batch);
+      if (batchStats.avg_performance === 0) studentStats.currentStand = 0;
+      else
+        studentStats.currentStand = Math.floor(
+          (studentStats.avg_performance / batchStats.avg_performance) * 100
+        );
       if (allStudents[0]) {
         res.render("student/index", {
           student: allStudents[0],
+          studentStats,
         });
       } else {
         res.redirect("/login");

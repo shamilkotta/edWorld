@@ -1,3 +1,4 @@
+const { studentStat, batchStat } = require("../helpers");
 const {
   getAllTeachersData,
   getAllBatchesData,
@@ -42,9 +43,11 @@ module.exports = {
       else {
         const { allBatches } = await getAllBatchesData({ search: batch.code });
         const students = await getAllStudentsData({ search: batch.code });
+        const batchStats = await batchStat(batch.code);
         res.render("teacher/classroom", {
           batch: allBatches[0],
           ...students,
+          batchStats,
         });
       }
     } catch (error) {
@@ -56,9 +59,17 @@ module.exports = {
     const { registerId } = req.params;
     try {
       const { allStudents } = await getAllStudentsData({ search: registerId });
+      const studentStats = await studentStat(registerId);
+      const batchStats = await batchStat(studentStats.batch);
+      if (batchStats.avg_performance === 0) studentStats.currentStand = 0;
+      else
+        studentStats.currentStand = Math.floor(
+          (studentStats.avg_performance / batchStats.avg_performance) * 100
+        );
       if (allStudents[0]) {
         res.render("teacher/student", {
           student: allStudents[0],
+          studentStats,
         });
       } else {
         res.redirect("/teacher/classroom");
