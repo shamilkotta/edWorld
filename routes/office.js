@@ -18,6 +18,7 @@ const {
   getTeachersData,
   getStudentsData,
   getBatchesData,
+  getDashboard,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -40,9 +41,7 @@ router.all("/*", (req, res, next) => {
   next();
 });
 
-router.get("/", (req, res) => {
-  res.render("office/index");
-});
+router.get("/", getDashboard);
 
 // view all batches
 router.get("/batches", getAllBatches);
