@@ -19,6 +19,8 @@ const {
   getStudentsData,
   getBatchesData,
   getDashboard,
+  getPayments,
+  getPaymentsData,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -65,6 +67,7 @@ router.get("/teachers", getAllTeachers);
 router.get("/batches-data", getBatchesData);
 router.get("/students-data", getStudentsData);
 router.get("/teachers-data", getTeachersData);
+router.get("/payments-data", getPaymentsData);
 
 // get add teacher view
 router.get("/teachers/add-teacher", getAddTeacher);
@@ -103,5 +106,7 @@ router.post(
 
 // view individual student
 router.get("/student/:registerId", getSingleStudent);
+
+router.get("/payments", getPayments);
 
 module.exports = router;
