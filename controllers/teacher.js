@@ -100,7 +100,7 @@ module.exports = {
                 monthly_data: {
                   // eslint-disable-next-line camelcase
                   total: working_days,
-                  attended: -1,
+                  attended: 0,
                   performance: 0,
                 },
               },
