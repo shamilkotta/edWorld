@@ -25,22 +25,6 @@ a {
   scrollbar-width: none;
 }
 
-.working-days-card-add {
-  height: 100px;
-  width: 200px !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  flex-grow: 0;
-  flex-shrink: 0;
-  font-weight: bolder;
-  margin: 0 5px;
-  cursor: auto;
-  background-color: #ffffff;
-  color: #434343;
-}
-
 .working-days-card {
   font-size: larger;
   height: 55px;
