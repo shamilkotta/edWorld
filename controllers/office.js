@@ -11,6 +11,7 @@ const {
   getAllBatchesData,
   getAllTeachersData,
   getActiveBatches,
+  getAllPaymentsData,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -77,7 +78,7 @@ module.exports = {
 
   getAllBatches: async (req, res) => {
     try {
-      let { page = 1, limit = 10 } = req.query;
+      let { page = 1, limit = 50 } = req.query;
       const { search = "", sort = "code" } = req.query;
       page = parseInt(page, 10);
       limit = parseInt(limit, 10);
@@ -276,6 +277,30 @@ module.exports = {
       });
     }
   },
+
+  getPaymentsData: async (req, res) => {
+    let { page = 1, limit = 50 } = req.query;
+    const { search = "", sort = "createdAt,1" } = req.query;
+    page = parseInt(page, 10);
+    limit = parseInt(limit, 10);
+
+    try {
+      const data = await getAllPaymentsData({ search, sort, limit, page });
+      res.status(200).json({
+        data,
+      });
+    } catch (error) {
+      res.status(200).json({
+        success: false,
+        data: {
+          allPayments: [],
+          total: 0,
+          page: 1,
+          limit: 50,
+        },
+      });
+    }
+  },
   // pagination, sorting, search -- end
 
   putEditTeacher: (req, res) => {
@@ -374,7 +399,7 @@ module.exports = {
 
   getAllStudents: async (req, res) => {
     try {
-      let { page = 1, limit = 10 } = req.query;
+      let { page = 1, limit = 50 } = req.query;
       const { search = "", sort = "code" } = req.query;
       page = parseInt(page, 10);
       limit = parseInt(limit, 10);
@@ -476,6 +501,19 @@ module.exports = {
       });
     } catch (error) {
       res.render("office/index");
+    }
+  },
+
+  getPayments: async (req, res) => {
+    try {
+      let { page = 1, limit = 50 } = req.query;
+      const { search = "", sort = "createdAt,1" } = req.query;
+      page = parseInt(page, 10);
+      limit = parseInt(limit, 10);
+      const data = await getAllPaymentsData({ page, limit, search, sort });
+      res.render("office/payment", { ...data });
+    } catch (error) {
+      res.render("office/payment", { allPayments: [] });
     }
   },
 };
