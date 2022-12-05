@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 const { create } = require("express-handlebars");
+const Batch = require("../models/batch");
 const Payment = require("../models/payment");
 const Student = require("../models/student");
 
@@ -239,6 +240,126 @@ module.exports = {
         //     limit,
         //   },
         // },
+      ])
+        .then((data) => {
+          resolve(data[0]);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  batchStat: (code) =>
+    new Promise((resolve, reject) => {
+      Batch.aggregate([
+        {
+          $match: {
+            code,
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "code",
+            foreignField: "batch",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  payment_done: 1,
+                  installment: 1,
+                  monthly_data: 1,
+                  total: {
+                    $size: "$monthly_data",
+                  },
+                },
+              },
+              {
+                $addFields: {
+                  avg_attendance: {
+                    $divide: [
+                      {
+                        $sum: "$monthly_data.attended",
+                      },
+                      "$total",
+                    ],
+                  },
+                  avg_performance: {
+                    $divide: [
+                      {
+                        $sum: "$monthly_data.performance",
+                      },
+                      "$total",
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "data",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            fee: 1,
+            working_days: 1,
+            current_month: 1,
+            data: 1,
+            total: {
+              $size: "$data",
+            },
+          },
+        },
+        {
+          $addFields: {
+            avg_attendance: {
+              $round: {
+                $divide: [
+                  {
+                    $sum: "$data.avg_attendance",
+                  },
+                  "$total",
+                ],
+              },
+            },
+            avg_performance: {
+              $round: {
+                $divide: [
+                  {
+                    $sum: "$data.avg_performance",
+                  },
+                  "$total",
+                ],
+              },
+            },
+            paymentComplete: {
+              $round: {
+                $multiply: [
+                  {
+                    $divide: [
+                      {
+                        $size: {
+                          $filter: {
+                            input: "$data",
+                            as: "ele",
+                            cond: "$ele.payment_done",
+                          },
+                        },
+                      },
+                      "$total",
+                    ],
+                  },
+                  100,
+                ],
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            data: 0,
+          },
+        },
       ])
         .then((data) => {
           resolve(data[0]);
