@@ -12,6 +12,7 @@ const {
   getForgotPass,
   getUpdatePass,
   postFeePayment,
+  getReceipt,
 } = require("../controllers");
 const { loginRedirection } = require("../middlewares/authorization");
 
@@ -58,6 +59,8 @@ router.post(
 );
 
 router.post("/save-fee-payment-data", postFeePayment);
+
+router.get("/get-receipt/:receipt", getReceipt);
 
 router.get("/404", (req, res) => {
   res.render("404");

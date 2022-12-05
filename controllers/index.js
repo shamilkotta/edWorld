@@ -9,6 +9,7 @@ const {
   compileHTMLEmailTemplate,
   savePaymentStatus,
   verifyRazorpaySignature,
+  getAllPaymentsData,
 } = require("../helpers");
 const sendMail = require("../config/nodemailer");
 
@@ -444,5 +445,19 @@ module.exports = {
         message: failure,
       });
     }
+  },
+
+  getReceipt: (req, res) => {
+    // const { receipt } = req.params;
+    getAllPaymentsData()
+      .then((response) => {
+        console.log(response);
+        console.log(req);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("H9");
   },
 };

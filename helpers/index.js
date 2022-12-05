@@ -1,4 +1,6 @@
+/* eslint-disable no-param-reassign */
 const { create } = require("express-handlebars");
+const Payment = require("../models/payment");
 const Student = require("../models/student");
 
 module.exports = {
@@ -118,5 +120,131 @@ module.exports = {
 
       const isValid = generatedSignature === paymentSignature;
       resolve(isValid);
+    }),
+
+  getAllPaymentsData: () =>
+    new Promise((resolve, reject) => {
+      // page -= 1;
+
+      // if (sort === "date") sort = [sort];
+      // else sort = sort.split(",");
+
+      // const sortBy = {};
+      // if (sort[1] && sort[1] === "1") sortBy[sort[0]] = -1;
+      // else sortBy[sort[0]] = 1;
+
+      // const today = new Date();
+
+      Payment.aggregate([
+        {
+          $project: {
+            registerId: 1,
+            amount: 1,
+            payment_type: {
+              $cond: {
+                if: {
+                  $eq: ["$option", 1],
+                },
+                then: "Installment",
+                else: "One time",
+              },
+            },
+            ref_id: "$razorpay_order_id",
+            receipt: 1,
+            date: "$createdAt",
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "registerId",
+            foreignField: "registerId",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  name: 1,
+                  batch: 1,
+                  address: 1,
+                  email: 1,
+                  phone: 1,
+                },
+              },
+            ],
+            as: "student",
+          },
+        },
+        {
+          $unwind: {
+            path: "$student",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $lookup: {
+            from: "batches",
+            localField: "student.batch",
+            foreignField: "code",
+            pipeline: [
+              {
+                $project: {
+                  fee: 1,
+                  _id: 0,
+                },
+              },
+            ],
+            as: "fee",
+          },
+        },
+
+        // search
+        // {
+        //   $match: {
+        //     $or: [
+        //       { code: { $regex: search, $options: "i" } },
+        //       { head: { $regex: search, $options: "i" } },
+        //       { start_date: { $regex: search, $options: "i" } },
+        //       { end_date: { $regex: search, $options: "i" } },
+        //       { fee: { $regex: search, $options: "i" } },
+        //     ],
+        //   },
+        // },
+        // {
+        //   $sort: sortBy,
+        // },
+        // // transforming results
+        // {
+        //   $facet: {
+        //     allBatches: [
+        //       {
+        //         $skip: page * limit,
+        //       },
+        //       {
+        //         $limit: limit,
+        //       },
+        //     ],
+        //     total: [{ $count: "total" }],
+        //   },
+        // },
+        // {
+        //   $unwind: {
+        //     path: "$total",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
+        // {
+        //   $addFields: {
+        //     total: "$total.total",
+        //     page: page + 1,
+        //     limit,
+        //   },
+        // },
+      ])
+        .then((data) => {
+          resolve(data[0]);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     }),
 };
