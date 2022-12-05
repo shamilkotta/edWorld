@@ -277,19 +277,31 @@ module.exports = {
               {
                 $addFields: {
                   avg_attendance: {
-                    $divide: [
+                    $cond: [
+                      { $eq: ["$total", 0] },
+                      0,
                       {
-                        $sum: "$monthly_data.attended",
+                        $divide: [
+                          {
+                            $sum: "$monthly_data.attended",
+                          },
+                          "$total",
+                        ],
                       },
-                      "$total",
                     ],
                   },
                   avg_performance: {
-                    $divide: [
+                    $cond: [
+                      { $eq: ["$total", 0] },
+                      0,
                       {
-                        $sum: "$monthly_data.performance",
+                        $divide: [
+                          {
+                            $sum: "$monthly_data.performance",
+                          },
+                          "$total",
+                        ],
                       },
-                      "$total",
                     ],
                   },
                 },
@@ -315,11 +327,17 @@ module.exports = {
             avg_attendance: {
               $round: [
                 {
-                  $divide: [
+                  $cond: [
+                    { $eq: ["$total", 0] },
+                    0,
                     {
-                      $sum: "$data.avg_attendance",
+                      $divide: [
+                        {
+                          $sum: "$data.avg_attendance",
+                        },
+                        "$total",
+                      ],
                     },
-                    "$total",
                   ],
                 },
                 1,
@@ -328,11 +346,17 @@ module.exports = {
             avg_performance: {
               $round: [
                 {
-                  $divide: [
+                  $cond: [
+                    { $eq: ["$total", 0] },
+                    0,
                     {
-                      $sum: "$data.avg_performance",
+                      $divide: [
+                        {
+                          $sum: "$data.avg_performance",
+                        },
+                        "$total",
+                      ],
                     },
-                    "$total",
                   ],
                 },
                 1,
@@ -343,17 +367,23 @@ module.exports = {
                 {
                   $multiply: [
                     {
-                      $divide: [
+                      $cond: [
+                        { $eq: ["$total", 0] },
+                        0,
                         {
-                          $size: {
-                            $filter: {
-                              input: "$data",
-                              as: "ele",
-                              cond: "$ele.payment_done",
+                          $divide: [
+                            {
+                              $size: {
+                                $filter: {
+                                  input: "$data",
+                                  as: "ele",
+                                  cond: "$ele.payment_done",
+                                },
+                              },
                             },
-                          },
+                            "$total",
+                          ],
                         },
-                        "$total",
                       ],
                     },
                     100,
@@ -402,11 +432,17 @@ module.exports = {
             avg_attendance: {
               $round: [
                 {
-                  $divide: [
+                  $cond: [
+                    { $eq: ["$total_month", 0] },
+                    0,
                     {
-                      $sum: "$monthly_data.attended",
+                      $divide: [
+                        {
+                          $sum: "$monthly_data.attended",
+                        },
+                        "$total_month",
+                      ],
                     },
-                    "$total_month",
                   ],
                 },
                 1,
@@ -415,11 +451,17 @@ module.exports = {
             avg_performance: {
               $round: [
                 {
-                  $divide: [
+                  $cond: [
+                    { $eq: ["$total_month", 0] },
+                    0,
                     {
-                      $sum: "$monthly_data.performance",
+                      $divide: [
+                        {
+                          $sum: "$monthly_data.performance",
+                        },
+                        "$total_month",
+                      ],
                     },
-                    "$total_month",
                   ],
                 },
                 1,
