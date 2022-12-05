@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const fs = require("fs");
-const { batchStat } = require("../helpers");
+const { batchStat, studentStat } = require("../helpers");
 
 const {
   generateUniqueCode,
@@ -435,12 +435,24 @@ module.exports = {
     const { registerId } = req.params;
     try {
       const { allStudents } = await getAllStudentsData({ search: registerId });
+      const studentStats = await studentStat(registerId);
+      const batchStats = await batchStat(studentStats.batch);
+      if (batchStats.avg_performance === 0) studentStats.currentStand = 0;
+      else
+        studentStats.currentStand = Math.floor(
+          (studentStats.avg_performance / batchStats.avg_performance) * 100
+        );
+
       if (allStudents[0]) {
-        res.render("office/students/student", { student: allStudents[0] });
+        res.render("office/students/student", {
+          student: allStudents[0],
+          studentStats,
+        });
       } else {
         res.redirect("/office/students");
       }
     } catch (error) {
+      console.log(error);
       res.redirect("/office/students");
     }
   },
