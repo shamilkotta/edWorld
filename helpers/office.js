@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Batch = require("../models/batch");
 const Teacher = require("../models/teacher");
 const Student = require("../models/student");
+const Payment = require("../models/payment");
 
 module.exports = {
   generateUniqueCode: (data) =>
@@ -590,6 +591,136 @@ module.exports = {
       ])
         .then((data) => {
           resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getAllPaymentsData: ({
+    page = 1,
+    limit = 10,
+    search = "",
+    sort = "createdAt",
+  }) =>
+    new Promise((resolve, reject) => {
+      page -= 1;
+
+      if (sort === "createdAt") sort = [sort];
+      else sort = sort.split(",");
+
+      const sortBy = {};
+      if (sort[1] && sort[1] === "1") sortBy[sort[0]] = -1;
+      else sortBy[sort[0]] = 1;
+
+      // const today = new Date();
+
+      Payment.aggregate([
+        {
+          $project: {
+            registerId: 1,
+            amount: 1,
+            payment_type: {
+              $cond: {
+                if: {
+                  $eq: ["$option", 1],
+                },
+                then: "Installment",
+                else: "One time",
+              },
+            },
+            ref_id: "$order_id",
+            payment_id: 1,
+            receipt: 1,
+            invoice: 1,
+            date: {
+              $dateToString: {
+                format: "%d/%m/%Y",
+                date: "$createdAt",
+                timezone: "+05:30",
+              },
+            },
+            status: 1,
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "registerId",
+            foreignField: "registerId",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  name: 1,
+                  batch: 1,
+                },
+              },
+            ],
+            as: "student",
+          },
+        },
+        {
+          $unwind: {
+            path: "$student",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            name: "$student.name",
+            batch: "$student.batch",
+          },
+        },
+        // search
+        {
+          $match: {
+            $or: [
+              { payment_id: { $regex: search, $options: "i" } },
+              { ref_id: { $regex: search, $options: "i" } },
+              { invoice: { $regex: search, $options: "i" } },
+              { receipt: { $regex: search, $options: "i" } },
+              { amount: { $regex: search, $options: "i" } },
+              { registerId: { $regex: search, $options: "i" } },
+              { name: { $regex: search, $options: "i" } },
+              { batch: { $regex: search, $options: "i" } },
+              { payment_type: { $regex: search, $options: "i" } },
+            ],
+          },
+        },
+        {
+          $sort: sortBy,
+        },
+        // transforming results
+        {
+          $facet: {
+            allPayments: [
+              {
+                $skip: page * limit,
+              },
+              {
+                $limit: limit,
+              },
+            ],
+            total: [{ $count: "total" }],
+          },
+        },
+        {
+          $unwind: {
+            path: "$total",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            total: "$total.total",
+            page: page + 1,
+            limit,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data[0]);
         })
         .catch((err) => {
           reject(err);
