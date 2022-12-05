@@ -558,4 +558,41 @@ module.exports = {
           reject(err);
         });
     }),
+
+  getActiveBatches: () =>
+    new Promise((resolve, reject) => {
+      const today = new Date();
+
+      Batch.aggregate([
+        {
+          $match: {
+            $expr: {
+              $and: [
+                {
+                  $gt: [
+                    {
+                      $dateAdd: {
+                        startDate: "$start_date",
+                        unit: "month",
+                        amount: "$duration",
+                      },
+                    },
+                    today,
+                  ],
+                },
+                {
+                  $gt: [today, "$start_date"],
+                },
+              ],
+            },
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
