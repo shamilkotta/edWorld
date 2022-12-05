@@ -263,37 +263,52 @@
     </div>
 
     {{#if student.monthly_data}}
-    <h6 class="mb-2 mt-5">Monthly Attendence</h6>
-    <div class="px-1 py-3 rounded working-days">
-      <div class="d-flex flex-row-reverse">
-      {{#each student.monthly_data}}
-        {{#if (isAttendancePending this.attended) }}
-          <div class="btn working-days-card-add" data-mdb-toggle="modal" data-mdb-target="#addMonthlyData" onclick="monthlyData(`{{this.total}}`, `{{this.attended}}`, `{{this._id}}`, `{{@index}}`)">
-            <img src="/static/icon/note-add.svg" alt="add">
-            <div>Add new</div>
-          </div>
-        {{else}}
-          <div class="btn working-days-card pt-2 px-2">
-            <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.attended}}</div>
-            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
-          </div>
-        {{/if}}
-      {{/each}}
-      </div>
-    </div>
-
-    <h6 class="mb-2 mt-5">Performance</h6>
-    <div class="px-1 py-3 rounded working-days">
-      <div class="d-flex flex-row-reverse">
-      {{#each student.monthly_data}}
-        <div class="btn working-days-card pt-2 px-2">
-          <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.performance}}</div>
-          <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
+      <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+        <div class="working-days-head">
+          <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+            Attendance
+          </h6>
         </div>
-      {{/each}}
-      </div>
-    </div>
+        <div class="px-1 py-3 rounded working-days">
+          <div class="d-flex flex-row-reverse">
+            {{#each student.monthly_data}}
+              {{#if (isAttendancePending this.attended) }}
+                <div class="btn working-days-card p-2" style="white-space: nowrap;" data-mdb-toggle="modal" data-mdb-target="#addMonthlyData" onclick="monthlyData(`{{this.total}}`, `{{this.attended}}`, `{{this._id}}`, `{{@index}}`)">
+                  <div class="working-days-card-text py-1 px-3 rounded" style="white-space: nowrap; border: 3px dashed #cdcdcd43; color: #2b2b2b43 !important;">
+                    <img src="/static/icon/note-add.svg" style="margin-top: -5px;" alt="add">
+                    Update Now
+                  </div>
+                </div>
+              {{else}}
+                <div class="btn working-days-card" style="white-space: nowrap;">
+                  <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
+                  <div class="working-days-card-count">&nbsp;{{this.attended}}</div>
+                </div>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+      </section>
+
+      <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+        <div class="working-days-head">
+          <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+            Performance
+          </h6>
+        </div>
+        <div class="px-1 py-3 rounded working-days">
+          <div class="d-flex flex-row-reverse">
+            {{#each student.monthly_data}}
+              <div class="btn working-days-card" style="white-space: nowrap;">
+                <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
+                <div class="working-days-card-count">&nbsp;{{this.performance}}</div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </section>
     {{/if}}
+
   </section>
 </main>
 

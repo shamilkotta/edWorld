@@ -247,41 +247,53 @@
     </div>
 
     {{#if student.monthly_data}}
-    <h6 class="mb-2 mt-5">Monthly Attendence</h6>
-    <div class="px-1 py-3 rounded working-days">
-      <div class="d-flex flex-row-reverse">
-      {{#each student.monthly_data}}
-        {{#if (isAttendancePending this.attended) }}
-          <div class="btn working-days-card pt-2 px-2">
-            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">Will update soon</div>
+      <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+        <div class="working-days-head">
+          <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+            Attendance
+          </h6>
+        </div>
+        <div class="px-1 py-3 rounded working-days">
+          <div class="d-flex flex-row-reverse">
+          {{#each student.monthly_data}}
+            {{#if (isAttendancePending this.attended) }}
+              <div class="btn working-days-card" style="white-space: nowrap;">
+                <div class="working-days-card-text" style="white-space: nowrap;">Will update soon</div>
+              </div>
+            {{else}}
+              <div class="btn working-days-card" style="white-space: nowrap;">
+                <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
+                <div class="working-days-card-count">&nbsp;{{this.attended}}</div>
+              </div>
+            {{/if}}
+          {{/each}}
           </div>
-        {{else}}
-          <div class="btn working-days-card pt-2 px-2">
-            <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.attended}}</div>
-            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
-          </div>
-        {{/if}}
-      {{/each}}
-      </div>
-    </div>
+        </div>
+      </section>
 
-    <h6 class="mb-2 mt-5">Performance</h6>
-    <div class="px-1 py-3 rounded working-days">
-      <div class="d-flex flex-row-reverse">
-      {{#each student.monthly_data}}
-        {{#if (isAttendancePending this.attended) }}
-          <div class="btn working-days-card pt-2 px-2">
-            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">Will update soon</div>
+      <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
+        <div class="working-days-head">
+          <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: larger;">
+            Performance
+          </h6>
+        </div>
+        <div class="px-1 py-3 rounded working-days">
+          <div class="d-flex flex-row-reverse">
+          {{#each student.monthly_data}}
+            {{#if (isAttendancePending this.attended) }}
+              <div class="btn working-days-card">
+                <div class="working-days-card-text">Will update soon</div>
+              </div>
+            {{else}}
+              <div class="btn working-days-card" style="white-space: nowrap;">
+                <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
+                <div class="working-days-card-count">&nbsp;{{this.performance}}</div>
+              </div>
+            {{/if}}
+          {{/each}}
           </div>
-        {{else}}
-          <div class="btn working-days-card pt-2 px-2">
-            <div class="working-days-card-count h-100 align-self-end" style="font-size: 55px; margin: -20px -3px 0 0;">{{this.performance}}</div>
-            <div class="working-days-card-text h-100 fs-3 align-self-start" style="margin: -10px 0 0 0;">{{{ superfix @index true }}} month</div>
-          </div>
-        {{/if}}
-      {{/each}}
-      </div>
-    </div>
+        </div>
+      </section>
     {{/if}}
     
   </section>
