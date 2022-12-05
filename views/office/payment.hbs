@@ -1,0 +1,253 @@
+<main>
+  <h4>All Payments</h4>
+  <section class="mb-4 mt-4">
+    <div class="">
+      <div class="row gy-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Total transactions</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.avg_performance}}<span class="fs-6">%</span></p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: {{stats.avg_performance}}%"
+                  aria-valuenow="{{stats.avg_performance}}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Attendance</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.avg_attendance}}<span class="fs-6">%</span></p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: {{stats.avg_attendance}}%"
+                  aria-valuenow="{{stats.avg_attendance}}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Fee completion</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.paymentComplete}}<span class="fs-6">%</span></p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: {{stats.paymentComplete}}%"
+                  aria-valuenow="{{stats.paymentComplete}}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card shadow mb-0">
+            <div class="card-body">
+              <div class="d-flex align-items-end justify-content-between mb-2">
+                <div class="me-2">
+
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Amount Collected</p>
+                </div>
+                <p class="fs-2 lh-1 mb-0 text-success">14000000</p>
+              </div>
+              <div class="progress" style="height: 3px">
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  style="width: 55%"
+                  aria-valuenow="55"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <div class="d-flex flex-wrap justify-content-end mb-2">
+      <div class="my-auto" style="max-width: 900px; min-width: 400px;">
+        <div class="form-outline input-group-lg">
+          <input
+            type="text"
+            id="search"
+            name="search"
+            class="form-control"
+            oninput="setSearch(this)"
+          />
+          <label class="form-label" for="search">Search</label>
+        </div>
+      </div>   
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped" id="batches-table">
+        <thead class="bg-dark text-white">
+          <tr class="bg-dark">
+            <th scope="col">
+              <span>Order id</span>
+            </th>
+            <th scope="col">
+              <span>Invoice</span>
+            </th>
+            <th scope="col">
+              <span>Receipt</span>
+            </th>
+            <th scope="col" onclick="setSort('amount')" style="cursor: pointer;">
+              <span>Amount</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th scope="col" onclick="setSort('registerId')" style="cursor: pointer;">
+              <span>Id</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th scope="col" onclick="setSort('payment_type')" style="cursor: pointer;">
+              <span>Type</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th scope="col">
+              <span>Date</span>
+            </th>
+            <th scope="col" onclick="setSort('status')" style="cursor: pointer;">
+              <span>Status</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
+            <th class="th-sm">Receipt</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          {{#each allPayments}}
+            <tr>
+              <td>{{this.ref_id}}</td>
+              <td>{{this.invoice}}</td>
+              <td>{{this.receipt}}</td>
+              <td>{{this.amount}}</td>
+              <td>{{this.registerId}}</td>
+              <td>{{this.payment_type}}</td>
+              <td>{{this.date}}</td>
+              <td>
+                {{#if this.status}}
+                  <span class="badge badge-success rounded-pill">
+                    success
+                  </span>
+                {{else}}
+                  <span class="badge badge-danger rounded-pill">
+                    failure
+                  </span>
+                {{/if}}
+              </td>
+              <td>
+                Download
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center me-1 mb-2">
+      <div>
+        <select class="select" onchange="setLimit(this)">
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50" selected>50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+      <p class="my-auto">Total <span id="total-documents">{{total}}</span> data</p>
+      <div class="d-flex align-items-center" style="column-gap: 5px;">
+        <div class="btn rounded px-1" onclick="setPage('-1')">
+          <img src="/static/icon/arrow-left.svg" alt="prevous" height="18px">
+        </div>
+        <div class="border border-2 rounded py-1 px-3" id="page-number">
+          {{page}}
+        </div>
+        <div class="btn rounded px-1" onclick="setPage('1')">
+          <img src="/static/icon/arrow-right.svg" alt="next" height="18px">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script> 
+
+function getUrl({ search = "", sort = "createdAt", limit = 50, page = 1 }) {
+  return `/office/payments-data?search=${search}&sort=${sort}&limit=${limit}&page=${page}`;
+}
+
+let sortValue = "createdAt,1"
+let limitValue = 50;
+let searchValue = ""
+let pageValue = 1;
+const total = parseInt(document.getElementById("total-documents").innerText)
+let numberOfPages = Math.ceil(total / limitValue)
+
+const searchField = document.getElementById("search");
+
+function getData(url) {
+  const tbody = document.getElementById("table-body");
+  fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      tbody.innerHTML = "";
+      res.data.allPayments.forEach((ele) => {
+
+        const row = document.createElement("tr");
+        row.innerHTML =
+          `
+          <td>${ele.ref_id}</td>
+          <td>${ele.invoice}</td>
+          <td>${ele.receipt ? ele.receipt : ""}</td>
+          <td>${ele.amount}</td>
+          <td>${ele.registerId}</td>
+          <td>${ele.payment_type}</td>
+          <td>${ele.date}</td>
+          <td>
+            ${ele.status ? 
+              '<span class="badge badge-success rounded-pill">success</span>'
+            :
+              '<span class="badge badge-danger rounded-pill">failure</span>'
+            }
+          </td>
+          <td>
+            Download
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      document.getElementById("total-documents").innerText = res.data.total
+      numberOfPages = Math.ceil(res.data.total / res.data.limit)
+    });
+}
+
+</script>
