@@ -12,14 +12,31 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = (toEmail, subject, htmlContent) =>
+const sendMail = (toEmail, subject, htmlContent, attachment, name) =>
   new Promise((resolve, reject) => {
-    const mailOptions = {
-      from: process.env.G_MAIL_USERNAME,
-      to: toEmail,
-      subject,
-      html: htmlContent,
-    };
+    let mailOptions = {};
+    if (attachment) {
+      mailOptions = {
+        from: process.env.G_MAIL_USERNAME,
+        to: toEmail,
+        subject,
+        html: htmlContent,
+        attachments: [
+          {
+            filename: name,
+            contentType: "application/pdf",
+            content: attachment,
+          },
+        ],
+      };
+    } else {
+      mailOptions = {
+        from: process.env.G_MAIL_USERNAME,
+        to: toEmail,
+        subject,
+        html: htmlContent,
+      };
+    }
 
     transporter.sendMail(mailOptions, (err) => {
       if (err) reject(err);
