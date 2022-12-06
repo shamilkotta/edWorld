@@ -12,6 +12,7 @@ const {
   getAllTeachersData,
   getActiveBatches,
   getAllPaymentsData,
+  paymentStat,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -511,7 +512,14 @@ module.exports = {
       page = parseInt(page, 10);
       limit = parseInt(limit, 10);
       const data = await getAllPaymentsData({ page, limit, search, sort });
-      res.render("office/payment", { ...data });
+      const paymentStats = await paymentStat();
+      res.render("office/payment", {
+        ...data,
+        paymentStats,
+        helpers: {
+          maxAmount: (amount) => (amount > 10000000 ? "10000000+" : amount),
+        },
+      });
     } catch (error) {
       res.render("office/payment", { allPayments: [] });
     }
