@@ -2661,9 +2661,9 @@
   }
 </style>
 
-<body>
+<body style="height: 1200px; width: 1000px; display: flex; justify-content: center; align-items: center;">
   <section>
-    <div class="tm_invoice tm_style1 tm_type3" id="tm_download_section" style="max-width: 700px;">
+    <div class="tm_invoice tm_style1 tm_type3" id="tm_download_section" style="padding: 50px;">
       <div class="tm_shape_1">
         <svg width="850" height="151" viewBox="0 0 850 151" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -2681,20 +2681,20 @@
       <div class="tm_invoice_in">
         <div class="tm_invoice_head tm_align_center tm_mb20">
           <div class="tm_invoice_left">
-            <div class="tm_logo"><img src="/public/svg/logo.svg" alt="Logo">
+            <div class="tm_logo"><img src="http://localhost:5000/static/svg/logo.svg" alt="edWorld">
             </div>
           </div>
           <div class="tm_invoice_right tm_text_right">
             <div class="tm_primary_color tm_f50 tm_text_uppercase">Receipt</div>
           </div>
         </div>
-        <div class="tm_invoice_info tm_mb20">
+        <div class="tm_invoice_info tm_mb20" style="margin-top: 120px;">
           <div class="tm_invoice_seperator">
             <img src="assets/img/arrow_bg.svg" alt="">
           </div>
           <div class="tm_invoice_info_list">
-            <p class="tm_invoice_number tm_m0">No: <b class="tm_primary_color">#ST0041670310572832</b></p>
-            <p class="tm_invoice_date tm_m0">Date: <b class="tm_primary_color">01.07.2022</b></p>
+            <p class="tm_invoice_number tm_m0">No: <b class="tm_primary_color">#{{receipt}}</b></p>
+            <p class="tm_invoice_date tm_m0">Date: <b class="tm_primary_color">{{date}}</b></p>
             <div class="tm_invoice_info_list_bg tm_accent_bg_10" style="z-index: -1;"></div>
           </div>
         </div>
@@ -2702,9 +2702,9 @@
           <div class="tm_invoice_left">
             <p class="tm_mb2"><b class="tm_primary_color">Receipt To:</b></p>
             <p>
-              Lowell H. Dominguez <br>
-              84 Spilman Street, London <br>United Kingdom <br>
-              lowell@gmail.com
+              {{name}} <br>
+              {{address.house_name}} {{address.place}}, {{address.district}} <br>{{address.state}} <br>
+              {{email}}
             </p>
           </div>
           <div class="tm_invoice_right tm_text_right">
@@ -2728,12 +2728,12 @@
               </thead>
               <tbody>
                 <tr>
-                  <td class="tm_width_4">Six web page designs and three times revision</td>
-                  <td class="tm_width_2 tm_text_right">$350</td>
+                  <td class="tm_width_4">Fee amount</td>
+                  <td class="tm_width_2 tm_text_right">₹{{amount}}</td>
                 </tr>
                 <tr>
-                  <td class="tm_width_4">Convert pixel-perfect frontend and make it dynamic</td>
-                  <td class="tm_width_2 tm_text_right">$600</td>
+                  <td class="tm_width_4">Others</td>
+                  <td class="tm_width_2 tm_text_right">₹00.00</td>
                 </tr>
               </tbody>
             </table>
@@ -2746,23 +2746,23 @@
                 <tbody>
                   <tr>
                     <td class="tm_width_3 tm_primary_color tm_border_none tm_bold">Subtoal</td>
-                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">$1650</td>
+                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_bold">₹{{amount}}</td>
                   </tr>
                   <tr>
                     <td class="tm_width_3 tm_primary_color tm_border_none tm_pt0">Tax <span
                         class="tm_ternary_color">(0%)</span></td>
-                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_pt0">+$00</td>
+                    <td class="tm_width_3 tm_primary_color tm_text_right tm_border_none tm_pt0">+₹00</td>
                   </tr>
                   <tr class="tm_border_top tm_border_bottom">
                     <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color">Grand Total </td>
-                    <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">$1732</td>
+                    <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_primary_color tm_text_right">₹{{amount}}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <div class="tm_padd_15_20">
+        <div class="tm_padd_15_20" style="margin-bottom: 70px;">
           <p class="tm_mb2"><b class="tm_primary_color">Terms & Conditions:</b></p>
           <ul class="tm_m0 tm_note_list">
             <li><a href="#"> edWorld Terms and conditions</a></li>
