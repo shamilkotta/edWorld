@@ -207,16 +207,21 @@ module.exports = {
         const orderRes = await generateRazorpayOrder(result.data.total);
         if (orderRes.success) {
           const amount = result.data.total;
-          // saving generated order
-          const payment = new Payment({
-            registerId,
-            amount,
-            option,
-            order_id: orderRes.order.id,
-            invoice,
-          });
-          const saveRes = await payment.save();
-          if (saveRes)
+          const saveRes = await Payment.replaceOne(
+            { invoice },
+            {
+              registerId,
+              amount,
+              option,
+              order_id: orderRes.order.id,
+              invoice,
+            },
+            { upsert: true }
+          );
+          if (
+            saveRes.acknowledged &&
+            (saveRes.modifiedCount || saveRes.upsertedCount)
+          )
             // send res to client
             return res.status(200).json({
               success: true,
