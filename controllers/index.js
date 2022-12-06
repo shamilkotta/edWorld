@@ -9,6 +9,7 @@ const {
   compileHTMLEmailTemplate,
   savePaymentStatus,
   verifyRazorpaySignature,
+  generatePdf,
 } = require("../helpers");
 const sendMail = require("../config/nodemailer");
 
@@ -463,17 +464,63 @@ module.exports = {
     }
   },
 
-  getReceipt: (req, res) => {
+  getReceipt: async (req, res) => {
     const { receipt } = req.params;
-    getAllPaymentsData({ search: receipt })
-      .then((response) => {
-        console.log(response);
-        console.log(req);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+    let pdfContent;
+    let replacements = {};
+    const emailTemplatePath = `./utils/receipt.html`;
+
+    try {
+      // fetching payment data
+      const { allPayments } = await getAllPaymentsData({ search: receipt });
+      if (!allPayments[0])
+        return res.status(404).json({
+          success: false,
+          message: "Can't find payment data, please check your receipt id",
+        });
+
+      // eslint-disable-next-line prefer-destructuring
+      replacements = allPayments[0];
+      console.log(allPayments[0]);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Something went wrong, try again",
       });
-    res.end();
+    }
+
+    try {
+      // reading html data with replacements
+      const { amount, date, name, address, email } = replacements;
+      pdfContent = await compileHTMLEmailTemplate(emailTemplatePath, {
+        receipt,
+        amount,
+        date,
+        name,
+        address,
+        email,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Something went wrong, try again",
+      });
+    }
+
+    try {
+      // creating pdf from html
+      const receiptPdf = await generatePdf(pdfContent);
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${receipt}.pdf`
+      );
+      return res.end(receiptPdf);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Something went wrong, try again",
+      });
+    }
   },
 };
