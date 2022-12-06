@@ -252,6 +252,14 @@ module.exports = {
                 else: false,
               },
             },
+            startDate: "$start_date",
+            endDate: {
+              $dateAdd: {
+                startDate: "$start_date",
+                unit: "month",
+                amount: "$duration",
+              },
+            },
             start_date: {
               $dateToString: {
                 format: "%d/%m/%Y",
@@ -601,7 +609,7 @@ module.exports = {
     page = 1,
     limit = 10,
     search = "",
-    sort = "createdAt",
+    sort = "createdAt,1",
   }) =>
     new Promise((resolve, reject) => {
       page -= 1;
@@ -633,6 +641,7 @@ module.exports = {
             payment_id: 1,
             receipt: 1,
             invoice: 1,
+            createdAt: 1,
             date: {
               $dateToString: {
                 format: "%d/%m/%Y",
@@ -716,6 +725,104 @@ module.exports = {
             total: "$total.total",
             page: page + 1,
             limit,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data[0]);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  paymentStat: () =>
+    new Promise((resolve, reject) => {
+      Payment.aggregate([
+        {
+          $facet: {
+            total: [
+              {
+                $count: "total",
+              },
+            ],
+            success: [
+              {
+                $match: {
+                  status: true,
+                },
+              },
+              {
+                $count: "total",
+              },
+            ],
+            failure: [
+              {
+                $match: {
+                  status: false,
+                },
+              },
+              {
+                $count: "total",
+              },
+            ],
+            total_amount: [
+              {
+                $group: {
+                  _id: null,
+                  amounts: {
+                    $push: "$amount",
+                  },
+                },
+              },
+              {
+                $addFields: {
+                  total: {
+                    $sum: "$amounts",
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
+          $unwind: {
+            path: "$total",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$success",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$failure",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$total_amount",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $project: {
+            total: {
+              $ifNull: ["$total.total", 0],
+            },
+            success: {
+              $ifNull: ["$success.total", 0],
+            },
+            failure: {
+              $ifNull: ["$failure.total", 0],
+            },
+            total_amount: {
+              $ifNull: ["$total_amount.total", 0],
+            },
           },
         },
       ])
