@@ -161,13 +161,17 @@ module.exports = {
             resetUrl,
           });
           // send mail
-          sendMail(email, "edWorld password reset link", emailContent).then(
-            () => {
+          sendMail(email, "edWorld password reset link", emailContent)
+            .then(() => {
               req.session.forgotPassSucc =
                 "We've sent a password reset link to your email (only valid for 10 min)";
               res.redirect(303, "/forgot-password");
-            }
-          );
+            })
+            .catch(() => {
+              req.session.forgotPassErr =
+                "Somthing went wrong, can't send reset password link";
+              res.redirect(303, "/forgot-password");
+            });
         } else {
           req.session.forgotPassErr = "Can't send send reset password link";
           res.redirect(303, "/forgot-password");
@@ -433,9 +437,9 @@ module.exports = {
       });
     }
 
+    const receipt = registerId + Date.now();
     try {
       // saving/updating payment data
-      const receipt = registerId + Date.now();
       const updateRes = await Payment.updateOne(
         { registerId, invoice },
         { payment_id: paymentId, signature, receipt, status: true }
@@ -443,23 +447,81 @@ module.exports = {
       if (updateRes.acknowledged && updateRes.modifiedCount) {
         // changing payment status in student profile
         const response = await savePaymentStatus({ registerId, option });
-        if (response.acknowledged && response.modifiedCount) {
-          return res.status(200).json({
-            success: true,
-            message: "Payment successfull",
-            receipt,
+        if (!response.acknowledged || !response.modifiedCount) {
+          return res.status(500).json({
+            success: false,
+            message: failure,
           });
         }
       }
-
-      return res.status(500).json({
-        success: false,
-        message: failure,
-      });
     } catch (error) {
       return res.status(500).json({
         success: false,
         message: failure,
+      });
+    }
+
+    const receiptTemplatePath = `./utils/receipt.html`;
+    const emailTemplatePath = `./utils/receipt-email.html`;
+
+    try {
+      // getting payment data
+      const { allPayments } = await getAllPaymentsData({ search: receipt });
+      if (!allPayments[0])
+        return res.status(200).json({
+          success: true,
+          message: "Payment successfull, but can't send receipt to email",
+          receipt,
+        });
+      // eslint-disable-next-line prefer-destructuring
+      const replacements = allPayments[0];
+
+      // reading html data with replacements
+      const { amount, date, name, address, email } = replacements;
+      const pdfContent = await compileHTMLEmailTemplate(receiptTemplatePath, {
+        receipt,
+        amount,
+        date,
+        name,
+        address,
+        email,
+      });
+
+      // creating pdf from html
+      const receiptPdf = await generatePdf(pdfContent);
+
+      // creating email template
+      const emailContent = await compileHTMLEmailTemplate(emailTemplatePath, {
+        name,
+        downloadUrl: `http://localhost:5000/get-receipt/${receipt}`,
+      });
+
+      // sending mail
+      const response = await sendMail(
+        email,
+        "Receipt of your fee payment",
+        emailContent,
+        receiptPdf,
+        "receipt.pdf"
+      );
+      if (response.success)
+        return res.status(200).json({
+          success: true,
+          message: "Payment successfull",
+          receipt,
+        });
+
+      return res.status(200).json({
+        success: true,
+        message: "Payment successfull, but can't send receipt to email",
+        receipt,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(200).json({
+        success: true,
+        message: "Payment successfull, but can't send receipt to email",
+        receipt,
       });
     }
   },
@@ -468,7 +530,7 @@ module.exports = {
     const { receipt } = req.params;
     let pdfContent;
     let replacements = {};
-    const emailTemplatePath = `./utils/receipt.html`;
+    const receiptTemplatePath = `./utils/receipt.html`;
 
     try {
       // fetching payment data
@@ -481,7 +543,6 @@ module.exports = {
 
       // eslint-disable-next-line prefer-destructuring
       replacements = allPayments[0];
-      console.log(allPayments[0]);
     } catch (error) {
       return res.status(500).json({
         success: false,
@@ -492,7 +553,7 @@ module.exports = {
     try {
       // reading html data with replacements
       const { amount, date, name, address, email } = replacements;
-      pdfContent = await compileHTMLEmailTemplate(emailTemplatePath, {
+      pdfContent = await compileHTMLEmailTemplate(receiptTemplatePath, {
         receipt,
         amount,
         date,
