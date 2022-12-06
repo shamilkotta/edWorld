@@ -11,17 +11,7 @@
 
                   <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Total transactions</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">{{stats.avg_performance}}<span class="fs-6">%</span></p>
-              </div>
-              <div class="progress" style="height: 3px">
-                <div
-                  class="progress-bar bg-success"
-                  role="progressbar"
-                  style="width: {{stats.avg_performance}}%"
-                  aria-valuenow="{{stats.avg_performance}}"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.total}}</p>
               </div>
             </div>
           </div>
@@ -32,19 +22,9 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Attendance</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">success</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">{{stats.avg_attendance}}<span class="fs-6">%</span></p>
-              </div>
-              <div class="progress" style="height: 3px">
-                <div
-                  class="progress-bar bg-success"
-                  role="progressbar"
-                  style="width: {{stats.avg_attendance}}%"
-                  aria-valuenow="{{stats.avg_attendance}}"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.success}}</p>
               </div>
             </div>
           </div>
@@ -57,17 +37,7 @@
 
                   <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Fee completion</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">{{stats.paymentComplete}}<span class="fs-6">%</span></p>
-              </div>
-              <div class="progress" style="height: 3px">
-                <div
-                  class="progress-bar bg-success"
-                  role="progressbar"
-                  style="width: {{stats.paymentComplete}}%"
-                  aria-valuenow="{{stats.paymentComplete}}"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.failure}}</p>
               </div>
             </div>
           </div>
@@ -78,19 +48,9 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Amount Collected</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Amount</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">14000000</p>
-              </div>
-              <div class="progress" style="height: 3px">
-                <div
-                  class="progress-bar bg-success"
-                  role="progressbar"
-                  style="width: 55%"
-                  aria-valuenow="55"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+                <p class="fs-2 lh-1 mb-0 text-success">{{maxAmount paymentStats.total_amount}}</p>
               </div>
             </div>
           </div>
@@ -136,8 +96,8 @@
             <th scope="col" onclick="setSort('payment_type')" style="cursor: pointer;">
               <span>Type</span><img src="/static/icon/arrow-3.svg" alt="sort">
             </th>
-            <th scope="col">
-              <span>Date</span>
+            <th scope="col" onclick="setSort('createdAt')" style="cursor: pointer;">
+              <span>Date</span><img src="/static/icon/arrow-3.svg" alt="sort">
             </th>
             <th scope="col" onclick="setSort('status')" style="cursor: pointer;">
               <span>Status</span><img src="/static/icon/arrow-3.svg" alt="sort">
@@ -150,7 +110,7 @@
             <tr>
               <td>{{this.ref_id}}</td>
               <td>{{this.invoice}}</td>
-              <td>{{this.receipt}}</td>
+              <td>{{#if this.receipt}}{{this.receipt}}{{else}}-{{/if}}</td>
               <td>{{this.amount}}</td>
               <td>{{this.registerId}}</td>
               <td>{{this.payment_type}}</td>
@@ -227,7 +187,7 @@ function getData(url) {
           `
           <td>${ele.ref_id}</td>
           <td>${ele.invoice}</td>
-          <td>${ele.receipt ? ele.receipt : ""}</td>
+          <td>${ele.receipt ? ele.receipt : "-"}</td>
           <td>${ele.amount}</td>
           <td>${ele.registerId}</td>
           <td>${ele.payment_type}</td>
