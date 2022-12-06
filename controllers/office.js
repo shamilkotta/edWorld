@@ -494,10 +494,13 @@ module.exports = {
       const studentCount = await Student.countDocuments();
       // get active batches
       const activeBatchCount = await getActiveBatches();
+      // last payment
+      const { allPayments } = await getAllPaymentsData({});
       res.render("office/index", {
         batchCount,
         teacherCount,
         studentCount,
+        lastPayment: allPayments[0],
         activeBatchCount: activeBatchCount.length,
       });
     } catch (error) {

@@ -64,16 +64,38 @@
       <div>
         <div class="" style="overflow-x: auto;">
           <div class="d-flex justify-content-between flex-nowrap" style="white-space: nowrap;">
-              <div class="mx-2">Payment id</div>
-              <div class="mx-2">Order id</div>
-              <div class="mx-2">Invoice</div>
-              <div class="mx-2">Receipt</div>
-              <div class="mx-2">Amount</div>
-              <div class="mx-2">Id</div>
-              <div class="mx-2">Name</div>
-              <div class="mx-2">Batch</div>
-              <div class="mx-2">Payment option</div>
-              <div class="mx-2">Success</div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Order id</span>
+              <span class="text-dark" >{{lastPayment.ref_id}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Invoice</span>
+              <span class="text-dark" >{{lastPayment.invoice}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Receipt</span>
+              <span class="text-dark" >{{#if lastPayment.receipt}}{{lastPayment.receipt}}{{else}}-{{/if}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Amount</span>
+              <span class="text-dark" >{{lastPayment.amount}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Id</span>
+              <span class="text-dark" >{{lastPayment.registerId}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Name</span>
+              <span class="text-dark" >{{lastPayment.name}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Type</span>
+              <span class="text-dark" >{{lastPayment.payment_type}}</span>
+            </div>
+            <div class="mx-2 d-flex flex-column" style="row-gap: 5px;">
+              <span class="text-muted" >Date</span>
+              <span class="text-dark" >{{lastPayment.date}}</span>
+            </div>
           </div>
         </div>
       </div>
