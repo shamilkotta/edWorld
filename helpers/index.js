@@ -2,6 +2,7 @@
 const crypto = require("crypto");
 
 const { create } = require("express-handlebars");
+const puppeteer = require("puppeteer");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
 
@@ -351,5 +352,24 @@ module.exports = {
         .catch((err) => {
           reject(err);
         });
+    }),
+
+  generatePdf: (content) =>
+    // eslint-disable-next-line no-async-promise-executor
+    new Promise(async (resolve, reject) => {
+      try {
+        // creating page using puppeteer
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+        await page.setContent(content);
+        const buffer = await page.pdf({
+          format: "a4",
+          width: "700px",
+        });
+        await browser.close();
+        resolve(buffer);
+      } catch (error) {
+        reject(error);
+      }
     }),
 };
