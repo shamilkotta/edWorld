@@ -625,6 +625,11 @@ module.exports = {
 
       Payment.aggregate([
         {
+          $match: {
+            status: true,
+          },
+        },
+        {
           $project: {
             registerId: 1,
             amount: 1,

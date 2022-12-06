@@ -93,16 +93,16 @@
             <th scope="col" onclick="setSort('registerId')" style="cursor: pointer;">
               <span>Id</span><img src="/static/icon/arrow-3.svg" alt="sort">
             </th>
+            <th scope="col" onclick="setSort('name')" style="cursor: pointer;">
+              <span>Name</span><img src="/static/icon/arrow-3.svg" alt="sort">
+            </th>
             <th scope="col" onclick="setSort('payment_type')" style="cursor: pointer;">
               <span>Type</span><img src="/static/icon/arrow-3.svg" alt="sort">
             </th>
             <th scope="col" onclick="setSort('createdAt')" style="cursor: pointer;">
               <span>Date</span><img src="/static/icon/arrow-3.svg" alt="sort">
             </th>
-            <th scope="col" onclick="setSort('status')" style="cursor: pointer;">
-              <span>Status</span><img src="/static/icon/arrow-3.svg" alt="sort">
-            </th>
-            <th class="th-sm">Receipt</th>
+            <th class="th-sm">Download</th>
           </tr>
         </thead>
         <tbody id="table-body">
@@ -113,21 +113,13 @@
               <td>{{#if this.receipt}}{{this.receipt}}{{else}}-{{/if}}</td>
               <td>{{this.amount}}</td>
               <td>{{this.registerId}}</td>
+              <td>{{this.name}}</td>
               <td>{{this.payment_type}}</td>
               <td>{{this.date}}</td>
               <td>
-                {{#if this.status}}
-                  <span class="badge badge-success rounded-pill">
-                    success
-                  </span>
-                {{else}}
-                  <span class="badge badge-danger rounded-pill">
-                    failure
-                  </span>
-                {{/if}}
-              </td>
-              <td>
-                Download
+                <span class="btn btn-sm btn-success">
+                <img src="/static/icon/arrow-down.svg" alt="download">
+                </span>
               </td>
             </tr>
           {{/each}}
@@ -190,15 +182,9 @@ function getData(url) {
           <td>${ele.receipt ? ele.receipt : "-"}</td>
           <td>${ele.amount}</td>
           <td>${ele.registerId}</td>
+          <td>${ele.name}</td>
           <td>${ele.payment_type}</td>
           <td>${ele.date}</td>
-          <td>
-            ${ele.status ? 
-              '<span class="badge badge-success rounded-pill">success</span>'
-            :
-              '<span class="badge badge-danger rounded-pill">failure</span>'
-            }
-          </td>
           <td>
             Download
           </td>
