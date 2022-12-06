@@ -4,12 +4,11 @@ const jwt = require("jsonwebtoken");
 const Teacher = require("../models/teacher");
 const Student = require("../models/student");
 const Payment = require("../models/payment");
-const { createPassword } = require("../helpers/office");
+const { createPassword, getAllPaymentsData } = require("../helpers/office");
 const {
   compileHTMLEmailTemplate,
   savePaymentStatus,
   verifyRazorpaySignature,
-  getAllPaymentsData,
 } = require("../helpers");
 const sendMail = require("../config/nodemailer");
 
@@ -388,13 +387,30 @@ module.exports = {
       registerId,
       invoice,
       razorpay_payment_id: paymentId,
-      razorpay_order_id: orderId,
+      razorpay_order_id: inOrderId,
       razorpay_signature: signature,
       option,
     } = req.body;
+    let orderId;
     // failure message
     const failure =
       "Payment is successfull, but something went wrong in our side. Please contact office with the reference id";
+
+    try {
+      // retreiving seaved invoice
+      const savedInvoice = await Payment.findOne({ order_id: inOrderId });
+      if (!savedInvoice || !savedInvoice.order_id)
+        return res.status(400).json({
+          success: false,
+          message: "Payment verification failed",
+        });
+      orderId = savedInvoice.order_id;
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment verification failed",
+      });
+    }
 
     try {
       // verifying payment details
@@ -448,8 +464,8 @@ module.exports = {
   },
 
   getReceipt: (req, res) => {
-    // const { receipt } = req.params;
-    getAllPaymentsData()
+    const { receipt } = req.params;
+    getAllPaymentsData({ search: receipt })
       .then((response) => {
         console.log(response);
         console.log(req);
@@ -458,6 +474,6 @@ module.exports = {
       .catch((err) => {
         console.log(err);
       });
-    console.log("H9");
+    res.end();
   },
 };
