@@ -170,6 +170,7 @@ function fetchInvoice(option = 0) {
                   type="button"
                   onClick="checkout(${option}, '${invoice}')"
                   class="btn"
+                  id="checkout-btn"
                   style="background-color: #3BB77E; color: #FFF;"
                 >Pay Now</button>
               </div>
@@ -191,11 +192,16 @@ function checkout(option, invoice) {
   const email = document.getElementById("student-email").innerText;
   const payoutModal = document.getElementById("payout-body");
   const paymentRes = document.getElementById("response-payment");
+  const checkoutBtn = document.getElementById("checkout-btn");
+  checkoutBtn.classList.add("disabled");
+  checkoutBtn.innerHTML = "Processing...";
 
   // creating order
   fetch(`/student/generate-order/${option}/${invoice}`)
     .then((res) => res.json())
     .then((res) => {
+      checkoutBtn.classList.remove("disabled");
+      checkoutBtn.innerHTML = "Pay Now";
       if (res.success) {
         const { id, amount, registerId } = res.data;
         // razorpay api options
@@ -228,7 +234,7 @@ function checkout(option, invoice) {
                   payoutModal.innerHTML = `
                     <p class="mt-4 fw-semibold fs-6">${response.message}</p>
                     <p class="fs-6" style="margin-top: -10px;"><span class="fw-bold">Receipt Id :</span> ${response.receipt}</p>
-                    <div class="btn " style="color: white; background-color: #3BB77e;">
+                    <div class="btn " style="color: white; background-color: #3BB77e;" onClick="getReceipt('${response.receipt}')">
                       Download Receipt
                     </div>
                     `;
@@ -261,7 +267,18 @@ function checkout(option, invoice) {
       }
     })
     .catch((err) => {
+      checkoutBtn.classList.remove("disabled");
+      checkoutBtn.innerHTML = "Pay Now";
       paymentRes.innerText = "Something went wrong, try again later";
+    });
+}
+
+// getReceipt
+function getReceipt(receipt) {
+  fetch(`/get-receipt/${receipt}`)
+    .then((res) => res.json())
+    .then((res) => {
+      console.log(res);
     });
 }
 
