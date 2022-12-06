@@ -761,17 +761,12 @@ module.exports = {
                 $count: "total",
               },
             ],
-            failure: [
+            total_amount: [
               {
                 $match: {
-                  status: false,
-                },
+                  status: true
+                }
               },
-              {
-                $count: "total",
-              },
-            ],
-            total_amount: [
               {
                 $group: {
                   _id: null,
@@ -804,12 +799,6 @@ module.exports = {
         },
         {
           $unwind: {
-            path: "$failure",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
             path: "$total_amount",
             preserveNullAndEmptyArrays: true,
           },
@@ -822,9 +811,6 @@ module.exports = {
             success: {
               $ifNull: ["$success.total", 0],
             },
-            failure: {
-              $ifNull: ["$failure.total", 0],
-            },
             total_amount: {
               $ifNull: ["$total_amount.total", 0],
             },
@@ -832,6 +818,9 @@ module.exports = {
         },
       ])
         .then((data) => {
+          if (data[0].total !== 0)
+            data[0].completion = ((data[0].success / data[0].total) * 100).toFixed(1);
+          else data[0].completion = 0
           resolve(data[0]);
         })
         .catch((err) => {

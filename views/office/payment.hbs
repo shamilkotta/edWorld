@@ -9,7 +9,7 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Total transactions</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Invoices generated</p>
                 </div>
                 <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.total}}</p>
               </div>
@@ -22,7 +22,7 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">success</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Completed</p>
                 </div>
                 <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.success}}</p>
               </div>
@@ -35,9 +35,9 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Fee completion</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">completion rate</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.failure}}</p>
+                <p class="fs-2 lh-1 mb-0 text-success">{{paymentStats.completion}}<span class="fs-6">%</span></p>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
               <td>{{this.date}}</td>
               <td>
                 <span class="btn btn-sm btn-success">
-                <img src="/static/icon/arrow-down.svg" alt="download">
+                <img src="/static/icon/arrow-down.svg" height="15px" alt="download">
                 </span>
               </td>
             </tr>
