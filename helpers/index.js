@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+const crypto = require("crypto");
+
 const { create } = require("express-handlebars");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
