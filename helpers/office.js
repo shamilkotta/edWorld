@@ -668,6 +668,8 @@ module.exports = {
                   _id: 0,
                   name: 1,
                   batch: 1,
+                  address: 1,
+                  email: 1,
                 },
               },
             ],
@@ -684,6 +686,14 @@ module.exports = {
           $addFields: {
             name: "$student.name",
             batch: "$student.batch",
+            address: "$student.address",
+            email: "$student.email",
+          },
+        },
+        {
+          $project: {
+            student: 0,
+            _id: 0,
           },
         },
         // search
@@ -764,8 +774,8 @@ module.exports = {
             total_amount: [
               {
                 $match: {
-                  status: true
-                }
+                  status: true,
+                },
               },
               {
                 $group: {
@@ -819,8 +829,11 @@ module.exports = {
       ])
         .then((data) => {
           if (data[0].total !== 0)
-            data[0].completion = ((data[0].success / data[0].total) * 100).toFixed(1);
-          else data[0].completion = 0
+            data[0].completion = (
+              (data[0].success / data[0].total) *
+              100
+            ).toFixed(1);
+          else data[0].completion = 0;
           resolve(data[0]);
         })
         .catch((err) => {
