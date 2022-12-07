@@ -840,4 +840,169 @@ module.exports = {
           reject(err);
         });
     }),
+
+  getBatchesSeatCountData: () =>
+    new Promise((resolve, reject) => {
+      const today = new Date();
+      Batch.aggregate([
+        {
+          $project: {
+            _id: 0,
+            code: 1,
+            seat_num: 1,
+            start_date: 1,
+            duration: 1,
+          },
+        },
+        {
+          $match: {
+            $expr: {
+              $lt: [
+                today,
+                {
+                  $dateAdd: {
+                    startDate: "$start_date",
+                    unit: "month",
+                    amount: "$duration",
+                  },
+                },
+              ],
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "code",
+            foreignField: "batch",
+            pipeline: [
+              {
+                $project: {
+                  _id: 1,
+                },
+              },
+            ],
+            as: "students",
+          },
+        },
+        {
+          $project: {
+            students_num: {
+              $size: "$students",
+            },
+            code: 1,
+            seat_num: 1,
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
+
+  getStudentsPerformance: () =>
+    new Promise((resolve, reject) => {
+      const today = new Date();
+      Batch.aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                $expr: {
+                  $gt: [today, "$start_date"],
+                },
+              },
+              {
+                $expr: {
+                  $lt: [
+                    today,
+                    {
+                      $dateAdd: {
+                        startDate: "$start_date",
+                        unit: "month",
+                        amount: "$duration",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            code: 1,
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "code",
+            foreignField: "batch",
+            pipeline: [
+              {
+                $project: {
+                  _id: 0,
+                  monthly_data: 1,
+                },
+              },
+              {
+                $unwind: "$monthly_data",
+              },
+            ],
+            as: "students",
+          },
+        },
+        {
+          $addFields: {
+            avg_attendance: {
+              $sum: "$students.monthly_data.attended",
+            },
+            avg_performance: {
+              $sum: "$students.monthly_data.performance",
+            },
+          },
+        },
+        {
+          $addFields: {
+            count: {
+              $size: "$students",
+            },
+          },
+        },
+        {
+          $project: {
+            code: 1,
+            avg_attendance: {
+              $cond: [
+                { $eq: ["$count", 0] },
+                0,
+                {
+                  $divide: ["$avg_attendance", "$count"],
+                },
+              ],
+            },
+            avg_performance: {
+              $cond: [
+                { $eq: ["$count", 0] },
+                0,
+                {
+                  $divide: ["$avg_performance", "$count"],
+                },
+              ],
+            },
+          },
+        },
+      ])
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }),
 };
