@@ -101,4 +101,145 @@
       </div>
     </div>
   </section>
+
+  <section class="mt-5">
+    <div class="row" style="gap: 10px;">
+      <div class="col-12 col-sm-4 card py-2 px-3 d-felx flex-column" >
+        <h5 class="mb-4 justify-slef-start">Payments</h5>
+        <canvas id="payment-pie" style="display: relative;"></canvas>
+      </div>
+      <div class="col card py-2 px-3 d-felx flex-column">
+        <h5 class="mb-4 justify-slef-start">Last months Performance & Attendance</h5>
+        <canvas id="batch-performance"></canvas>
+      </div>
+    </div>
+    <div class="row mt-5" style="gap: 10px;">
+      <div class="col card py-2 px-3 d-felx flex-column">
+        <h5 class="mb-4 justify-slef-start">Batches Seats & Students count</h5>
+        <canvas id="batch-stats"></canvas>
+      </div>
+      <div class="col-12 col-sm-4 card py-2 px-3 d-felx flex-column" >
+        <h5 class="mb-4 justify-slef-start">Quick Actions</h5>
+        <div class="card shadow mb-0 my-2">
+          <a href="/office/batches/add-batch" class="card-body text-black" style="cursor: pointer;">
+            <div class="">
+              <div class="me-2 d-flex justify-content-between align-items-center">
+                <p class="text-sm text-uppercase text-gray-600 mb-0">Host new Batch</p>
+                <img src="/static/icon/arrow-right.svg" alt="add">
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card shadow mb-0 my-2">
+          <a href="/office/teachers/add-teacher" class="card-body text-black" style="cursor: pointer;">
+            <div class="">
+              <div class="me-2 d-flex justify-content-between align-items-center">
+                <p class="text-sm text-uppercase text-gray-600 mb-0">Add teacher</p>
+                <img src="/static/icon/arrow-right.svg" alt="add">
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="card shadow mb-0 my-2">
+          <a href="/office/students/add-student" class="card-body text-black" style="cursor: pointer;">
+            <div class="">
+              <div class="me-2 d-flex justify-content-between align-items-center">
+                <p class="text-sm text-uppercase text-gray-600 mb-0">Add Student </p>
+                <img src="/static/icon/arrow-right.svg" alt="add">
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('payment-pie');
+
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ["Success", "Failed/Aborted"],
+      datasets: [{
+          data: [1200, 1700],
+          backgroundColor: ["#3bb77e", "#D2FFEA", ]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom",
+        },
+      }
+    }
+  });
+</script>
+
+<script>
+  const batchPerf = document.getElementById('batch-performance');
+
+  new Chart(batchPerf, {
+    type: 'line',
+    data: {
+      labels: [1,2, 3, 4, 5],
+      datasets: [
+        {
+          label: "Performance",
+          data: [200, 300, 250, 150, 400],
+          backgroundColor: "#3bb77e",
+          borderColor: "#3bb77e",
+        },
+        {
+          label: "Attendance",
+          data: [230, 280, 260, 200, 420],
+          backgroundColor: "#2943d5",
+          borderColor: "#2943d5"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom",
+        }
+      }
+    },
+  });
+</script>
+
+<script>
+  const batchStats = document.getElementById('batch-stats');
+
+  new Chart(batchStats, {
+    type: 'bar',
+    data: {
+      labels: ["a","b", "c", "d", "f"],
+      datasets: [
+        {
+          label: "Performance",
+          data: [200, 300, 250, 150, 400],
+          backgroundColor: "#3bb77e"
+        },
+        {
+          label: "Attendance",
+          data: [230, 280, 260, 200, 420],
+          backgroundColor: "#D2FFEA"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom",
+        }
+      }
+    },
+  });
+</script>
