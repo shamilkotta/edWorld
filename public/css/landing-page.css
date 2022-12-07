@@ -44,6 +44,7 @@
 }
 
 .nav-bar_btn:hover {
+  color: #3bb77e;
   box-shadow: 0px 0px 30px -10px #3bb77e;
 }
 
@@ -85,6 +86,11 @@
   padding: 7px 15px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.hero_btn:hover {
+  color: #fff;
+  background-color: #3acd88;
 }
 
 .partners {
@@ -237,7 +243,8 @@
 
 .cta {
   background-color: #d2ffea;
-  padding: 60px 10px;
+  padding: 80px 10px;
+  margin: 100px 0;
 }
 
 .cta > div {
@@ -251,6 +258,11 @@
   padding: 0 20px;
 }
 
+.cta_head {
+  margin-right: 20px;
+  font-size: 2em;
+}
+
 .cta_btn {
   color: rgb(19, 196, 231);
   font-weight: 500;
@@ -258,9 +270,63 @@
   padding: 8px 20px;
   border-radius: 5px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .cta_btn:hover {
   color: #fff;
   background-color: rgb(19, 196, 231);
+}
+
+footer {
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 30px;
+}
+
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-main > div {
+  width: fit-content;
+  margin: 0 20px;
+}
+
+@media screen and (min-width: 768px) {
+  .footer_desc {
+    max-width: 40%;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .footer_desc {
+    max-width: 25%;
+  }
+}
+
+.footer_desc > p {
+  margin-top: 20px;
+}
+
+.footer_links > p {
+  cursor: pointer;
+}
+
+.footer_links > p:hover {
+  color: #000;
+}
+
+.footer_btns > img {
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.footer-sec {
+  margin-top: 30px;
+  border-top: 1px solid rgb(185, 185, 185);
+  padding: 40px 0;
 }
