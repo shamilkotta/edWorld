@@ -17,12 +17,13 @@
 }
 
 .office-layout > .sidebar > div {
-  background-color: #eaeaea;
+  background-color: #ffffff;
+  border-right: 1px solid #efefef;
 }
 
 .office-layout > .sidebar > div .sidebar-items > a {
   font-size: 1.3em;
-  padding: 10px 30px 10px 20px;
+  padding: 10px 40px 10px 20px;
   cursor: pointer;
   color: #696969 !important;
 }
@@ -32,7 +33,7 @@
 }
 
 .office-layout > .sidebar > div .sidebar-items > a:hover {
-  background-color: rgb(246, 246, 246);
+  background-color: #e1fff1e1;
   border-radius: 10px;
 }
 
