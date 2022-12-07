@@ -21,6 +21,7 @@ const {
   getDashboard,
   getPayments,
   getPaymentsData,
+  getDashboardData,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -107,6 +108,10 @@ router.post(
 // view individual student
 router.get("/student/:registerId", getSingleStudent);
 
+// get all payments
 router.get("/payments", getPayments);
+
+// get data for dashborad
+router.get("/dashboard-data", getDashboardData);
 
 module.exports = router;
