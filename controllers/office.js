@@ -13,6 +13,8 @@ const {
   getActiveBatches,
   getAllPaymentsData,
   paymentStat,
+  getBatchesSeatCountData,
+  getStudentsPerformance,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -525,6 +527,30 @@ module.exports = {
       });
     } catch (error) {
       res.render("office/payment", { allPayments: [] });
+    }
+  },
+
+  getDashboardData: async (req, res) => {
+    let paymentStats = { total: 0, success: 0, failed: 0 };
+    let batchStats = [];
+    let studentStats = [];
+
+    try {
+      paymentStats = await paymentStat();
+      paymentStats.failed = paymentStats.total - paymentStats.success;
+      batchStats = await getBatchesSeatCountData();
+      studentStats = await getStudentsPerformance();
+      res.status(200).json({
+        success: true,
+        paymentStats,
+        batchStats,
+        studentStats,
+      });
+      res.end();
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+      });
     }
   },
 };
