@@ -234,3 +234,33 @@
 .gallery_wrap > img:hover {
   opacity: 0.8;
 }
+
+.cta {
+  background-color: #d2ffea;
+  padding: 60px 10px;
+}
+
+.cta > div {
+  color: #000;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.cta_btn {
+  color: rgb(19, 196, 231);
+  font-weight: 500;
+  border: 2px solid rgb(19, 196, 231);
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cta_btn:hover {
+  color: #fff;
+  background-color: rgb(19, 196, 231);
+}
