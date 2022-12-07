@@ -55,6 +55,9 @@
   justify-content: center;
   align-items: flex-start;
   height: 80vh;
+  background-image: url("/static/svg/head-back.svg");
+  background-position: 100 -50;
+  background-repeat: no-repeat;
 }
 
 .hero_content {
@@ -119,6 +122,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    background-image: none;
   }
 
   .hero_title {
