@@ -338,3 +338,23 @@ function setSearch(e) {
   }
   document.getElementById("page-number").innerText = 1;
 }
+
+
+// block/ublock student and teacher accounts
+function manageAccount(status = false, registerId, name, role) {
+  const head = document.getElementById("blockModalHead");
+  const url = `/office/accounts/${role}/${registerId}/${status ? "block" : "unblock"}`;
+  head.innerText = `${status ? "Block" : "Unblock"} ${name}`;
+  const body = document.getElementById("blockModalBody");
+  body.innerHTML =
+    `
+  <p>Are you sure you want to ${status ? "block" : "unblock"} ${name}</p>
+  <div class="btn btn-sm btn-${status ? "danger" : "success"} align-self-end" onClick="block('${url}')">${status ? "block" : "unblock"}</div>
+    `;
+}
+function block(url) {
+  fetch(url)
+    .then(() => {
+      location.reload();
+    });
+}

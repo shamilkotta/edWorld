@@ -100,6 +100,10 @@ const teacherSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    account_status: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
