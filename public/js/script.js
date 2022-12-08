@@ -108,8 +108,8 @@ function fetchInvoice(option = 0) {
           <div>
             <div class="px-3" >
             ${
-              feeOptions &&
-              `
+              feeOptions
+                ? `
               <div class="row border rounded align-items-center py-2 px-1">
                 <p class="col-5 my-auto">Payment Options</p>
                 <div class="form-check col">
@@ -142,6 +142,7 @@ function fetchInvoice(option = 0) {
                 </div>
               </div>
             `
+                : ``
             }
               
               <!-- Billing details -->
