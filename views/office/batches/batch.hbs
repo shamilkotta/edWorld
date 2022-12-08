@@ -156,16 +156,16 @@
               <div class="d-flex align-items-end justify-content-between mb-2">
                 <div class="me-2">
 
-                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">All Projects</p>
+                  <p class="text-sm text-uppercase text-gray-600 lh-1 mb-0">Batch fill</p>
                 </div>
-                <p class="fs-2 lh-1 mb-0 text-success">140</p>
+                <p class="fs-2 lh-1 mb-0 text-success">{{stats.batchFill}}<span class="fs-6">%</span></p>
               </div>
               <div class="progress" style="height: 3px">
                 <div
                   class="progress-bar bg-success"
                   role="progressbar"
-                  style="width: 55%"
-                  aria-valuenow="55"
+                  style="width: {{stats.batchFill}}%"
+                  aria-valuenow="{{stats.batchFill}}"
                   aria-valuemin="0"
                   aria-valuemax="100"
                 ></div>

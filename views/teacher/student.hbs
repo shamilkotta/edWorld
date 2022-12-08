@@ -128,17 +128,16 @@
                 <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p class="text-sm text-uppercase text-muted lh-1 mb-0">All
-                      Projects</p>
+                    <p class="text-sm text-uppercase text-muted lh-1 mb-0">Fee completion</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">41</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{studentStats.fee_completion}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 35%"
-                    aria-valuenow="35"
+                    style="width: {{studentStats.fee_completion}}%"
+                    aria-valuenow="{{studentStats.fee_completion}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>

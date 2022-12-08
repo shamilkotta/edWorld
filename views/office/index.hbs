@@ -106,7 +106,7 @@
     <div class="row" style="gap: 10px;">
       <div class="col-12 col-sm-4 card py-2 px-3 d-felx flex-column" >
         <h5 class="mb-4 justify-slef-start">Payments</h5>
-        <canvas id="payment-pie" style="display: relative;"></canvas>
+        <canvas id="payment-pie"></canvas>
       </div>
       <div class="col card py-2 px-3 d-felx flex-column">
         <h5 class="mb-4 justify-slef-start">Last months Performance & Attendance</h5>
@@ -158,88 +158,106 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  const ctx = document.getElementById('payment-pie');
+    async function fetchData() {
+      const data = await fetch("/office/dashboard-data")
+      const chartData = await data.json()
+      if(!chartData || !chartData.success) {
+        console.log("hi")
+      }else {
+        const ctx = document.getElementById('payment-pie').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: ["Success", "Failed/Aborted"],
+            datasets: [{
+                data: [chartData.paymentStats.success, chartData.paymentStats.failed],
+                backgroundColor: ["#3bb77e", "#D2FFEA", ]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+            }
+          }
+        });
 
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ["Success", "Failed/Aborted"],
-      datasets: [{
-          data: [1200, 1700],
-          backgroundColor: ["#3bb77e", "#D2FFEA", ]
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "bottom",
-        },
+        const batchStats = document.getElementById('batch-stats').getContext('2d');
+        let labelsTwo = [], dataOneTwo = [], dataTwoTwo = []
+        chartData.batchStats.forEach(ele => {
+          labelsTwo.push(ele.code)
+          dataOneTwo.push(ele.seat_num)
+          dataTwoTwo.push(ele.students_num)
+        })
+        new Chart(batchStats, {
+          type: 'bar',
+          data: {
+            labels: labelsTwo,
+            datasets: [
+              {
+                label: "Seats",
+                data: dataOneTwo,
+                backgroundColor: "#3bb77e"
+              },
+              {
+                label: "Students",
+                data: dataTwoTwo,
+                backgroundColor: "#D2FFEA"
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              }
+            }
+          },
+        });
+
+        console.log(chartData.studentStats)
+
+
+        const batchPerf = document.getElementById('batch-performance').getContext('2d');
+        let labelsThree = [], dataOneThree = [], dataTwoThree = []
+        chartData.studentStats.forEach(ele => {
+          labelsThree.push(ele.code)
+          dataOneThree.push(ele.avg_performance)
+          dataTwoThree.push(ele.avg_attendance)
+        })
+        new Chart(batchPerf, {
+          type: 'line',
+          data: {
+            labels: labelsThree,
+            datasets: [
+              {
+                label: "Performance",
+                data: dataOneThree,
+                backgroundColor: "#3bb77e",
+                borderColor: "#3bb77e",
+              },
+              {
+                label: "Attendance",
+                data: dataTwoThree,
+                backgroundColor: "#2943d5",
+                borderColor: "#2943d5"
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+              }
+            }
+          },
+        });
       }
     }
-  });
-</script>
 
-<script>
-  const batchPerf = document.getElementById('batch-performance');
-
-  new Chart(batchPerf, {
-    type: 'line',
-    data: {
-      labels: [1,2, 3, 4, 5],
-      datasets: [
-        {
-          label: "Performance",
-          data: [200, 300, 250, 150, 400],
-          backgroundColor: "#3bb77e",
-          borderColor: "#3bb77e",
-        },
-        {
-          label: "Attendance",
-          data: [230, 280, 260, 200, 420],
-          backgroundColor: "#2943d5",
-          borderColor: "#2943d5"
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "bottom",
-        }
-      }
-    },
-  });
-</script>
-
-<script>
-  const batchStats = document.getElementById('batch-stats');
-
-  new Chart(batchStats, {
-    type: 'bar',
-    data: {
-      labels: ["a","b", "c", "d", "f"],
-      datasets: [
-        {
-          label: "Performance",
-          data: [200, 300, 250, 150, 400],
-          backgroundColor: "#3bb77e"
-        },
-        {
-          label: "Attendance",
-          data: [230, 280, 260, 200, 420],
-          backgroundColor: "#D2FFEA"
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: "bottom",
-        }
-      }
-    },
-  });
+    fetchData()
 </script>

@@ -190,17 +190,16 @@
                 <div class="d-flex align-items-end justify-content-between mb-2">
                   <div class="me-2">
 
-                    <p class="text-sm text-uppercase text-muted lh-1 mb-0">All
-                      Projects</p>
+                    <p class="text-sm text-uppercase text-muted lh-1 mb-0">Fee completion</p>
                   </div>
-                  <p class="fs-2 lh-1 mb-0 text-success">41</p>
+                  <p class="fs-2 lh-1 mb-0 text-success">{{studentStats.fee_completion}}<span class="fs-6">%</span></p>
                 </div>
                 <div class="progress" style="height: 3px">
                   <div
                     class="progress-bar bg-success"
                     role="progressbar"
-                    style="width: 35%"
-                    aria-valuenow="35"
+                    style="width: {{studentStats.fee_completion}}%"
+                    aria-valuenow="{{studentStats.fee_completion}}"
                     aria-valuemin="0"
                     aria-valuemax="100"
                   ></div>
@@ -211,8 +210,13 @@
         </div>
       </div>
     </section>
-
-    <div class="d-flex flex-wrap justify-content-end">
+    {{#if student.payment_done}}
+    {{else}}
+    <div class="d-flex flex-wrap justify-content-end align-items-center">
+      <div class="py-3 px-4 d-flex justify-content-between">
+        <p class="text-danger my-auto">Your fee is pending complete now</p>
+        <img src="/static/icon/arrow-right-white.svg" alt="arrow">
+      </div>
       <div class="tab-bar mb-4 ms-2 mt-4">
         <a
           data-mdb-toggle="modal" data-mdb-target="#payoutModal"
@@ -230,6 +234,7 @@
         </a>
       </div>
     </div>
+    {{/if}}
 
     {{#if student.monthly_data}}
       <section class="d-block d-sm-flex align-items-center mt-3 mb-3">
