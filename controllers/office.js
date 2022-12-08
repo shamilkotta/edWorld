@@ -505,12 +505,16 @@ module.exports = {
       const activeBatchCount = await getActiveBatches();
       // last payment
       const { allPayments } = await getAllPaymentsData({});
+      // payment stats
+      const paymentStats = await paymentStat(); // payment chart
+      paymentStats.failed = paymentStats.total - paymentStats.success;
       res.render("office/index", {
         batchCount,
         teacherCount,
         studentCount,
         lastPayment: allPayments[0],
         activeBatchCount: activeBatchCount.length,
+        paymentStats,
       });
     } catch (error) {
       res.render("office/index");
