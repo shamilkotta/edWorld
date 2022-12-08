@@ -22,6 +22,7 @@ const {
   getPayments,
   getPaymentsData,
   getDashboardData,
+  blockAccount,
 } = require("../controllers/office");
 const {
   createBatchValidation,
@@ -113,5 +114,8 @@ router.get("/payments", getPayments);
 
 // get data for dashborad
 router.get("/dashboard-data", getDashboardData);
+
+// block student/ teacher
+router.get("/accounts/:role/:registerId/:block", blockAccount);
 
 module.exports = router;

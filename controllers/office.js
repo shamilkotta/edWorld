@@ -560,4 +560,31 @@ module.exports = {
       });
     }
   },
+
+  blockAccount: async (req, res) => {
+    const { role, registerId, block } = req.params;
+    let status = false;
+    if (block === "unblock") status = true;
+    let model;
+    if (role === "teacher") model = Teacher;
+    else model = Student;
+
+    try {
+      const result = await model.updateOne({ registerId }, { $set: { account_status: status } });
+      if (result.acknowledged && result.modifiedCount)
+        res.status(200).json({
+          success: true,
+        });
+      else
+        res.status(404).json({
+          success: false
+        });
+    } catch (error) {
+      res.status(500).json({
+        success: false
+      });
+    }
+
+
+  }
 };
