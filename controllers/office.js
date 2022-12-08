@@ -421,6 +421,9 @@ module.exports = {
       const { allBatches: batch } = await getAllBatchesData({ search: code });
       // get batch stats
       const stats = await batchStat(code);
+      const seatNum = batch[0].seat_num;
+      const studentNum = batch[0].students;
+      stats.batchFill = ((studentNum / seatNum) * 100).toFixed(1);
       // students data for table
       const students = await getAllStudentsData({ search: code });
       const openTeachers = await getOpenTeachers();
@@ -465,6 +468,10 @@ module.exports = {
     try {
       const { allStudents } = await getAllStudentsData({ search: registerId });
       const studentStats = await studentStat(registerId);
+      studentStats.fee_completion = (
+        (studentStats.installment / 3) *
+        100
+      ).toFixed(1);
       const batchStats = await batchStat(studentStats.batch);
       if (batchStats.avg_performance === 0) studentStats.currentStand = 0;
       else
@@ -536,10 +543,10 @@ module.exports = {
     let studentStats = [];
 
     try {
-      paymentStats = await paymentStat();
+      paymentStats = await paymentStat(); // payment chart
       paymentStats.failed = paymentStats.total - paymentStats.success;
-      batchStats = await getBatchesSeatCountData();
-      studentStats = await getStudentsPerformance();
+      batchStats = await getBatchesSeatCountData(); // seat count chart
+      studentStats = await getStudentsPerformance(); // students performance chart
       res.status(200).json({
         success: true,
         paymentStats,

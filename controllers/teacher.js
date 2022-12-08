@@ -44,6 +44,9 @@ module.exports = {
         const { allBatches } = await getAllBatchesData({ search: batch.code });
         const students = await getAllStudentsData({ search: batch.code });
         const batchStats = await batchStat(batch.code);
+        const seatNum = allBatches[0].seat_num;
+        const studentNum = allBatches[0].students;
+        batchStats.batchFill = ((studentNum / seatNum) * 100).toFixed(1);
         res.render("teacher/classroom", {
           batch: allBatches[0],
           ...students,
@@ -60,6 +63,10 @@ module.exports = {
     try {
       const { allStudents } = await getAllStudentsData({ search: registerId });
       const studentStats = await studentStat(registerId);
+      studentStats.fee_completion = (
+        (studentStats.installment / 3) *
+        100
+      ).toFixed(1);
       const batchStats = await batchStat(studentStats.batch);
       if (batchStats.avg_performance === 0) studentStats.currentStand = 0;
       else

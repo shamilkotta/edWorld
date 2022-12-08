@@ -152,6 +152,10 @@ module.exports = {
       const { registerId } = req.session.user;
       const { allStudents } = await getAllStudentsData({ search: registerId });
       const studentStats = await studentStat(registerId);
+      studentStats.fee_completion = (
+        (studentStats.installment / 3) *
+        100
+      ).toFixed(1);
       const batchStats = await batchStat(studentStats.batch);
       if (batchStats.avg_performance === 0) studentStats.currentStand = 0;
       else
