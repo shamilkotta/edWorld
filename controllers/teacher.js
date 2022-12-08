@@ -3,6 +3,7 @@ const {
   getAllTeachersData,
   getAllBatchesData,
   getAllStudentsData,
+  getOpenTeachers,
 } = require("../helpers/office");
 const Batch = require("../models/batch");
 const Student = require("../models/student");
@@ -12,6 +13,7 @@ module.exports = {
     try {
       const { registerId } = req.session.user;
       const { allTeachers } = await getAllTeachersData({ search: registerId });
+      await getOpenTeachers();
       if (allTeachers[0]) {
         res.render("teacher/index", { teacher: allTeachers[0] });
       } else {
@@ -118,7 +120,7 @@ module.exports = {
                 monthly_data: {
                   // eslint-disable-next-line camelcase
                   total: working_days,
-                  attended: 0,
+                  attended: -1,
                   performance: 0,
                 },
               },
