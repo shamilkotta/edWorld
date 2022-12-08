@@ -59,7 +59,13 @@ module.exports = {
             $lt: [
               {
                 $dateAdd: {
-                  startDate: "$start_date",
+                  startDate: {
+                    $dateAdd: {
+                      startDate: "$start_date",
+                      unit: "day",
+                      amount: 5,
+                    },
+                  },
                   unit: "month",
                   amount: "$duration",
                 },
