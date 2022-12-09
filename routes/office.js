@@ -35,7 +35,7 @@ const {
   createTeacherValidation,
   editTeacherValidation,
 } = require("../middlewares/validations/office/teacherValidations");
-const profileUpload = require("../middlewares/uploadFile");
+const profileUpload = require("../middlewares/multerParse");
 
 const router = express.Router();
 
