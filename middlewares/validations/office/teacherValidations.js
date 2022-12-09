@@ -2,6 +2,7 @@
 const yup = require("yup");
 const fs = require("fs");
 const { getAllTeachersData } = require("../../../helpers/office");
+const { uploader } = require("../../../config/cloudinary");
 
 const createTeacherSchema = yup.object().shape({
   name: yup
@@ -103,7 +104,6 @@ const createTeacherSchema = yup.object().shape({
     .number()
     .typeError("Invalid experience count")
     .required("Experience can not be empty"),
-  profile: yup.string().trim().required("Please porvide a profile image"),
 });
 
 const editTeacherSchema = yup.object().shape({
@@ -162,12 +162,28 @@ module.exports = {
       };
       req.body = rest;
       req.body.address = address;
-      req.body.profile = `/static/uploads/profile/${req.file.filename}`;
       createTeacherSchema
         .validate(req.body, { stripUnknown: true, abortEarly: false })
         .then((data) => {
-          req.validData = data;
-          next();
+          uploader
+            .upload(req.file.path, { folder: "edWorld" })
+            .then((cloudRes) => {
+              fs.unlink(req.file.path, (fserr) => {
+                if (fserr)
+                  console.error({
+                    message: `Cant't remove ${req?.file?.path}`,
+                    err: fserr,
+                  });
+              });
+              req.validData = data;
+              req.validData.profile = cloudRes.secure_url;
+              next();
+            })
+            .catch(() => {
+              const validationErr = "Something went wrong try again";
+              req.validationErr = validationErr;
+              next();
+            });
         })
         .catch((err) => {
           fs.unlink(req.file.path, (fserr) => {
