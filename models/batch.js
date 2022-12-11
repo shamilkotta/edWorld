@@ -48,6 +48,17 @@ const batchSchema = new mongoose.Schema(
     working_days: {
       type: [Number],
     },
+    subjects: [
+      {
+        subject: {
+          type: String,
+          required: true,
+        },
+        teacher: {
+          type: String,
+        },
+      },
+    ],
     current_month: {
       type: Number,
       default: 1,
