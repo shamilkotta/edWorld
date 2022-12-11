@@ -51,8 +51,10 @@ module.exports = {
 
   postAddBatch: async (req, res) => {
     if (req.validationErr) {
-      req.session.addBatchError = req.validationErr;
-      res.redirect(303, "/office/batches/add-batch");
+      res.status(400).json({
+        success: false,
+        message: req.validationErr,
+      });
     } else {
       try {
         const data = req.validData;
@@ -62,19 +64,26 @@ module.exports = {
         batch
           .save()
           .then(() => {
-            req.session.addBatchSuccess = "New batch created successfully";
-            res.redirect(303, "/office/batches/add-batch");
+            res.status(200).json({
+              success: true,
+              message: "New batch created successfully",
+            });
           })
           .catch((err) => {
+            let message;
             if (err.code === 11000)
-              req.session.addBatchError =
-                "This teacher already have a batch assigned";
-            else req.session.addBatchError = "Something went wrong";
-            res.redirect(303, "/office/batches/add-batch");
+              message = "This teacher already have a batch assigned";
+            else message = "Something went wrong";
+            res.status(500).json({
+              success: false,
+              message,
+            });
           });
       } catch (err) {
-        req.session.addBatchError = "Something went wrong";
-        res.redirect(303, "/office/batches/add-batch");
+        res.status(500).json({
+          success: false,
+          message: "Something went wrong",
+        });
       }
     }
   },
