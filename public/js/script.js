@@ -9,6 +9,26 @@ const toggleMobileNave = (open) => {
   }
 };
 
+// calling toasts
+function openDangerToast(message) {
+  const toast = document.getElementById("toast");
+  const body = document.getElementById("toast-body");
+  body.innerHTML = message || "Something went wrong";
+  toast.style.backgroundColor = "#f9e1e5";
+  toast.style.color = "#af233a";
+  const dangerToast = mdb.Toast.getInstance(toast);
+  dangerToast.show();
+}
+function openSuccessToast(message) {
+  const toast = document.getElementById("toast");
+  const body = document.getElementById("toast-body");
+  body.innerHTML = message || "Success";
+  toast.style.backgroundColor = "#d6f0e0";
+  toast.style.color = "#0d6831";
+  const successToast = mdb.Toast.getInstance(toast);
+  successToast.show();
+}
+
 // image upload preview
 document.getElementById("profile").onchange = function () {
   const src = URL.createObjectURL(this.files[0]);
@@ -361,4 +381,47 @@ function block(url) {
   fetch(url).then(() => {
     location.reload();
   });
+}
+
+function submitAddBatch(e) {
+  e.preventDefault();
+  const form = document.getElementById("addBatchForm");
+  const formData = new FormData(form);
+  const dataToSend = Object.fromEntries(formData);
+
+  if (dataToSend.fee_type == "Installment")
+    dataToSend.fee_type = ["One time", "Installment"];
+  else dataToSend.fee_type = ["One time"];
+
+  const subject = document.getElementById("subjects").querySelectorAll("span");
+  let subjects = [];
+  subject.forEach((ele) => {
+    subjects.push({
+      subject: ele.innerText,
+      teacher: "",
+    });
+  });
+
+  if (!subjects.length) openDangerToast("Subjects can not be empty");
+  else {
+    dataToSend.subjects = subjects;
+
+    fetch(`/office/batches/add-batch`, {
+      method: "POST",
+      body: JSON.stringify(dataToSend),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.success) {
+          openSuccessToast(response.message);
+          form.reset();
+        } else openDangerToast(response.message);
+      })
+      .catch((error) => {
+        openDangerToast("Something went wrong");
+      });
+  }
 }
