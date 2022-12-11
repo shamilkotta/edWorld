@@ -186,7 +186,9 @@ function getData(url) {
           <td>${ele.payment_type}</td>
           <td>${ele.date}</td>
           <td>
-            Download
+            <a href="/get-receipt/${ele.receipt}" download class="btn btn-sm btn-success">
+              <img src="/static/icon/arrow-down.svg" height="15px" alt="download">
+            </a>
           </td>
         `;
         tbody.appendChild(row);
