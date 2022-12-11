@@ -61,6 +61,27 @@ const createBatchSchema = yup.object().shape({
         arg.length !== 0 &&
         arg.every((ele) => ["One time", "Installment"].includes(ele))
     ),
+  subjects: yup
+    .array()
+    .typeError("Invalid subjects given")
+    .min(1, "Atleast one subject is required")
+    .of(
+      yup.object().shape({
+        subject: yup
+          .string()
+          .transform((value) =>
+            value !== null
+              ? value.charAt(0).toUpperCase() + value.slice(1)
+              : value
+          )
+          .trim()
+          .required("Subject can not be empty")
+          .test("isPerfectString", "Please enter valid subject", (arg) =>
+            /^[A-Za-z ]+$/.test(arg)
+          ),
+        teacher: yup.string(),
+      })
+    ),
 });
 
 const editBatchSchema = yup.object().shape({
@@ -120,8 +141,6 @@ const editBatchSchema = yup.object().shape({
 
 module.exports = {
   createBatchValidation: (req, res, next) => {
-    const feeType = req?.body?.fee_type;
-    if (feeType[feeType.length - 1] === "") req.body.fee_type.pop();
     createBatchSchema
       .validate(req.body, { stripUnknown: true, abortEarly: false })
       .then((data) => {
