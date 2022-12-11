@@ -90,13 +90,13 @@ async function fetchData() {
           {
             label: "Performance",
             data: dataOneThree,
-            // backgroundColor: "#3bb77e",
+            backgroundColor: "#dddddd00",
             borderColor: "#3bb77e",
           },
           {
             label: "Attendance",
             data: dataTwoThree,
-            // backgroundColor: "#2943d5",
+            backgroundColor: "#dddddd00",
             borderColor: "#2943d5",
           },
         ],
