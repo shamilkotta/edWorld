@@ -5,8 +5,10 @@
 <section class="mt-3">
   <h4 class="mb-4">Add new Batch</h4>
   <form
-    method="post"
-    action="/office/batches/add-batch"
+    onkeydown="return event.keyCode != 13;"
+    action=""
+    id="addBatchForm"
+    onsubmit="submitAddBatch(event)"
     style="max-width: 1000px;"
   >
     <div class="row mb-4">
@@ -96,6 +98,16 @@
             />
             <label class="form-check-label" for="one-time">One-time</label>
           </div>
+          <input
+            class="form-check-input"
+            name="fee_type"
+            type="checkbox"
+            value="One time"
+            id="one-time"
+            checked
+            hidden
+            required
+          />
           <div class="form-check col">
             <input
               class="form-check-input"
@@ -109,25 +121,11 @@
               for="installment"
             >Installment</label>
           </div>
-          <input
-            class="form-check-input"
-            name="fee_type"
-            type="checkbox"
-            value="One time"
-            id="one-time"
-            checked
-            hidden
-            required
-          />
-          <input
-            class="form-check-input"
-            hidden
-            name="fee_type"
-            type="checkbox"
-            value=""
-            id="one-time-1"
-            checked
-          />
+        </div>
+      </div>
+      <div class="col-12 col-md-6 mb-3">
+        <div class="input-group-lg">
+          <div class="chips subjects chips-placeholder" id="subjects" data-mdb-editable="true" data-mdb-label-text="Subjects (Press enter to add)"></div>
         </div>
       </div>
     </div>
