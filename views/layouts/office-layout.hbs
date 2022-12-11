@@ -96,12 +96,35 @@
         </nav>
         <div class="px-4 py-2" style="max-width: 1400px;">
           {{{body}}}
+
+          <!-- Toasts -->
+          <div
+            class="toast fade mx-auto"
+            id="toast"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            data-mdb-autohide="true"
+            data-mdb-delay="5000"
+            data-mdb-position="top-right"
+            data-mdb-append-to-body="true"
+            data-mdb-stacking="true"
+            data-mdb-width="350px"
+          >
+            <div class="d-flex">
+              <div class="toast-body" id="toast-body">
+                Hello, world! This is a toast message.
+              </div>
+              <button type="button" class="btn-close me-2 m-auto" data-mdb-dismiss="toast" aria-label="Close"></button>
+            </div>
+          </div>
+          <!-- Toasts -->
         </div>
       </section>
     </main>
 
     <!-- MDB -->
     <script type="text/javascript" src="/static/mdb/js/mdb.min.js"></script>
-    <script src="/static/js/script.js"></script>
+    <script src="/static/js/script.js"></script> 
   </body>
 </html>
