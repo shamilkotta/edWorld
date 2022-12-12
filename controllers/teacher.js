@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const { studentStat, batchStat } = require("../helpers");
 const {
   getAllTeachersData,
@@ -65,6 +66,10 @@ module.exports = {
     try {
       const { allStudents } = await getAllStudentsData({ search: registerId });
       const studentStats = await studentStat(registerId);
+      const subjects = await Batch.aggregate([
+        { $match: { code: allStudents[0].batch } },
+        { $project: { _id: 0, subjects: 1 } },
+      ]);
       studentStats.fee_completion = (
         (studentStats.installment / 3) *
         100
@@ -79,6 +84,7 @@ module.exports = {
         res.render("teacher/student", {
           student: allStudents[0],
           studentStats,
+          subjects: subjects[0].subjects,
         });
       } else {
         res.redirect("/teacher/classroom");
@@ -155,7 +161,8 @@ module.exports = {
       });
     } else {
       try {
-        const { attendance, performance, registerId, id } = req.validData;
+        const { attendance, performance, subject_performance, registerId, id } =
+          req.validData;
         const result = await Student.updateOne(
           {
             registerId,
@@ -165,6 +172,7 @@ module.exports = {
             $set: {
               "monthly_data.$.attended": attendance,
               "monthly_data.$.performance": performance,
+              "monthly_data.$.subject_performance": subject_performance,
             },
           }
         );
