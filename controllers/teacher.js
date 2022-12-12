@@ -41,7 +41,8 @@ module.exports = {
   getClassRoom: async (req, res) => {
     try {
       const { registerId } = req.session.user;
-      const batch = await Batch.findOne({ batch_head: registerId });
+      const { code } = req.params;
+      const batch = await Batch.findOne({ batch_head: registerId, code });
       if (!batch) res.redirect("/teacher");
       else {
         const { allBatches } = await getAllBatchesData({ search: batch.code });
