@@ -77,7 +77,11 @@
               </div>
             </td>
             {{#if this.batch}}
-              <td>{{this.batch}}</td>
+              <td>
+                {{#each this.batch}}
+                  <span>{{this}}</span><br>
+                {{/each}}
+              </td>
             {{else}}
               <td> - </td>
             {{/if}}
@@ -212,10 +216,25 @@ function getData(url) {
               </a>
             </div>
           </td>
-          <td>${ele.batch ? ele.batch : `-`}</td>
+          <td>
+            ${
+              ele.batch[0] ? 
+                ele.batch.map((code) => `<span>${code}</span><br>`).join("")
+              : `-`
+            }
+          </td>
           <td>${ele.salary}</td>
           <td>${ele.qualification}</td>
           <td>${ele.experience}</td>
+          <td>
+            <a 
+              data-mdb-toggle="modal"
+              data-mdb-target="#manageAccount"
+              class="btn btn-sm ${ele.account_status ? `btn-danger` : `btn-success`}"
+              onclick="manageAccount(${ele.account_status},'${ele.registerId}', '${ele.name}', 'teacher')" >
+              ${ele.account_status ? `block` : `unblock`}
+            </a>
+          </td>
           <td>
             <a href="/office/teacher/${ele.registerId}">
               <img src="/static/icon/export.svg" width="20px" alt="" />
