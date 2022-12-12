@@ -23,13 +23,13 @@ router.all("/*", (req, res, next) => {
 
 router.get("/", getTeacherView);
 
-router.get("/classroom", getClassRoom);
+router.get("/classroom/:code", getClassRoom);
 
 router.put("/edit-basic-details", editTeacherValidation, putEditDetails);
 
 router.put("/change-password", getChangePassword);
 
-router.get("/classroom/:registerId", getStudent);
+router.get("/student/:registerId", getStudent);
 
 router.put(
   "/add-total-working-days",
