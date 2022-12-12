@@ -454,10 +454,11 @@ function formSubmit(e) {
           const card = document.createElement("div")
           card.className = "btn working-days-card"
           card.style.whiteSpace = "nowrap"
+          card.style.boxShadow = "none"
           card.innerHTML = `
             <div class="working-days-card-text" style="white-space: nowrap;">${ele.subject} : </div>
             ${
-              ele.teacher_id ? `<div class="working-days-card-count subjects-card subjects-card-count">&nbsp;${ele.teacher_name}</div>` :
+              ele.teacher_id ? `<div class="working-days-card-text">&nbsp;${ele.teacher_name}</div>` :
               `<div class="fs-6" style="color: #5b5b5b43;">&nbsp;--</div>`
             }
           `
