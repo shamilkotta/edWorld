@@ -17,12 +17,6 @@ const monthlyDataSchema = yup.object().shape({
     .required("Attendance can not be empty")
     .min(0, "Enter a valid count")
     .max(31, "Enter valid count"), //
-  performance: yup
-    .number()
-    .typeError("Invalid performance provided")
-    .required("Performance can not be empty")
-    .min(0, "Enter a valid performance")
-    .max(100, "Enter valid performance"),
   registerId: yup
     .string()
     .trim()
@@ -30,6 +24,31 @@ const monthlyDataSchema = yup.object().shape({
     .required("Can't find the student")
     .max(5, "register id can not be greater than 5 charecters"),
   id: yup.string().required("Can't find the student"),
+  subject_performance: yup
+    .array()
+    .typeError("Invalid subjects given")
+    .of(
+      yup.object().shape({
+        subject: yup
+          .string()
+          .transform((value) =>
+            value !== null
+              ? value.charAt(0).toUpperCase() + value.slice(1)
+              : value
+          )
+          .trim()
+          .required("Subject can not be empty")
+          .test("isPerfectString", "Please enter valid subject", (arg) =>
+            /^[A-Za-z ]+$/.test(arg)
+          ),
+        score: yup
+          .number()
+          .typeError("Invalid performance provided")
+          .required("Performance can not be empty")
+          .min(0, "Enter a valid performance")
+          .max(100, "Enter valid performance"),
+      })
+    ),
 });
 
 const editTeacherSchema = yup.object().shape({
@@ -116,6 +135,11 @@ module.exports = {
         const newAttend = (data.attendance / req.body.total) * 100;
         req.validData = data;
         req.validData.attendance = newAttend.toFixed(2);
+        let total = 0;
+        data.subject_performance.forEach((ele) => {
+          total += ele.score;
+        });
+        req.validData.performance = total / data.subject_performance.length;
         next();
       })
       .catch((err) => {
