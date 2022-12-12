@@ -330,22 +330,28 @@
             <label class="form-label" for="attendance">Attendance</label>
             <span class="input-group-text border-0" id="basic-addon2"></span>
           </div>
-          <div class="form-outline input-group mt-3 input-group-lg">
-            <input
-              type="number"
-              id="performance"
-              name="performance"
-              class="form-control"
-              required
-              min="0"
-              max="100"
-            />
-            <label class="form-label" for="performance">Performance</label>
-            <span class="input-group-text border-0" id="basic-addon2">%</span>
-          </div>
           <input type="hidden" name="id" id="month-id" value="">
           <input type="hidden" name="registerId" id="registerId" value="{{student.registerId}}">
           <input type="hidden" name="total" id="total-days" value="">
+
+          <h6 class="mt-3">Performance</h6>
+          <div id="subject-performance">
+            {{#each subjects}}
+              <div class="input-group input-group-lg mb-3">
+                <span class="input-group-text prefix">{{this.subject}}</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="{{this.subject}}"
+                  required
+                  min="0"
+                  max="100"
+                />
+                <span class="input-group-text">%</span>
+              </div>
+            {{/each}}
+          </div>
+
           <p id="monthlyDataForm-response"></p>
           <div class="mt-3 d-flex justify-content-end">
             <button
@@ -362,10 +368,26 @@
 <script>
   const form = document.getElementById("monthlyDataForm")
   const response = document.getElementById("monthlyDataForm-response")
+  const perfo = document.getElementById("subject-performance")
   const formSubmit = (e) => {
     e.preventDefault()
     const formData = new FormData(form);
-    const dataToSend = Object.fromEntries(formData);
+    const data = Object.fromEntries(formData);
+    const subject_performance = [];
+    [...perfo.children].map((ele) => {
+      subject_performance.push({
+        subject: ele.getElementsByClassName("prefix")[0].innerText,
+        score: ele.getElementsByTagName("input")[0].value
+      })
+    })
+    const {attendance, registerId, id, total} = data
+    const dataToSend = {
+      attendance,
+      registerId,
+      id,
+      total,
+      subject_performance
+    }
 
     fetch("/teacher/add-monthly-data", {
       method: "PUT",
