@@ -118,10 +118,10 @@ module.exports = {
         message: req.validationErr,
       });
     } else {
-      const { code, batch_head, seat_num } = req.validData;
+      const { code, batch_head, seat_num, subjects } = req.validData;
       Batch.findOneAndUpdate(
         { code },
-        { batch_head, seat_num },
+        { batch_head, seat_num, subjects },
         { runValidators: true }
       )
         .then(() => {
