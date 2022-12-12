@@ -82,25 +82,6 @@ module.exports = {
       );
       Teacher.aggregate([
         {
-          $lookup: {
-            from: "batches",
-            localField: "registerId",
-            foreignField: "batch_head",
-            as: "closed_batches",
-          },
-        },
-        {
-          $unwind: {
-            path: "$closed_batches",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $match: {
-            closed_batches: { $exists: false },
-          },
-        },
-        {
           $project: {
             registerId: 1,
             name: 1,
