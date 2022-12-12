@@ -22,21 +22,23 @@
 
 <main class="container-fluid px-3" style="max-width: 1500px;">
   <div class="d-flex flex-wrap justify-content-end">
-    <div class="tab-bar mb-4 ms-2 mt-2">
-      <a
-        href="/teacher/classroom"
-        class="btn d-flex py-3 px-4 justify-content-center align-items-center rounded-3 {{#if teacher.batch}}{{else}}disabled{{/if}}"
-        style="background-color: #f1f1f1;"
-      >
-        <div
-          class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
-          style="cursor: pointer;"
+    {{#each teacher.batch}}
+      <div class="tab-bar mb-4 ms-2 mt-2">
+        <a
+          href="/teacher/classroom/{{this}}"
+          class="btn d-flex py-3 px-4 justify-content-center align-items-center rounded-3"
+          style="background-color: #f1f1f1;"
         >
-          <img src="/static/icon/home.svg" width="25px" alt="" />
-          <span class="ms-2">Class Room</span>
-        </div>
-      </a>
-    </div>
+          <div
+            class="d-flex flex-column justify-content-center align-items-center flex-sm-row"
+            style="cursor: pointer;"
+          >
+            <img src="/static/icon/home.svg" width="25px" alt="" />
+            <span class="ms-2">{{this}}</span>
+          </div>
+        </a>
+      </div>
+    {{/each}}
   </div>
 
   <section class="mt-1">
@@ -71,7 +73,9 @@
           <div class="">
             <span class="fw-bold fs-6 mb-0">Batch</span><br />
             {{#if teacher.batch}}
-              <span class="text-muted fs-6 mt-0">{{teacher.batch}}</span>
+              {{#each teacher.batch}}
+                <span class="text-muted fs-6 mt-0">{{this}}</span><br>
+              {{/each}}
             {{else}}
               <span class="text-muted fs-6 mt-0">-</span>
             {{/if}}
