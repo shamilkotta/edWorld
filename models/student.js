@@ -128,6 +128,17 @@ const studentSchema = new mongoose.Schema(
         performance: {
           type: Number,
         },
+        subject_performance: [
+          {
+            subject: {
+              type: String,
+              trim: true,
+            },
+            score: {
+              type: Number,
+            },
+          },
+        ],
       },
     ],
     payment_done: {
