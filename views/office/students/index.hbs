@@ -210,6 +210,15 @@ function getData(url) {
           <td>${ele.education}</td>
           <td>${ele.university}</td>
           <td>
+            <a 
+              data-mdb-toggle="modal"
+              data-mdb-target="#manageAccount"
+              class="btn btn-sm ${ele.account_status ? `btn-danger` : `btn-success`}"
+              onclick="manageAccount(${ele.account_status},'${ele.registerId}', '${ele.name}', 'student')" >
+              ${ele.account_status ? `block` : `unblock`}
+            </a>
+          </td>
+          <td>
             <a href="/office/student/${ele.registerId}">
               <img src="/static/icon/export.svg" width="20px" alt="" />
             </a>
