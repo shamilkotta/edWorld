@@ -79,7 +79,23 @@ const createBatchSchema = yup.object().shape({
           .test("isPerfectString", "Please enter valid subject", (arg) =>
             /^[A-Za-z ]+$/.test(arg)
           ),
-        teacher: yup.string(),
+        teacher_id: yup
+          .string()
+          .required("Can't find teacher")
+          .uppercase()
+          .max(5, "Register id can not be greater than 5 charecters"),
+        teacher_name: yup
+          .string()
+          .trim()
+          .required("Name can not be empty")
+          .transform((value) =>
+            value !== null
+              ? value.charAt(0).toUpperCase() + value.slice(1)
+              : value
+          )
+          .test("isPerfectString", "Please enter valid name", (arg) =>
+            /^[A-Za-z]+$/.test(arg)
+          ),
       })
     ),
 });
@@ -136,6 +152,43 @@ const editBatchSchema = yup.object().shape({
           message: "This teacher already have a batch assigned",
         });
       }
+    ),
+  subjects: yup
+    .array()
+    .typeError("Invalid subjects given")
+    .min(1, "Atleast one subject is required")
+    .of(
+      yup.object().shape({
+        subject: yup
+          .string()
+          .transform((value) =>
+            value !== null
+              ? value.charAt(0).toUpperCase() + value.slice(1)
+              : value
+          )
+          .trim()
+          .required("Subject can not be empty")
+          .test("isPerfectString", "Please enter valid subject", (arg) =>
+            /^[A-Za-z ]+$/.test(arg)
+          ),
+        teacher_id: yup
+          .string()
+          .required("Can't find teacher")
+          .uppercase()
+          .max(5, "Register id can not be greater than 5 charecters"),
+        teacher_name: yup
+          .string()
+          .trim()
+          .required("Name can not be empty")
+          .transform((value) =>
+            value !== null
+              ? value.charAt(0).toUpperCase() + value.slice(1)
+              : value
+          )
+          .test("isPerfectString", "Please enter valid name", (arg) =>
+            /^[A-Za-z]+$/.test(arg)
+          ),
+      })
     ),
 });
 
