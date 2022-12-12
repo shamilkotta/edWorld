@@ -27,7 +27,7 @@
   </div>
 
   <div
-    class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 mb-4 y-2"
+    class="d-flex flex-wrap align-items-center justify-content-evenly mt-4 py-2"
     style="font-size: 18px; row-gap: 10px;"
   >
     <div class="mx-2">
@@ -79,24 +79,30 @@
   </div>
 
   <div
-    class="mt-4 mb-4 border-bottom py-2"
+    class="mb-4 border-bottom py-2"
     style="font-size: 18px; row-gap: 10px;"
   >
-  <h5>Subjects</h5>
-    <div class="px-1 py-3 rounded working-days">
-        <div class="d-flex flex-row-reverse">
-        {{#each batch.subjects}}
-          <div class="btn working-days-card" style="white-space: nowrap;">
-            <div class="working-days-card-text" style="white-space: nowrap;">{{this.subject}} : </div>
-            {{#if this.teacher}}
-              <div class="working-days-card-count">&nbsp;{{this.teacher}}</div>
-            {{else}}
-              <div class="fs-6" style="color: #5b5b5b43;">&nbsp;(Assgin a teacher)</div>
-            {{/if}}
-          </div>
-        {{/each}}
+    <section class="d-block d-sm-flex align-items-center">
+      <div class="working-days-head">
+        <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: large;">
+          Subjects :
+        </h6>
       </div>
-    </div>
+      <div class="px-1 py-3 rounded working-days">
+        <div class="d-flex flex-row-reverse" id="subjects-row">
+          {{#each batch.subjects}}
+            <div class="btn working-days-card" style="white-space: nowrap; box-shadow: none;">
+              <div class="working-days-card-text" style="white-space: nowrap;">{{this.subject}}</div>
+              {{#if this.teacher_id}}
+                <div class="working-days-card-text">&nbsp;({{this.teacher_name}})</div>
+              {{else}}
+                <div class="fs-6" style="color: #5b5b5b43;">&nbsp;--</div>
+              {{/if}}
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
   </div>
   
   <section class="mb-4">
@@ -207,12 +213,13 @@
       </div>
       <div class="px-1 py-3 rounded working-days">
         <div class="d-flex flex-row-reverse">
-        {{#each batch.working_days}}
-          <div class="btn working-days-card" style="white-space: nowrap;">
-            <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month: </div>
-            <div class="working-days-card-count">&nbsp;{{this}}</div>
-          </div>
-        {{/each}}
+          {{#each batch.working_days}}
+            <div class="btn working-days-card" style="white-space: nowrap;">
+              <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month: </div>
+              <div class="working-days-card-count">&nbsp;{{this}}</div>
+            </div>
+          {{/each}}
+        </div>
       </div>
     </section>
   {{/if}}
@@ -361,6 +368,28 @@
               {{/each}}
             </select>
           </div>
+          <h6 class="mt-3">Subjects</h6>
+          <div id="subjects">
+          {{#each batch.subjects}}
+            <div class="input-group-lg mb-3">
+              <label class="form-label" for="{{this.id}}">{{this.subject}}</label>
+              <select
+                class="form-select form-control form-select-lg"
+                name="{{this._id}}"
+                id="batch-subject-{{this._id}}-select"
+                required
+              >
+                <option
+                  selected
+                  value="{{this.teacher_id}}"
+                >{{this.teacher_name}}</option>
+                {{#each ../openTeachers}}
+                  <option value="{{this.registerId}}">{{this.name}}</option>
+                {{/each}}
+              </select>
+            </div>
+          {{/each}}
+          </div>
           <p id="response"></p>
           <div class="mt-3 d-flex justify-content-end">
             <button
@@ -383,12 +412,27 @@ const seat = document.getElementById("seat-num");
 const head = document.getElementById("batch-head");
 const headName = document.getElementById("batch-head-name");
 const sel = document.getElementById("batch-head-select");
+const subjectsRow = document.getElementById("subjects-row")
 
 function formSubmit(e) {
   e.preventDefault();
 
   const formData = new FormData(form);
-  const dataToSend = Object.fromEntries(formData);
+  const data= Object.fromEntries(formData);
+  let subjects = [];
+  [...document.getElementById("subjects").getElementsByTagName("select")].map((ele, index) =>{
+    subjects.push({
+      subject: document.getElementById("subjects").getElementsByTagName("label")[index].innerText,
+      teacher_id: ele.value,
+      teacher_name: ele.options[ele.selectedIndex].text
+    })
+  })
+  const { batch_head, seat_num} = data
+  const dataToSend = {
+    batch_head,
+    seat_num,
+    subjects
+  }
   fetch(`/office/batch/edit-batch/${code}`, {
     method: "PUT",
     body: JSON.stringify(dataToSend),
@@ -405,6 +449,21 @@ function formSubmit(e) {
         head.innerText = `(${dataToSend.batch_head})`;
         const { text } = sel.options[sel.selectedIndex];
         headName.innerText = text;
+        subjectsRow.innerHTML = ""
+        subjects.forEach((ele) => {
+          const card = document.createElement("div")
+          card.className = "btn working-days-card"
+          card.style.whiteSpace = "nowrap"
+          card.innerHTML = `
+            <div class="working-days-card-text" style="white-space: nowrap;">${ele.subject} : </div>
+            ${
+              ele.teacher_id ? `<div class="working-days-card-count subjects-card subjects-card-count">&nbsp;${ele.teacher_name}</div>` :
+              `<div class="fs-6" style="color: #5b5b5b43;">&nbsp;--</div>`
+            }
+          `
+          subjectsRow.appendChild(card)
+        })
+
       } else {
         res.classList.add("text-danger");
         res.classList.remove("text-success");
@@ -412,6 +471,7 @@ function formSubmit(e) {
       res.innerText = response.message;
     })
     .catch((error) => {
+      console.log(error)
       res.classList.add("text-danger");
       res.classList.remove("text-success");
       res.innerText = "Somthing went wrong";
