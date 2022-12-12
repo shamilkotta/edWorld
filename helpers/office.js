@@ -360,9 +360,6 @@ module.exports = {
           },
         },
         {
-          $unwind: { path: "$batch", preserveNullAndEmptyArrays: true },
-        },
-        {
           $addFields: {
             batch: "$batch.code",
             birth_date: {
