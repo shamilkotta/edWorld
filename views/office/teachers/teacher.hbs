@@ -51,10 +51,12 @@
         <div class="">
           <span class="fw-bold fs-6 mb-0">Batch</span><br>
           {{#if teacher.batch}}
-            <span class="text-muted fs-6 mt-0">{{teacher.batch}}</span>
-            <a href="/office/batch/{{teacher.batch}}" class="mt-0">
-              <img src="/static/icon/export.svg" width="15px" alt="{{teacher.batch}}" />
-            </a>
+            {{#each teacher.batch}}
+              <span class="text-muted fs-6 mt-0">{{this}}</span>
+              <a href="/office/batch/{{this}}" class="mt-0">
+                <img src="/static/icon/export.svg" width="15px" alt="{{this}}" />
+              </a><br>
+            {{/each}}
           {{else}}
             <span class="text-muted fs-6 mt-0">-</span>
           {{/if}}
