@@ -38,7 +38,7 @@
 
   <section class="mt-1">
     <div
-      class="d-flex flex-wrap align-items-center justify-content-evenly mt-3 mb-4 border-bottom py-2"
+      class="d-flex flex-wrap align-items-center justify-content-evenly mt-3py-2"
       style="font-size: 18px; row-gap: 10px;"
     >
       <div class="mx-2">
@@ -70,6 +70,33 @@
         <span class="text-muted">Seats:</span>
         <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
       </div>
+    </div>
+
+    <div
+      class="mb-4 border-bottom py-2"
+      style="font-size: 18px; row-gap: 10px;"
+    >
+      <section class="d-block d-sm-flex align-items-center">
+        <div class="working-days-head">
+          <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: large;">
+            Subjects :
+          </h6>
+        </div>
+        <div class="px-1 py-3 rounded working-days">
+          <div class="d-flex flex-row-reverse" id="subjects-row">
+            {{#each batch.subjects}}
+              <div class="btn working-days-card" style="white-space: nowrap; box-shadow: none;">
+                <div class="working-days-card-text" style="white-space: nowrap;">{{this.subject}}</div>
+                {{#if this.teacher_id}}
+                  <div class="working-days-card-text">&nbsp;({{this.teacher_name}})</div>
+                {{else}}
+                  <div class="fs-6" style="color: #5b5b5b43;">&nbsp;--</div>
+                {{/if}}
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </section>
     </div>
 
     <section class="mb-4">
