@@ -111,7 +111,7 @@ const editTeacherSchema = yup.object().shape({
     .string()
     .required("Can't find teacher")
     .uppercase()
-    .max(5, "Batch code can not be greater than 5 charecters"),
+    .max(5, "Register id can not be greater than 5 charecters"),
   experience: yup
     .number()
     .typeError("Invalid experience count")
