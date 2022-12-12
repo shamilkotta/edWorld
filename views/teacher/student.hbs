@@ -21,7 +21,7 @@
   <div class="d-flex flex-wrap justify-content-end">
     <div class="tab-bar mb-4 ms-2 mt-2">
       <a
-        href="/teacher/classroom"
+        href="/teacher/classroom/{{student.batch}}"
         class="btn d-flex py-3 px-4 justify-content-center align-items-center rounded-3"
         style="background-color: #f1f1f1;"
       >
@@ -30,7 +30,7 @@
           style="cursor: pointer;"
         >
           <img src="/static/icon/home.svg" width="25px" alt="" />
-          <span class="ms-2">Class Room</span>
+          <span class="ms-2">{{student.batch}}</span>
         </div>
       </a>
     </div>
