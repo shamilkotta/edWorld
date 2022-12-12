@@ -54,8 +54,14 @@ const batchSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        teacher: {
+        teacher_id: {
           type: String,
+          trim: true,
+          uppercase: true,
+        },
+        teacher_name: {
+          type: String,
+          trim: true,
         },
       },
     ],
