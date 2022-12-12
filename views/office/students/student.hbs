@@ -219,7 +219,7 @@
           {{else}}
             <div class="btn working-days-card" style="white-space: nowrap;">
               <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
-              <div class="working-days-card-count">&nbsp;{{this.attended}}</div>
+              <div class="working-days-card-count">&nbsp;{{this.attended}}<span class="fs-6">%</span></div>
             </div>
           {{/if}}
         {{/each}}
@@ -243,7 +243,7 @@
           {{else}}
             <div class="btn working-days-card" style="white-space: nowrap;">
               <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
-              <div class="working-days-card-count">&nbsp;{{this.performance}}</div>
+              <div class="working-days-card-count">&nbsp;{{this.performance}}<span class="fs-6">%</span></div>
             </div>
           {{/if}}
         {{/each}}
