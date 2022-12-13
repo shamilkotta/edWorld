@@ -517,7 +517,6 @@ module.exports = {
         receipt,
       });
     } catch (error) {
-      console.log(error);
       return res.status(200).json({
         success: true,
         message: "Payment successfull, but can't send receipt to email",
