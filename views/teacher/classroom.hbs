@@ -37,68 +37,6 @@
   </div>
 
   <section class="mt-1">
-    <div
-      class="d-flex flex-wrap align-items-center justify-content-evenly mt-3py-2"
-      style="font-size: 18px; row-gap: 10px;"
-    >
-      <div class="mx-2">
-        <span class="text-muted">Batch:</span>
-        <span class="fw-bold" id="batch-code">{{batch.code}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Start Date:</span>
-        <span class="fw-bold">{{batch.start_date}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Duration:</span>
-        <span class="fw-bold">{{batch.duration}} months</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">End Date:</span>
-        <span class="fw-bold">{{batch.end_date}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Students:</span>
-        <span class="fw-bold">{{batch.students}}</span>
-      </div>
-      <div style="color: #bbbbbb;">|</div>
-      <div class="mx-2">
-        <span class="text-muted">Seats:</span>
-        <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
-      </div>
-    </div>
-
-    <div
-      class="mb-4 border-bottom py-2"
-      style="font-size: 18px; row-gap: 10px;"
-    >
-      <section class="d-block d-sm-flex align-items-center">
-        <div class="working-days-head">
-          <h6 class="mb-0 mt-auto my-sm-auto" style="font-size: large;">
-            Subjects :
-          </h6>
-        </div>
-        <div class="px-1 py-3 rounded working-days">
-          <div class="d-flex flex-row-reverse" id="subjects-row">
-            {{#each batch.subjects}}
-              <div class="btn working-days-card" style="white-space: nowrap; box-shadow: none;">
-                <div class="working-days-card-text" style="white-space: nowrap;">{{this.subject}}</div>
-                {{#if this.teacher_id}}
-                  <div class="working-days-card-text">&nbsp;({{this.teacher_name}})</div>
-                {{else}}
-                  <div class="fs-6" style="color: #5b5b5b43;">&nbsp;--</div>
-                {{/if}}
-              </div>
-            {{/each}}
-          </div>
-        </div>
-      </section>
-    </div>
-
     <section class="mb-4">
       <div class="">
         <div class="row gy-4">
@@ -197,6 +135,59 @@
         </div>
       </div>
     </section>
+
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-start border rounded-4 mt-5 px-2 pb-2 pt-3"
+      style="font-size: 18px; row-gap: 10px; position: relative;"
+    >
+      <h6 class="px-2 text-muted" style="position:absolute; left: 10; top: -11; background-color: #fff; ">Details</h6>
+      <div class="mx-2">
+        <span class="text-muted">Batch:</span>
+        <span class="fw-bold" id="batch-code">{{batch.code}}</span>
+      </div>
+      
+      <div class="mx-2">
+        <span class="text-muted">Start Date:</span>
+        <span class="fw-bold">{{batch.start_date}}</span>
+      </div>
+      
+      <div class="mx-2">
+        <span class="text-muted">Duration:</span>
+        <span class="fw-bold">{{batch.duration}} months</span>
+      </div>
+      
+      <div class="mx-2">
+        <span class="text-muted">End Date:</span>
+        <span class="fw-bold">{{batch.end_date}}</span>
+      </div>
+      
+      <div class="mx-2">
+        <span class="text-muted">Students:</span>
+        <span class="fw-bold">{{batch.students}}</span>
+      </div>
+      
+      <div class="mx-2">
+        <span class="text-muted">Seats:</span>
+        <span class="fw-bold" id="seat-num">{{batch.seat_num}}</span>
+      </div>
+    </div>
+
+    <div
+      class="d-flex flex-wrap align-items-center justify-content-start border rounded-4 mt-4 mb-5 px-2 pb-2 pt-3"
+      style="font-size: 18px; row-gap: 10px; position: relative;"
+    >
+      <h6 class="px-2 text-muted" style="position:absolute; left: 10; top: -11; background-color: #fff; ">Subjects</h6>
+      {{#each batch.subjects}}
+        <div class="mx-2">
+          <span class="text-muted">{{this.subject}}</span>
+          {{#if this.teacher_id}}
+            <span class="fw-bold" id="seat-num">&nbsp;({{this.teacher_name}})</span>
+          {{else}}
+            <div class="fs-6" style="color: #5b5b5b43;">&nbsp;--</div>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
 
     <section class="d-block d-sm-flex align-items-center mt-5 mb-5">
       <div class="working-days-head">
