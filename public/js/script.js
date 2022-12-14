@@ -397,8 +397,9 @@ function submitAddBatch(e) {
   let subjects = [];
   subject.forEach((ele) => {
     subjects.push({
-      subject: ele.innerText,
-      teacher: "",
+      subject: ele.getAttribute("data-subject"),
+      teacher_id: ele.getAttribute("data-teacher_id"),
+      teacher_name: ele.getAttribute("data-teacher_name"),
     });
   });
 
@@ -424,4 +425,12 @@ function submitAddBatch(e) {
         openDangerToast("Something went wrong");
       });
   }
+}
+
+// show subjectwise performance
+function showPerformance(data) {
+  console.log(data);
+  data.forEach((ele) => {
+    console.log(ele);
+  });
 }
