@@ -123,9 +123,10 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 mb-3">
-        <div class="input-group-lg">
-          <div class="chips subjects chips-placeholder" id="subjects" data-mdb-editable="true" data-mdb-label-text="Subjects (Press enter to add)"></div>
+      <div class="col-12 mb-3">
+        <div class="btn btn-dark mb-3" data-mdb-toggle="modal" data-mdb-target="#addSubject">Add subject</div>
+        <div class="chips-placeholder d-flex gap-2 flex-wrap" id="subjects">
+          
         </div>
       </div>
     </div>
@@ -141,3 +142,98 @@
     >Create batch</button>
   </form>
 </section>
+
+
+{{! add subject modal }}
+<div
+  class="modal fade"
+  id="addSubject"
+  tabindex="-1"
+  aria-labelledby="addSubjectLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add new subject</h5>
+        <button
+          type="button"
+          class="btn-close"
+          id="modal-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body pb-0">
+        <form action="" id="addSubjectForm">
+
+          <div class="form-outline input-group-lg">
+            <input
+              type="text"
+              id="subject_name"
+              name="subject_name"
+              class="form-control"
+              required
+            />
+            <label class="form-label" for="subject_name">Subject</label>
+          </div>
+          <div class="input-group-lg mt-3">
+            <label class="form-label" for="batch_head">Teacher</label>
+            <select
+              class="form-select form-control form-select-lg"
+              name="teacher_id"
+              id="teacher_name"
+              required
+            >
+              <option
+                selected
+                value=""
+              ></option>
+              {{#each openTeachers}}
+                <option value="{{this.registerId}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div class="mt-3 d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-outline-success"
+            >Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const addSubjectForm = document.getElementById("addSubjectForm")
+  const teacherSelect = document.getElementById("teacher_name")
+  const subjects = document.getElementById("subjects")
+  function subjectFromSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(addSubjectForm);
+    const data = Object.fromEntries(formData);
+    data.teacher_name = teacherSelect.options[teacherSelect.selectedIndex].text
+
+    const sub = document.createElement("div")
+    sub.className = "custom-chip btn btn-rounded d-flex shadow-0 btn-outline-dark ps-2 py-1 pe-2 align-items-center"
+    sub.style.width = "fit-content"
+    sub.style.whiteSpace = "nowrap"
+
+    sub.innerHTML = `
+      <span style="white-space: nowrap;" data-subject="${data.subject_name}" data-teacher_name="${data.teacher_name}" data-teacher_id="${data.teacher_id}">${data.subject_name}: ${data.teacher_name}</span>
+      <i class="ms-2 fs-6 fas fa-times justify-self-end" onclick="deletChip(this)"></i>
+    `
+
+    subjects.appendChild(sub)
+    addSubjectForm.reset()
+    document.getElementById('modal-close').click()
+  }
+
+  addSubjectForm.addEventListener("submit", subjectFromSubmit)
+
+  function deletChip(e) {
+    e.parentElement.remove()
+  }
+</script>
