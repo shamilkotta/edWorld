@@ -429,8 +429,19 @@ function submitAddBatch(e) {
 
 // show subjectwise performance
 function showPerformance(data) {
-  console.log(data);
+  const body = document.getElementById("performance-modal-body");
   data.forEach((ele) => {
-    console.log(ele);
+    const span = document.createElement("span");
+    span.className =
+      "btn rounded-3 d-flex align-items-center shadow-0 btn-success  px-3 py-2 align-items-center";
+    span.style.width = "fit-content";
+    span.style.whiteSpace = "nowrap";
+    span.style.fontSize = "16px";
+    span.innerHTML = `
+      <span>${ele.subject}: &nbsp; <span class="fs-6">${ele.score}</span>%</span>
+    `;
+    body.appendChild(span);
   });
+  const myModal = new mdb.Modal(document.getElementById("showPerformance"));
+  myModal.show();
 }
