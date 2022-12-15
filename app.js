@@ -40,6 +40,7 @@ app.engine(
     helpers: {
       superfix,
       isAttendancePending: (count) => count === -1 || count === "-1",
+      json: (data) => JSON.stringify(data),
     },
   })
 );
