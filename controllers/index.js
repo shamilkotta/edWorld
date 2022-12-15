@@ -453,6 +453,18 @@ module.exports = {
             message: failure,
           });
         }
+
+        // sending success response
+        res.status(200).json({
+          success: true,
+          message: "Payment successfull",
+          receipt,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: failure,
+        });
       }
     } catch (error) {
       return res.status(500).json({
@@ -461,18 +473,14 @@ module.exports = {
       });
     }
 
+    // after sending response, email sending initiate
     const receiptTemplatePath = `./utils/receipt.html`;
     const emailTemplatePath = `./utils/receipt-email.html`;
 
     try {
       // getting payment data
       const { allPayments } = await getAllPaymentsData({ search: receipt });
-      if (!allPayments[0])
-        return res.status(200).json({
-          success: true,
-          message: "Payment successfull, but can't send receipt to email",
-          receipt,
-        });
+      if (!allPayments[0]) return {};
       // eslint-disable-next-line prefer-destructuring
       const replacements = allPayments[0];
 
@@ -497,31 +505,17 @@ module.exports = {
       });
 
       // sending mail
-      const response = await sendMail(
+      await sendMail(
         email,
         "Receipt of your fee payment",
         emailContent,
         receiptPdf,
         "receipt.pdf"
       );
-      if (response.success)
-        return res.status(200).json({
-          success: true,
-          message: "Payment successfull",
-          receipt,
-        });
 
-      return res.status(200).json({
-        success: true,
-        message: "Payment successfull, but can't send receipt to email",
-        receipt,
-      });
+      return {};
     } catch (error) {
-      return res.status(200).json({
-        success: true,
-        message: "Payment successfull, but can't send receipt to email",
-        receipt,
-      });
+      return {};
     }
   },
 
