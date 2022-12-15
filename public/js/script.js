@@ -394,7 +394,7 @@ function submitAddBatch(e) {
   else dataToSend.fee_type = ["One time"];
 
   const subject = document.getElementById("subjects").querySelectorAll("span");
-  let subjects = [];
+  const subjects = [];
   subject.forEach((ele) => {
     subjects.push({
       subject: ele.getAttribute("data-subject"),
@@ -419,6 +419,7 @@ function submitAddBatch(e) {
         if (response.success) {
           openSuccessToast(response.message);
           form.reset();
+          document.getElementById("subjects").innerHTML = "";
         } else openDangerToast(response.message);
       })
       .catch((error) => {
