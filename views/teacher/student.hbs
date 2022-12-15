@@ -283,7 +283,7 @@
         <div class="px-1 py-3 rounded working-days">
           <div class="d-flex flex-row-reverse">
             {{#each student.monthly_data}}
-              <div class="btn working-days-card" style="white-space: nowrap;">
+              <div class="btn working-days-card" style="white-space: nowrap;" onclick="showPerformance({{json this.subject_performance}})">
                 <div class="working-days-card-text" style="white-space: nowrap;">{{{ superfix @index true }}} Month :</div>
                 <div class="working-days-card-count">&nbsp;{{this.performance}}<span class="fs-6">%</span></div>
               </div>
@@ -364,6 +364,28 @@
     </div>
   </div>
 </div>
+
+<div
+  class="modal fade"
+  id="showPerformance"
+  tabindex="-1"
+  aria-labelledby="showPerformanceLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body p-2 d-flex flex-wrap gap-2" id="performance-modal-body" style="width: fit-content;">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById("showPerformance").addEventListener("hidden.mdb.modal", function (){
+    document.getElementById("performance-modal-body").innerHTML = ""
+  })
+</script>
 
 <script>
   const form = document.getElementById("monthlyDataForm")
