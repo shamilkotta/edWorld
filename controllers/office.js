@@ -154,7 +154,7 @@ module.exports = {
 
   postAddTeacher: async (req, res) => {
     if (req.validationErr) {
-      console.error(req.validationErr)
+      console.log(req.validationErr)
       req.session.addTeacherError = req.validationErr;
       res.redirect(303, "/office/teachers/add-teacher");
     } else {
@@ -178,7 +178,7 @@ module.exports = {
             res.redirect(303, "/office/teachers/add-teacher");
           })
           .catch((err) => {
-            console.error(err)
+            console.log(err)
             if (err.code === 11000)
               req.session.addTeacherError = "Duplicate email or phone number";
             else req.session.addTeacherError = "Something went wrong";
@@ -192,7 +192,7 @@ module.exports = {
             res.redirect(303, "/office/teachers/add-teacher");
           });
       } catch (err) {
-        console.error(err)
+        console.log(err)
         req.session.addTeacherError = "Something went wrong";
         fs.unlink(req.file.path, (fserr) => {
           if (fserr)
