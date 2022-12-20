@@ -156,7 +156,7 @@ module.exports = {
           );
 
           // reading email template and sending email
-          const resetUrl = `http://localhost:5000/reset-password/${token}`;
+          const resetUrl = `https://edworld.gq/reset-password/${token}`;
           emailContent = await compileHTMLEmailTemplate(emailTemplatePath, {
             resetUrl,
           });
@@ -501,7 +501,7 @@ module.exports = {
       // creating email template
       const emailContent = await compileHTMLEmailTemplate(emailTemplatePath, {
         name,
-        downloadUrl: `http://localhost:5000/get-receipt/${receipt}`,
+        downloadUrl: `https://edworld.gq/get-receipt/${receipt}`,
       });
 
       // sending mail
