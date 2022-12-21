@@ -1,4 +1,9 @@
-# edWorld
+<a href="https://edworld.gq"><h1><b>edWorld</b></h1></a>
+<br>
+<a href="https://edworld.gq">
+<img src="https://img.shields.io/badge/status-active-success.svg" alt="Status">
+</a>
+
 
 ## **About**
 
