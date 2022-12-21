@@ -515,7 +515,6 @@ module.exports = {
 
       return {};
     } catch (error) {
-      console.log(error);
       return {};
     }
   },
@@ -538,7 +537,6 @@ module.exports = {
       // eslint-disable-next-line prefer-destructuring
       replacements = allPayments[0];
     } catch (error) {
-      console.log(error);
       return res.status(500).json({
         success: false,
         message: "Something went wrong, try again",
@@ -557,7 +555,6 @@ module.exports = {
         email,
       });
     } catch (error) {
-      console.log(error);
       return res.status(500).json({
         success: false,
         message: "Something went wrong, try again",
@@ -574,7 +571,6 @@ module.exports = {
       );
       return res.end(receiptPdf);
     } catch (error) {
-      console.log(error);
       return res.status(500).json({
         success: false,
         message: "Something went wrong, try again",
