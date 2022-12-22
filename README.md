@@ -27,6 +27,14 @@ Requirements you need to run the software and how to get them.
 
 A step by step series of examples that tell you how to get a development env running.
 
+Clone this repository to your local system.
+
+```
+git clone https://github.com/shamilkotta/edWorld.git
+```
+
+Then go to this project directory by running command `cd edWorld`
+
 Firstly install the required packages
 
 ```
