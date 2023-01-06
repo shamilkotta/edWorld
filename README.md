@@ -8,6 +8,9 @@
 
 edWorld is a student management app for educational institutions. Here institution admin/office can collect fee payments from students and manage attendance and monthly performances and other data also. Admin can host new batches and assign teacher as head, add as many subjects and subjectwise teachers also. Also, the admin will get nice-looking charts around the data of students.
 
+![image](https://user-images.githubusercontent.com/64640025/211061022-5e942f15-391f-41e3-9e15-7879a740fdba.png)
+
+
 ## **Getting Started**
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
