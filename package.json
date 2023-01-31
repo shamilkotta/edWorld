@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "SET NODE_ENV=production&node server.js",
-    "dev": "SET NODE_ENV=development&nodemon index.js",
+    "dev": "SET NODE_ENV=development&nodemon server.js",
     "lint": "eslint . --ext .js",
     "pretty": "prettier --check .",
     "style": "eslint --fix . --ext .js",
