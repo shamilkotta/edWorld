@@ -6,7 +6,7 @@
 
 ## **About**
 
-edWorld is a student management app for educational institutions. Here institution admin/office can collect fee payments from students and manage attendance and monthly performances and other data also. Admin can host new batches and assign teacher as head, add as many subjects and subjectwise teachers also. Also, the admin will get nice-looking charts around the data of students.
+edWorld is a web app is designed to assist educational institutions in managing their students and teachers. It includes a range of features such as admission management, batch creation with assigned teachers and subjects, student attendance and performance tracking, and fee payment management. On top of node js express and mongodb the platform has utilised various technologies including Bootstrap, Razorpay, Nodemailer, and Cloudinary to improve its functionality and user experience. It has been hosted on AWS with EC2 and Route 53 to ensure seamless access and scalability.
 
 ![image](https://user-images.githubusercontent.com/64640025/211061221-cdd72a97-87b0-4ae9-a66e-310be5d07250.png)
 
