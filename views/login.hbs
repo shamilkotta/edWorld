@@ -5,6 +5,18 @@
 </nav>
 <section style="height: 90vh;">
   <div class="container">
+  <div class="d-flex justify-content-center align-items-center bg-dark text-light ">
+    <div class="d-flex justify-content-between align-items-center py-3 my-auto" style="width: 70%;">
+    <p class="my-auto">
+    For testing purpose you can login as office/administrator...
+    </p>
+    <form action="/office-login" method="post" class="my-auto">
+      <input type="text" id="username" name="username"  required="" value="admin@gmail.com" hidden>
+      <input type="password" id="password" name="password" value="admin@123" required="" hidden>
+      <button type="submit" class="btn btn-success">Take me in</button>
+    </form>
+    </div>
+  </div>
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-10">
         <div class="card" style="border-radius: 1rem;">

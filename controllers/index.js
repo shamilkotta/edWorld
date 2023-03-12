@@ -76,8 +76,8 @@ module.exports = {
 
   postOfficeLogin: (req, res) => {
     const { username, password } = req.body;
-    const name = process.env.OFFICE || "admin";
-    const pass = process.env.OFFICE_PASS || "admin123";
+    const name = process.env.OFFICE || "admin@gmail.com";
+    const pass = process.env.OFFICE_PASS || "admin@123";
     if (username === name && password === pass) {
       req.session.loggedIn = true;
       req.session.user = { username: name, role: "office" };

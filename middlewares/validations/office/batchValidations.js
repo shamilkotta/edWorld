@@ -94,7 +94,7 @@ const createBatchSchema = yup.object().shape({
               : value
           )
           .test("isPerfectString", "Please enter valid name", (arg) =>
-            /^[A-Za-z]+$/.test(arg)
+            /^[A-Za-z ]+$/.test(arg)
           ),
       })
     ),
@@ -186,7 +186,7 @@ const editBatchSchema = yup.object().shape({
               : value
           )
           .test("isPerfectString", "Please enter valid name", (arg) =>
-            /^[A-Za-z]+$/.test(arg)
+            /^[A-Za-z ]+$/.test(arg)
           ),
       })
     ),

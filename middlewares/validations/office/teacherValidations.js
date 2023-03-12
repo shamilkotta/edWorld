@@ -13,7 +13,7 @@ const createTeacherSchema = yup.object().shape({
       value !== null ? value.charAt(0).toUpperCase() + value.slice(1) : value
     )
     .test("isPerfectString", "Please enter valid name", (arg) =>
-      /^[A-Za-z]+$/.test(arg)
+      /^[A-Za-z ]+$/.test(arg)
     ),
   phone: yup
     .number()

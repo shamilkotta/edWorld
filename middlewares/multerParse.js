@@ -12,7 +12,7 @@ const fileFilter = (req, file, cb) => {
   return cb(null, true);
 };
 
-const upload = multer({ storage, fileFilter, limits: { fileSize: 1048576 } });
+const upload = multer({ storage, fileFilter, limits: { fileSize: 2097152 } });
 
 module.exports = (req, res, next) => {
   upload.single("profile")(req, res, (err) => {
